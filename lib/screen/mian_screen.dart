@@ -1,3 +1,4 @@
+import 'package:cafe_order/screen/table_screen.dart';
 import 'package:cafe_order/widget/custon_appbar.dart';
 import 'package:cafe_order/widget/login_btn.dart';
 import 'package:cafe_order/globals.dart' as globals;
@@ -55,6 +56,10 @@ class _MainScreenState extends State<MainScreen> {
       });
       globals.code = "";
       globals.isLogin = true;
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (BuildContext ctx) {
+        return TableScreen();
+      }));
     }
   }
 

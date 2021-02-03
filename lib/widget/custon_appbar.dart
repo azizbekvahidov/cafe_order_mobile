@@ -1,3 +1,4 @@
+import 'package:cafe_order/screen/mian_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cafe_order/globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
@@ -7,11 +8,13 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
   final bool centerTitle;
   final Color backgroundColor;
   final Color textColor;
+  Function searchFunc;
   CustomAppbar(
       {this.title,
       this.centerTitle,
       this.backgroundColor,
       this.textColor,
+      this.searchFunc,
       Key key})
       : preferredSize = Size.fromHeight(kToolbarHeight),
         super(key: key);
@@ -30,7 +33,14 @@ class _CustomAppbarState extends State<CustomAppbar> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            globals.isLogin ? Container() : Container(),
+            globals.isOrder
+                ? InkWell(
+                    onTap: () => widget.searchFunc(),
+                    child: Container(
+                      child: SvgPicture.asset("assets/img/loupe.svg"),
+                    ),
+                  )
+                : Container(),
             Row(
               children: [
                 globals.isLogin
@@ -38,7 +48,12 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         onTap: () {
                           setState(() {
                             globals.isLogin = false;
+                            globals.isOrder = false;
                             globals.code = "";
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(builder: (BuildContext ctx) {
+                              return MainScreen();
+                            }), (route) => false);
                           });
                         },
                         child: Row(
