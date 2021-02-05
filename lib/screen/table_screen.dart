@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_order/screen/order_screen.dart';
 import 'package:cafe_order/widget/custon_appbar.dart';
 import 'package:flutter/material.dart';
@@ -71,11 +72,31 @@ class _TableScreenState extends State<TableScreen> {
                       child: Container(
                         margin: EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
-                          color: globals.thirdColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset:
+                                  Offset(3, 3), // changes position of shadow
+                            ),
+                          ],
+                          color: Colors.white,
+                          border: Border.all(
+                            width: 2,
+                            color: globals.thirdColor,
+                          ),
                         ),
                         height: 50,
                         child: Center(
-                          child: Text(_tables[index]["name"]),
+                          child: AutoSizeText(
+                            _tables[index]["name"],
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontFamily: globals.font,
+                            ),
+                          ),
                         ),
                       ),
                     );

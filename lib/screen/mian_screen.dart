@@ -110,6 +110,15 @@ class _MainScreenState extends State<MainScreen> {
                       width: 22,
                       height: 22,
                       decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset:
+                                  Offset(3, 3), // changes position of shadow
+                            ),
+                          ],
                           border: Border.all(
                             color: globals.thirdColor,
                             width: 1,
@@ -122,6 +131,15 @@ class _MainScreenState extends State<MainScreen> {
                       width: 22,
                       height: 22,
                       decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset:
+                                  Offset(3, 3), // changes position of shadow
+                            ),
+                          ],
                           border: Border.all(
                             color: globals.thirdColor,
                             width: 1,
@@ -134,6 +152,15 @@ class _MainScreenState extends State<MainScreen> {
                       width: 22,
                       height: 22,
                       decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset:
+                                  Offset(3, 3), // changes position of shadow
+                            ),
+                          ],
                           border: Border.all(
                             color: globals.thirdColor,
                             width: 1,
@@ -146,6 +173,15 @@ class _MainScreenState extends State<MainScreen> {
                       width: 22,
                       height: 22,
                       decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset:
+                                  Offset(3, 3), // changes position of shadow
+                            ),
+                          ],
                           border: Border.all(
                             color: globals.thirdColor,
                             width: 1,

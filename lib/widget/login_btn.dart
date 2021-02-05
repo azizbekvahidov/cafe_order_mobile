@@ -40,21 +40,35 @@ class LoginBtn extends StatelessWidget {
         width: 58,
         height: 59,
         decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(12),
-        ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: Offset(3, 3), // changes position of shadow
+              ),
+            ],
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              width: 1,
+              color: globals.mainColor,
+            )),
         child: Center(
           child: img == null
               ? Text(
                   txt,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: globals.mainColor,
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     fontFamily: globals.font,
                   ),
                 )
-              : SvgPicture.asset(img),
+              : SvgPicture.asset(
+                  img,
+                  color: globals.secondaryColor,
+                ),
         ),
       ),
     );
