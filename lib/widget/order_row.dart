@@ -7,11 +7,13 @@ class OrderRow extends StatefulWidget {
   Map orderRow;
   Function plus;
   Function minus;
+  Function customVal;
 
   OrderRow({
     this.orderRow,
     this.plus,
     this.minus,
+    this.customVal,
     Key key,
   }) : super(key: key);
 
@@ -20,6 +22,84 @@ class OrderRow extends StatefulWidget {
 }
 
 class _OrderRowState extends State<OrderRow> {
+  TextEditingController cntController = new TextEditingController();
+  customValDialog(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    var dWidth = MediaQuery.of(context).size.width;
+    return showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext, Animation animation,
+            Animation secondaryAnimation) {
+          return Container(
+            padding: EdgeInsets.only(top: 100, left: 20, right: 20),
+            alignment: Alignment.topCenter,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              width: MediaQuery.of(context).size.width,
+              height: 50, //MediaQuery.of(context).size.height * 0.5,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                width: double.infinity,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Color(0xffF5F6F9),
+                  borderRadius: BorderRadius.circular(22.5),
+                  border: Border.all(
+                    color: Color.fromRGBO(178, 183, 208, 0.5),
+                    style: BorderStyle.solid,
+                    width: 0.5,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    FocusScope(
+                      child: Focus(
+                        onFocusChange: (focus) {
+                          // widget.streetNode.requestFocus();
+                        },
+                        child: Container(
+                          width: (mediaQuery.size.width -
+                                  mediaQuery.padding.left -
+                                  mediaQuery.padding.right) *
+                              0.74,
+                          margin: EdgeInsets.only(top: 20),
+                          child: Scaffold(
+                            backgroundColor: Colors.transparent,
+                            body: TextField(
+                              onSubmitted: (val) {
+                                widget.customVal(
+                                    widget.orderRow, double.parse(val));
+                                Navigator.of(context).pop();
+                                cntController.text = "";
+                              },
+                              autofocus: true,
+                              controller: cntController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration.collapsed(
+                                hintText: "",
+                                hintStyle: TextStyle(
+                                    fontFamily: globals.font, fontSize: 18),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,13 +149,18 @@ class _OrderRowState extends State<OrderRow> {
                           ),
                         ),
                       ),
-                      Text(
-                        "${widget.orderRow["cnt"]}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: globals.font,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10,
+                      InkWell(
+                        onTap: () {
+                          customValDialog(context);
+                        },
+                        child: Text(
+                          "${widget.orderRow["cnt"]}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: globals.font,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10,
+                          ),
                         ),
                       ),
                       InkWell(

@@ -1,4 +1,5 @@
 import 'package:cafe_order/screen/mian_screen.dart';
+import 'package:cafe_order/widget/network_status.dart';
 import 'package:flutter/material.dart';
 import 'package:cafe_order/globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
@@ -29,6 +30,9 @@ class _CustomAppbarState extends State<CustomAppbar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 1,
+      iconTheme: IconThemeData(color: globals.mainColor),
+      backgroundColor: Colors.white,
       title: SizedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,7 +41,10 @@ class _CustomAppbarState extends State<CustomAppbar> {
                 ? InkWell(
                     onTap: () => widget.searchFunc(),
                     child: Container(
-                      child: SvgPicture.asset("assets/img/loupe.svg"),
+                      child: SvgPicture.asset(
+                        "assets/img/loupe.svg",
+                        color: globals.mainColor,
+                      ),
                     ),
                   )
                 : Container(),
@@ -59,32 +66,61 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         child: Row(
                           children: [
                             Text(
-                              globals.authName,
+                              globals.userData["name"],
                               style: TextStyle(
                                   fontFamily: globals.font,
-                                  fontSize: 28,
-                                  color: Colors.white),
+                                  fontSize: 18,
+                                  color: globals.mainColor),
                             ),
                             Padding(
                               padding: EdgeInsets.only(left: 5),
                             ),
-                            SvgPicture.asset("assets/img/lock.svg")
+                            SvgPicture.asset(
+                              "assets/img/lock.svg",
+                              color: globals.mainColor,
+                            )
                           ],
                         ),
                       )
                     : Container(),
-                Container(
-                  margin: EdgeInsets.only(left: 10),
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: globals.thirdColor,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(11),
-                      color: Color(0xff29FF3F)),
-                ),
+                NetworkStatus(
+                  onlineWidget: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: globals.thirdColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(11),
+                        color: Color(0xff29FF3F)),
+                  ),
+                  offlineWidget: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: globals.thirdColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(11),
+                        color: Colors.red),
+                  ),
+                )
+                // Container(
+                //   margin: EdgeInsets.only(left: 10),
+                //   width: 16,
+                //   height: 16,
+                //   decoration: BoxDecoration(
+                //       border: Border.all(
+                //         color: globals.thirdColor,
+                //         width: 1,
+                //       ),
+                //       borderRadius: BorderRadius.circular(11),
+                //       color: Color(0xff29FF3F)),
+                // ),
               ],
             ),
           ],

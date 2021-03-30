@@ -3,6 +3,8 @@ import 'package:cafe_order/widget/custon_appbar.dart';
 import 'package:cafe_order/widget/login_btn.dart';
 import 'package:cafe_order/globals.dart' as globals;
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:requests/requests.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
@@ -54,12 +56,36 @@ class _MainScreenState extends State<MainScreen> {
         thirdCircle = true;
         fourthCircle = true;
       });
+      singin();
+    }
+  }
+
+  singin() async {
+    Map body = {
+      "pass": globals.code,
+    };
+    var res = await Requests.post(globals.apiLink + "login", body: body);
+    if (res.statusCode == 200) {
+      globals.userData = res.json();
       globals.code = "";
       globals.isLogin = true;
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (BuildContext ctx) {
         return TableScreen();
       }));
+    } else if (res.statusCode == 204) {
+      setState(() {
+        globals.code = "";
+        firstCircle = false;
+        secondCircle = false;
+        thirdCircle = false;
+        fourthCircle = false;
+        globals.isLogin = false;
+      });
+      // Navigator.of(context)
+      //     .pushReplacement(MaterialPageRoute(builder: (BuildContext ctx) {
+      //   return TableScreen();
+      // }));
     }
   }
 
@@ -98,9 +124,11 @@ class _MainScreenState extends State<MainScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.only(top: 20),
-                child: Image.asset("assets/img/logo.png"),
-              ),
+                  padding: EdgeInsets.only(top: 20),
+                  child: SvgPicture.asset(
+                    "assets/img/logo-cafe.svg",
+                    height: 100,
+                  )),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 40, horizontal: 40),
                 child: Row(
@@ -116,13 +144,13 @@ class _MainScreenState extends State<MainScreen> {
                               spreadRadius: 1,
                               blurRadius: 2,
                               offset:
-                                  Offset(3, 3), // changes position of shadow
+                                  Offset(2, 2), // changes position of shadow
                             ),
                           ],
-                          border: Border.all(
-                            color: globals.thirdColor,
-                            width: 1,
-                          ),
+                          // border: Border.all(
+                          //   color: globals.thirdColor,
+                          //   width: 1,
+                          // ),
                           borderRadius: BorderRadius.circular(11),
                           color:
                               firstCircle ? globals.thirdColor : Colors.white),
@@ -137,13 +165,13 @@ class _MainScreenState extends State<MainScreen> {
                               spreadRadius: 1,
                               blurRadius: 2,
                               offset:
-                                  Offset(3, 3), // changes position of shadow
+                                  Offset(2, 2), // changes position of shadow
                             ),
                           ],
-                          border: Border.all(
-                            color: globals.thirdColor,
-                            width: 1,
-                          ),
+                          // border: Border.all(
+                          //   color: globals.thirdColor,
+                          //   width: 1,
+                          // ),
                           borderRadius: BorderRadius.circular(11),
                           color:
                               secondCircle ? globals.thirdColor : Colors.white),
@@ -158,13 +186,13 @@ class _MainScreenState extends State<MainScreen> {
                               spreadRadius: 1,
                               blurRadius: 2,
                               offset:
-                                  Offset(3, 3), // changes position of shadow
+                                  Offset(2, 2), // changes position of shadow
                             ),
                           ],
-                          border: Border.all(
-                            color: globals.thirdColor,
-                            width: 1,
-                          ),
+                          // border: Border.all(
+                          //   color: globals.thirdColor,
+                          //   width: 1,
+                          // ),
                           borderRadius: BorderRadius.circular(11),
                           color:
                               thirdCircle ? globals.thirdColor : Colors.white),
@@ -179,13 +207,13 @@ class _MainScreenState extends State<MainScreen> {
                               spreadRadius: 1,
                               blurRadius: 2,
                               offset:
-                                  Offset(3, 3), // changes position of shadow
+                                  Offset(2, 2), // changes position of shadow
                             ),
                           ],
-                          border: Border.all(
-                            color: globals.thirdColor,
-                            width: 1,
-                          ),
+                          // border: Border.all(
+                          //   color: globals.thirdColor,
+                          //   width: 1,
+                          // ),
                           borderRadius: BorderRadius.circular(11),
                           color:
                               fourthCircle ? globals.thirdColor : Colors.white),

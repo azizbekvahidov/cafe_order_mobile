@@ -1,6 +1,12 @@
+import 'dart:async';
+
 import 'package:cafe_order/screen/mian_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:requests/requests.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cafe_order/globals.dart' as globals;
 
 void main() {
   runApp(EasyLocalization(
@@ -39,7 +45,70 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainScreen(),
+      home: LoadScreen(),
+    );
+  }
+}
+
+class LoadScreen extends StatefulWidget {
+  @override
+  _LoadScreenState createState() => _LoadScreenState();
+}
+
+class _LoadScreenState extends State<LoadScreen> {
+  Timer timer;
+
+  getStringValuesSF() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    // setState(() {
+
+    await getTable();
+    // });
+  }
+
+  getTable() async {
+    try {
+      var url = '${globals.apiLink}tables';
+      var response = await Requests.get(
+        url,
+      );
+      if (response.statusCode == 200) {
+        globals.tables = response.json();
+      } else {
+        dynamic json = response.json();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getStringValuesSF();
+
+    Timer(Duration(seconds: 2), () {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext ctx) {
+        return MainScreen();
+      }));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Container(
+          child: SvgPicture.asset(
+            'assets/img/logo-cafe.svg',
+            height: 120,
+          ),
+        ),
+      ),
     );
   }
 }
