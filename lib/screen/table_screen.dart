@@ -1,9 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cafe_order/screen/order_screen.dart';
-import 'package:cafe_order/widget/custon_appbar.dart';
+import './order_screen.dart';
+import '../widget/custon_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:cafe_order/globals.dart' as globals;
-import 'package:flutter_svg/svg.dart';
+import '../globals.dart' as globals;
 import 'package:requests/requests.dart';
 
 class TableScreen extends StatefulWidget {
@@ -24,7 +23,8 @@ class _TableScreenState extends State<TableScreen> {
 
   Future getExpenses() async {
     try {
-      var url = '${globals.apiLink}expenses';
+      var url =
+          '${globals.apiLink}expenses?user=${globals.userData["employee_id"]}';
       var response = await Requests.get(
         url,
       );
@@ -93,7 +93,10 @@ class _TableScreenState extends State<TableScreen> {
                                         return OrderScreen(
                                             tableId: _tables[index]
                                                 ["table_num"],
-                                            expenseId: active["expense_id"]);
+                                            expenseId: active["expense_id"],
+                                            tableName: _tables[index]
+                                                    ["table_num"]
+                                                .toString());
                                       }));
                                     } else if (active == null) {
                                       globals.isOrder = true;
@@ -102,6 +105,8 @@ class _TableScreenState extends State<TableScreen> {
                                               builder: (BuildContext ctx) {
                                         return OrderScreen(
                                           tableId: _tables[index]["table_num"],
+                                          tableName: _tables[index]["table_num"]
+                                              .toString(),
                                         );
                                       }));
                                     }
@@ -131,7 +136,7 @@ class _TableScreenState extends State<TableScreen> {
                                     height: 50,
                                     child: Center(
                                       child: AutoSizeText(
-                                        _tables[index]["name"],
+                                        _tables[index]["table_num"].toString(),
                                         style: TextStyle(
                                           fontSize: 26,
                                           fontFamily: globals.font,

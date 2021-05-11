@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cafe_order/globals.dart' as globals;
+import '../globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
 
 class LoginBtn extends StatelessWidget {

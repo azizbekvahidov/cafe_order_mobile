@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:cafe_order/screen/mian_screen.dart';
+import './screen/mian_screen.dart';
+import './screen/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:requests/requests.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cafe_order/globals.dart' as globals;
+import './globals.dart' as globals;
 
 void main() {
   runApp(EasyLocalization(
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting("ru");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cafe Order',
@@ -57,30 +59,15 @@ class LoadScreen extends StatefulWidget {
 
 class _LoadScreenState extends State<LoadScreen> {
   Timer timer;
-
+  String url;
   getStringValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    url = prefs.getString("url");
+    globals.apiLink = url;
     //Return String
     // setState(() {
 
-    await getTable();
     // });
-  }
-
-  getTable() async {
-    try {
-      var url = '${globals.apiLink}tables';
-      var response = await Requests.get(
-        url,
-      );
-      if (response.statusCode == 200) {
-        globals.tables = response.json();
-      } else {
-        dynamic json = response.json();
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -92,7 +79,7 @@ class _LoadScreenState extends State<LoadScreen> {
     Timer(Duration(seconds: 2), () {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext ctx) {
-        return MainScreen();
+        return url != null ? MainScreen() : SettingsPage();
       }));
     });
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cafe_order/globals.dart' as globals;
+import '../globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -133,27 +133,27 @@ class _OrderRowState extends State<OrderRow> {
               ),
               Expanded(
                   flex: 2,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () => widget.minus(widget.orderRow),
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                          child: SvgPicture.asset(
-                            "assets/img/minus.svg",
-                            height: 16,
-                            color: globals.mainColor,
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          customValDialog(context);
-                        },
-                        child: Text(
+                  child: InkWell(
+                    onTap: () {
+                      customValDialog(context);
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // InkWell(
+                        //   onTap: () => widget.minus(widget.orderRow),
+                        //   child: Container(
+                        //     padding:
+                        //         EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                        //     child: SvgPicture.asset(
+                        //       "assets/img/minus.svg",
+                        //       height: 16,
+                        //       color: globals.mainColor,
+                        //     ),
+                        //   ),
+                        // ),
+                        Text(
                           "${widget.orderRow["cnt"]}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -162,20 +162,20 @@ class _OrderRowState extends State<OrderRow> {
                             fontSize: 10,
                           ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () => widget.plus(widget.orderRow),
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                          child: SvgPicture.asset(
-                            "assets/img/plus.svg",
-                            height: 16,
-                            color: globals.mainColor,
-                          ),
-                        ),
-                      ),
-                    ],
+                        // InkWell(
+                        //   onTap: () => widget.plus(widget.orderRow),
+                        //   child: Container(
+                        //     padding:
+                        //         EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                        //     child: SvgPicture.asset(
+                        //       "assets/img/plus.svg",
+                        //       height: 16,
+                        //       color: globals.mainColor,
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
+                    ),
                   )),
               Expanded(
                 flex: 2,

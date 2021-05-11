@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:cafe_order/globals.dart' as globals;
+import '../globals.dart' as globals;
 
 /// Виджет, отображающий наличие сети или её отстутствие
 class NetworkStatus extends StatefulWidget {
@@ -19,7 +19,7 @@ class NetworkStatus extends StatefulWidget {
     Key key,
     @required this.onlineWidget,
     @required this.offlineWidget,
-    this.pingUrl = globals.apiLink,
+    this.pingUrl,
   }) : super(key: key);
 
   @override
@@ -31,10 +31,12 @@ class _NetworkStatusState extends State<NetworkStatus> {
   @override
   void initState() {
     super.initState();
-
-    // timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-    //   ConnectivityUtils.instance.setServerToPing(widget.pingUrl);
-    // });
+    String apiLink = globals.apiLink;
+    if (apiLink != "") {
+      timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+        ConnectivityUtils.instance.setServerToPing(apiLink);
+      });
+    }
   }
 
   @override

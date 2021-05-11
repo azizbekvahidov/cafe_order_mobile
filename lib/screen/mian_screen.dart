@@ -1,7 +1,7 @@
-import 'package:cafe_order/screen/table_screen.dart';
-import 'package:cafe_order/widget/custon_appbar.dart';
-import 'package:cafe_order/widget/login_btn.dart';
-import 'package:cafe_order/globals.dart' as globals;
+import './table_screen.dart';
+import '../widget/custon_appbar.dart';
+import '../widget/login_btn.dart';
+import '../globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:requests/requests.dart';
@@ -60,32 +60,59 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  getTable() async {
+    try {
+      var url = '${globals.apiLink}tables';
+      var response = await Requests.get(
+        url,
+      );
+      if (response.statusCode == 200) {
+        globals.tables = response.json();
+      } else {
+        dynamic json = response.json();
+      }
+      url = '${globals.apiLink}department';
+      response = await Requests.get(
+        url,
+      );
+      if (response.statusCode == 200) {
+        globals.department = response.json();
+      } else {
+        dynamic json = response.json();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getTable();
+  }
+
   singin() async {
-    Map body = {
-      "pass": globals.code,
-    };
-    var res = await Requests.post(globals.apiLink + "login", body: body);
-    if (res.statusCode == 200) {
-      globals.userData = res.json();
-      globals.code = "";
-      globals.isLogin = true;
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (BuildContext ctx) {
-        return TableScreen();
-      }));
-    } else if (res.statusCode == 204) {
-      setState(() {
+    try {
+      Map body = {
+        "pass": globals.code,
+      };
+      var res = await Requests.post(globals.apiLink + "login", body: body);
+      if (res.statusCode == 200) {
+        globals.userData = res.json();
         globals.code = "";
-        firstCircle = false;
-        secondCircle = false;
-        thirdCircle = false;
-        fourthCircle = false;
-        globals.isLogin = false;
-      });
-      // Navigator.of(context)
-      //     .pushReplacement(MaterialPageRoute(builder: (BuildContext ctx) {
-      //   return TableScreen();
-      // }));
+        globals.isLogin = true;
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (BuildContext ctx) {
+          return TableScreen();
+        }));
+      } else if (res.statusCode == 204) {
+        clearCode();
+      } else {
+        clearCode();
+      }
+    } catch (e) {
+      clearCode();
     }
   }
 

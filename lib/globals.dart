@@ -2,8 +2,8 @@ library cafe_order.globals;
 
 import 'package:flutter/material.dart';
 
-const String apiLink = "http://127.0.0.1:8070/";
-// String apiLink = "http://192.168.1.205/";
+String apiLink = "";
+// String apiLink = "http://localhost:3007/";
 
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);
@@ -16,3 +16,4 @@ String authName = "Aziz";
 String code = "";
 bool isOrder = false;
 List tables;
+List department;

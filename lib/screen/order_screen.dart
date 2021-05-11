@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:cafe_order/print.dart';
-import 'package:cafe_order/screen/mian_screen.dart';
-import 'package:cafe_order/widget/custon_appbar.dart';
-import 'package:cafe_order/widget/order_row.dart';
+import '../print.dart';
+import './mian_screen.dart';
+import '../widget/custon_appbar.dart';
+import '../widget/order_row.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:cafe_order/globals.dart' as globals;
+import '../globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:requests/requests.dart';
@@ -16,7 +16,9 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 class OrderScreen extends StatefulWidget {
   final int tableId;
   final int expenseId;
-  OrderScreen({this.tableId, this.expenseId, Key key}) : super(key: key);
+  final String tableName;
+  OrderScreen({this.tableId, this.expenseId, this.tableName, Key key})
+      : super(key: key);
 
   @override
   _OrderScreenState createState() => _OrderScreenState();
@@ -26,6 +28,7 @@ class _OrderScreenState extends State<OrderScreen> {
   bool _showReciept = false;
   final formatter = new NumberFormat("# ### ###");
   String orderStatus = "create";
+  Map<String, dynamic> expense_data;
   List<dynamic> _products = [];
 
   List<dynamic> _order = [];
@@ -60,6 +63,7 @@ class _OrderScreenState extends State<OrderScreen> {
       );
       if (response.statusCode == 200) {
         var res = response.json();
+        expense_data = res["expense"];
         if (res["dish"].length != 0) {
           res["dish"].forEach((item) {
             var temp = {
@@ -67,6 +71,7 @@ class _OrderScreenState extends State<OrderScreen> {
               "name": item["name"],
               "price": item["price"],
               "cnt": item["cnt"],
+              "department_id": item["department_id"],
             };
             _order.add(temp);
           });
@@ -78,6 +83,7 @@ class _OrderScreenState extends State<OrderScreen> {
               "name": item["name"],
               "price": item["price"],
               "cnt": item["cnt"],
+              "department_id": item["department_id"],
             };
             _order.add(temp);
           });
@@ -89,6 +95,7 @@ class _OrderScreenState extends State<OrderScreen> {
               "name": item["name"],
               "price": item["price"],
               "cnt": item["cnt"],
+              "department_id": item["department_id"],
             };
             _order.add(temp);
           });
@@ -115,10 +122,12 @@ class _OrderScreenState extends State<OrderScreen> {
       var hasProd = _orderChange.firstWhere(
           (element) => element["id"] == item["id"],
           orElse: () => {});
+      var prod = _order.firstWhere((element) => element["id"] == item["id"],
+          orElse: () => {});
       if (!hasProd.isEmpty && hasProd["cnt"] != 0) {
-        if (hasProd["cnt"] < cnt) {
-          addToOrder(item, cnt: cnt);
+        if ((prod["cnt"] - hasProd["cnt"]) <= cnt) {
           addToOrderChange(item, cnt: cnt - (item["cnt"] - hasProd["cnt"]));
+          addToOrder(item, cnt: cnt);
           setState(() {
             totalSum = getTotal();
           });
@@ -126,9 +135,9 @@ class _OrderScreenState extends State<OrderScreen> {
           print("fuck off");
         }
       } else {
-        if (item["cnt"] < cnt) {
+        if (item["cnt"] <= cnt) {
+          addToOrderChange(item, cnt: cnt - prod["cnt"]);
           addToOrder(item, cnt: cnt);
-          addToOrderChange(item, cnt: cnt - (item["cnt"] - hasProd["cnt"]));
           setState(() {
             totalSum = getTotal();
           });
@@ -195,7 +204,8 @@ class _OrderScreenState extends State<OrderScreen> {
               "id": "dish_${val["id"]}",
               "name": val["name"],
               "price": val["price"],
-              "image": null
+              "image": null,
+              "department_id": val["department_id"],
             };
             _products.add(temp);
           });
@@ -206,7 +216,8 @@ class _OrderScreenState extends State<OrderScreen> {
               "id": "stuff_${val["id"]}",
               "name": val["name"],
               "price": val["price"],
-              "image": null
+              "image": null,
+              "department_id": val["department_id"],
             };
             _products.add(temp);
           });
@@ -217,7 +228,8 @@ class _OrderScreenState extends State<OrderScreen> {
               "id": "product_${val["id"]}",
               "name": val["name"],
               "price": val["price"],
-              "image": null
+              "image": null,
+              "department_id": val["department_id"],
             };
             _products.add(temp);
           });
@@ -238,7 +250,19 @@ class _OrderScreenState extends State<OrderScreen> {
     });
   }
 
-  void addToOrderChange(prod, {cnt = 0}) {
+  quit() {
+    setState(() {
+      globals.isLogin = false;
+      globals.isOrder = false;
+      globals.code = "";
+    });
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext ctx) {
+      return MainScreen();
+    }), (route) => false);
+  }
+
+  void addToOrderChange(prod, {cnt = null}) {
     try {
       var item = _orderChange.firstWhere(
           (element) => element["id"] == prod["id"],
@@ -249,7 +273,8 @@ class _OrderScreenState extends State<OrderScreen> {
           "id": "${prod["id"]}",
           "name": "${prod["name"]}",
           "price": prod["price"],
-          "cnt": cnt == 0 ? 1 : cnt,
+          "cnt": cnt == null ? 1 : cnt,
+          "department_id": prod["department_id"],
         };
         setState(() {
           _orderChange.add(temp);
@@ -257,7 +282,7 @@ class _OrderScreenState extends State<OrderScreen> {
         });
       } else {
         setState(() {
-          if (cnt == 0)
+          if (cnt == null)
             item["cnt"]++;
           else
             item["cnt"] = cnt;
@@ -269,7 +294,7 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
-  void addToOrder(prod, {cnt = 0}) {
+  void addToOrder(prod, {cnt = null}) {
     try {
       var item = _order.firstWhere((element) => element["id"] == prod["id"],
           orElse: () => {});
@@ -279,7 +304,8 @@ class _OrderScreenState extends State<OrderScreen> {
           "id": "${prod["id"]}",
           "name": "${prod["name"]}",
           "price": prod["price"],
-          "cnt": cnt == 0 ? 1 : cnt,
+          "cnt": cnt == null ? 1 : cnt,
+          "department_id": prod["department_id"],
         };
         setState(() {
           _order.add(temp);
@@ -287,7 +313,7 @@ class _OrderScreenState extends State<OrderScreen> {
         });
       } else {
         setState(() {
-          if (cnt == 0)
+          if (cnt == null)
             item["cnt"]++;
           else
             item["cnt"] = cnt;
@@ -324,22 +350,25 @@ class _OrderScreenState extends State<OrderScreen> {
           "employee_id": globals.userData["employee_id"],
           "expSum": totalSum,
           "params": _orderChange,
+          "all_prods": _order,
         };
         if (!_orderChange.isEmpty) {
+          Map<String, dynamic> temp = {
+            "table_name": widget.tableName,
+            "employee_name": globals.userData["name"]
+          };
           var response = await Requests.post(url,
               body: data, bodyEncoding: RequestBodyEncoding.JSON);
           if (response.statusCode == 200) {
+            prints.testPrint("192.168.1.200", context, "check",
+                {"expense": temp, "order": _orderChange});
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (BuildContext ctx) {
               return MainScreen();
             }), (route) => false);
           }
         } else {
-          prints.testPrint("192.168.1.200", context);
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext ctx) {
-            return MainScreen();
-          }), (route) => false);
+          quit();
         }
       } else {
         var url = '${globals.apiLink}update-order/${widget.expenseId}';
@@ -348,22 +377,18 @@ class _OrderScreenState extends State<OrderScreen> {
           "employee_id": globals.userData["employee_id"],
           "expSum": totalSum,
           "params": _orderChange,
+          "all_prods": _order,
         };
         if (!_orderChange.isEmpty) {
           var response = await Requests.post(url,
               body: data, bodyEncoding: RequestBodyEncoding.JSON);
           if (response.statusCode == 200) {
-            prints.testPrint("192.168.1.200", context);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext ctx) {
-              return MainScreen();
-            }), (route) => false);
+            prints.testPrint("192.168.1.200", context, "check",
+                {"expense": expense_data, "order": _orderChange});
+            quit();
           }
         } else {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext ctx) {
-            return MainScreen();
-          }), (route) => false);
+          quit();
         }
       }
     } catch (e) {
@@ -642,6 +667,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                   SuggestionsBoxDecoration(offsetX: -10.0),
                               onSuggestionSelected: (suggestion) {
                                 addToOrder(suggestion);
+                                addToOrderChange(suggestion);
                                 setState(() {
                                   _isSearch = false;
                                 });
@@ -739,6 +765,13 @@ class _OrderScreenState extends State<OrderScreen> {
                             ),
                           ),
                           InkWell(
+                            onTap: () {
+                              prints.testPrint(
+                                  "192.168.1.200",
+                                  context,
+                                  "reciept",
+                                  {"expense": expense_data, "order": _order});
+                            },
                             child: Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 5),

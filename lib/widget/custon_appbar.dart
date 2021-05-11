@@ -1,7 +1,7 @@
-import 'package:cafe_order/screen/mian_screen.dart';
-import 'package:cafe_order/widget/network_status.dart';
+import '../screen/mian_screen.dart';
+import './network_status.dart';
 import 'package:flutter/material.dart';
-import 'package:cafe_order/globals.dart' as globals;
+import '../globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
 
 class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
@@ -11,7 +11,7 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
   final Color textColor;
   Function searchFunc;
   CustomAppbar(
-      {this.title,
+      {this.title = "",
       this.centerTitle,
       this.backgroundColor,
       this.textColor,
@@ -48,6 +48,15 @@ class _CustomAppbarState extends State<CustomAppbar> {
                     ),
                   )
                 : Container(),
+            Container(
+              child: Text(
+                widget.title,
+                style: TextStyle(
+                    fontFamily: globals.font,
+                    fontSize: 18,
+                    color: globals.mainColor),
+              ),
+            ),
             Row(
               children: [
                 globals.isLogin
