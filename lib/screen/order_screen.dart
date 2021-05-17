@@ -352,6 +352,7 @@ class _OrderScreenState extends State<OrderScreen> {
           "params": _orderChange,
           "all_prods": _order,
         };
+        print(data);
         if (!_orderChange.isEmpty) {
           Map<String, dynamic> temp = {
             "table_name": widget.tableName,
@@ -360,6 +361,7 @@ class _OrderScreenState extends State<OrderScreen> {
           var response = await Requests.post(url,
               body: data, bodyEncoding: RequestBodyEncoding.JSON);
           if (response.statusCode == 200) {
+            print(globals.userData["department"]);
             prints.testPrint("192.168.1.200", context, "check",
                 {"expense": temp, "order": _orderChange});
             Navigator.of(context).pushAndRemoveUntil(
@@ -383,6 +385,7 @@ class _OrderScreenState extends State<OrderScreen> {
           var response = await Requests.post(url,
               body: data, bodyEncoding: RequestBodyEncoding.JSON);
           if (response.statusCode == 200) {
+            print(globals.userData["department"]);
             prints.testPrint("192.168.1.200", context, "check",
                 {"expense": expense_data, "order": _orderChange});
             quit();
@@ -767,7 +770,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           InkWell(
                             onTap: () {
                               prints.testPrint(
-                                  "192.168.1.200",
+                                  globals.userData["printer"],
                                   context,
                                   "reciept",
                                   {"expense": expense_data, "order": _order});
