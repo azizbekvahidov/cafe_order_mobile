@@ -17,3 +17,5 @@ String code = "";
 bool isOrder = false;
 List tables;
 List department;
+
+bool isServerConnection = false;

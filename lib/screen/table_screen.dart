@@ -1,36 +1,43 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cafe_mostbyte/helper/dio_connection.dart';
 import './order_screen.dart';
 import '../widget/custon_appbar.dart';
 import 'package:flutter/material.dart';
 import '../globals.dart' as globals;
-import 'package:requests/requests.dart';
+
+_TableScreenState tableScreenState;
 
 class TableScreen extends StatefulWidget {
   TableScreen({Key key}) : super(key: key);
 
   @override
-  _TableScreenState createState() => _TableScreenState();
+  _TableScreenState createState() {
+    tableScreenState = _TableScreenState();
+    return tableScreenState;
+  }
 }
 
 class _TableScreenState extends State<TableScreen> {
   List<dynamic> _tables = globals.tables;
   List<dynamic> _activeTables;
+  var connect = new DioConnection();
   @override
   void initState() {
     super.initState();
+    getExpenses();
     setState(() {});
   }
 
   Future getExpenses() async {
     try {
-      var url =
-          '${globals.apiLink}expenses?user=${globals.userData["employee_id"]}';
-      var response = await Requests.get(
-        url,
-      );
+      Map<String, String> headers = {};
+      var response = await connect.getHttp(
+          'expenses?user=${globals.userData["employee_id"]}',
+          tableScreenState,
+          headers);
       var res = [];
-      if (response.statusCode == 200) {
-        res = response.json();
+      if (response["statusCode"] == 200) {
+        res = response["result"];
       }
       return res;
     } catch (e) {
@@ -40,7 +47,6 @@ class _TableScreenState extends State<TableScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getExpenses();
     var dHeight = MediaQuery.of(context).size.height;
     var dWidth = MediaQuery.of(context).size.width;
     var appbar = CustomAppbar();

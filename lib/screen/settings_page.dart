@@ -27,9 +27,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   setSharedPref() async {
-    globals.apiLink = "http://${urlController.text}/";
+    globals.apiLink = "http://${urlController.text}";
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("url", "http://${urlController.text}/");
+    prefs.setString("url", "http://${urlController.text}");
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext ctx) {
       return MainScreen();
