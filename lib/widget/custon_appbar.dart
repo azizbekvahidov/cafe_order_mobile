@@ -92,32 +92,32 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         ),
                       )
                     : Container(),
-                NetworkStatus(
-                  onlineWidget: Container(
-                    margin: EdgeInsets.only(left: 10),
-                    width: 16,
-                    height: 16,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: globals.thirdColor,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(11),
-                        color: Color(0xff29FF3F)),
-                  ),
-                  offlineWidget: Container(
-                    margin: EdgeInsets.only(left: 10),
-                    width: 16,
-                    height: 16,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: globals.thirdColor,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(11),
-                        color: Colors.red),
-                  ),
-                )
+                globals.isServerConnection
+                    ? Container(
+                        margin: EdgeInsets.only(left: 10),
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: globals.thirdColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(11),
+                            color: Color(0xff29FF3F)),
+                      )
+                    : Container(
+                        margin: EdgeInsets.only(left: 10),
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: globals.thirdColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(11),
+                            color: Colors.red),
+                      ),
+
                 // Container(
                 //   margin: EdgeInsets.only(left: 10),
                 //   width: 16,

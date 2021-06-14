@@ -1,16 +1,22 @@
+import 'package:cafe_mostbyte/helper/dio_connection.dart';
+
 import './table_screen.dart';
 import '../widget/custon_appbar.dart';
 import '../widget/login_btn.dart';
 import '../globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:requests/requests.dart';
+
+_MainScreenState mainScreenState;
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _MainScreenState createState() {
+    mainScreenState = _MainScreenState();
+    return mainScreenState;
+  }
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -20,6 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   bool fourthCircle = false;
   String code = "";
 
+  var connect = new DioConnection();
   checkCode() {
     if (globals.code.length == 0) {
       setState(() {
@@ -62,23 +69,18 @@ class _MainScreenState extends State<MainScreen> {
 
   getTable() async {
     try {
-      var url = '${globals.apiLink}tables';
-      var response = await Requests.get(
-        url,
-      );
-      if (response.statusCode == 200) {
-        globals.tables = response.json();
+      Map<String, String> headers = {};
+      var response = await connect.getHttp('tables', mainScreenState, headers);
+      if (response["statusCode"] == 200) {
+        globals.tables = response["result"];
       } else {
-        dynamic json = response.json();
+        dynamic json = response["result"];
       }
-      url = '${globals.apiLink}department';
-      response = await Requests.get(
-        url,
-      );
-      if (response.statusCode == 200) {
-        globals.department = response.json();
+      response = await connect.getHttp('department', mainScreenState, headers);
+      if (response["statusCode"] == 200) {
+        globals.department = response["result"];
       } else {
-        dynamic json = response.json();
+        dynamic json = response["result"];
       }
     } catch (e) {
       print(e);
@@ -97,16 +99,18 @@ class _MainScreenState extends State<MainScreen> {
       Map body = {
         "pass": globals.code,
       };
-      var res = await Requests.post(globals.apiLink + "login", body: body);
-      if (res.statusCode == 200) {
-        globals.userData = res.json();
+      Map<String, String> headers = {};
+      var response =
+          await connect.postHttp('login', mainScreenState, headers, body);
+      if (response["statusCode"] == 200) {
+        globals.userData = response["result"];
         globals.code = "";
         globals.isLogin = true;
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (BuildContext ctx) {
           return TableScreen();
         }));
-      } else if (res.statusCode == 204) {
+      } else if (response["statusCode"] == 204) {
         clearCode();
       } else {
         clearCode();

@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:cafe_mostbyte/helper/dio_connection.dart';
+import 'package:requests/requests.dart';
+
 import '../print.dart';
 import './mian_screen.dart';
 import '../widget/custon_appbar.dart';
@@ -9,9 +12,10 @@ import 'package:flutter/material.dart';
 import '../globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:requests/requests.dart';
 
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+_OrderScreenState orderScreenState;
 
 class OrderScreen extends StatefulWidget {
   final int tableId;
@@ -21,7 +25,10 @@ class OrderScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _OrderScreenState createState() => _OrderScreenState();
+  _OrderScreenState createState() {
+    orderScreenState = _OrderScreenState();
+    return orderScreenState;
+  }
 }
 
 class _OrderScreenState extends State<OrderScreen> {
@@ -30,7 +37,8 @@ class _OrderScreenState extends State<OrderScreen> {
   String orderStatus = "create";
   Map<String, dynamic> expense_data;
   List<dynamic> _products = [];
-
+  var connect = new DioConnection();
+  Future _categories;
   List<dynamic> _order = [];
   List<dynamic> _orderChange = [];
 
@@ -49,7 +57,7 @@ class _OrderScreenState extends State<OrderScreen> {
     // TODO: implement initState
     super.initState();
     getOrderStruct();
-
+    _categories = getCategory();
     if (widget.expenseId != null) {
       orderStatus = "update";
     }
@@ -57,12 +65,11 @@ class _OrderScreenState extends State<OrderScreen> {
 
   getOrderStruct() async {
     try {
-      var url = '${globals.apiLink}order-struct/${widget.expenseId}';
-      var response = await Requests.get(
-        url,
-      );
-      if (response.statusCode == 200) {
-        var res = response.json();
+      Map<String, String> headers = {};
+      var response = await connect.getHttp(
+          'order-struct/${widget.expenseId}', orderScreenState, headers);
+      if (response["statusCode"] == 200) {
+        var res = response["result"];
         expense_data = res["expense"];
         if (res["dish"].length != 0) {
           res["dish"].forEach((item) {
@@ -102,7 +109,7 @@ class _OrderScreenState extends State<OrderScreen> {
         }
         setState(() {});
       } else {
-        dynamic json = response.json();
+        dynamic json = response["result"];
       }
     } catch (e) {
       print(e);
@@ -175,14 +182,13 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Future getCategory() async {
     try {
-      var url = '${globals.apiLink}categories';
-      var response = await Requests.get(
-        url,
-      );
-      if (response.statusCode == 200) {
-        return response.json();
+      Map<String, String> headers = {};
+      var response =
+          await connect.getHttp('categories', orderScreenState, headers);
+      if (response["statusCode"] == 200) {
+        return response["result"];
       } else {
-        dynamic json = response.json();
+        dynamic json = response["result"];
       }
     } catch (e) {
       print(e);
@@ -194,10 +200,12 @@ class _OrderScreenState extends State<OrderScreen> {
     _isSearch = false;
 
     try {
-      var res = await Requests.get("${globals.apiLink}prod-list/$id");
-      if (res.statusCode == 200) {
+      Map<String, String> headers = {};
+      var response =
+          await connect.getHttp('prod-list/$id', orderScreenState, headers);
+      if (response["statusCode"] == 200) {
         _products = [];
-        var menu = res.json();
+        var menu = response["result"];
         if (menu["dish"].length != 0) {
           menu["dish"].forEach((val) {
             var temp = {
@@ -327,13 +335,32 @@ class _OrderScreenState extends State<OrderScreen> {
 
   searchProducts(String value) async {
     try {
-      var url = '${globals.apiLink}search-prod?q=$value';
-      var response = await Requests.get(
-        url,
-      );
-      if (response.statusCode == 200) {
-        var json = response.json();
+      Map<String, String> headers = {};
+      var response = await connect.getHttp(
+          'search-prod?q=$value', orderScreenState, headers);
+      if (response["statusCode"] == 200) {
+        var json = response["result"];
         return json;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  sendPrint() async {
+    try {
+      Map<String, dynamic> data = {
+        "table": widget.tableName,
+        "emp": globals.userData["name"],
+        "departments": globals.userData["department"],
+        "data": _orderChange
+      };
+      Map<String, String> headers = {};
+      var response =
+          await connect.postHttp('print', orderScreenState, headers, data);
+      if (response["statusCode"] == 200) {
+        var json = response["result"];
+        // return json;
       }
     } catch (e) {
       print(e);
@@ -343,8 +370,9 @@ class _OrderScreenState extends State<OrderScreen> {
   final Print prints = new Print();
   addProduct() async {
     try {
+      var response;
+      Map<String, String> headers = {};
       if (widget.expenseId == null) {
-        var url = '${globals.apiLink}create-order';
         Map<String, dynamic> data = {
           "table": widget.tableId,
           "employee_id": globals.userData["employee_id"],
@@ -352,18 +380,19 @@ class _OrderScreenState extends State<OrderScreen> {
           "params": _orderChange,
           "all_prods": _order,
         };
-        print(data);
+        print(_orderChange);
         if (!_orderChange.isEmpty) {
           Map<String, dynamic> temp = {
             "table_name": widget.tableName,
             "employee_name": globals.userData["name"]
           };
-          var response = await Requests.post(url,
-              body: data, bodyEncoding: RequestBodyEncoding.JSON);
-          if (response.statusCode == 200) {
-            print(globals.userData["department"]);
-            prints.testPrint("192.168.1.200", context, "check",
-                {"expense": temp, "order": _orderChange});
+
+          response = await connect.postHttp(
+              'create-order', orderScreenState, headers, data);
+          if (response["statusCode"] == 200) {
+            sendPrint();
+            // prints.testPrint("192.168.1.200", context, "check",
+            //     {"expense": temp, "order": _orderChange});
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (BuildContext ctx) {
               return MainScreen();
@@ -373,7 +402,6 @@ class _OrderScreenState extends State<OrderScreen> {
           quit();
         }
       } else {
-        var url = '${globals.apiLink}update-order/${widget.expenseId}';
         Map<String, dynamic> data = {
           "table": widget.tableId,
           "employee_id": globals.userData["employee_id"],
@@ -382,12 +410,13 @@ class _OrderScreenState extends State<OrderScreen> {
           "all_prods": _order,
         };
         if (!_orderChange.isEmpty) {
-          var response = await Requests.post(url,
-              body: data, bodyEncoding: RequestBodyEncoding.JSON);
-          if (response.statusCode == 200) {
+          response = await connect.postHttp('update-order/${widget.expenseId}',
+              orderScreenState, headers, data);
+          if (response["statusCode"] == 200) {
             print(globals.userData["department"]);
-            prints.testPrint("192.168.1.200", context, "check",
-                {"expense": expense_data, "order": _orderChange});
+            sendPrint();
+            // prints.testPrint("192.168.1.200", context, "check",
+            //     {"expense": expense_data, "order": _orderChange});
             quit();
           }
         } else {
@@ -631,6 +660,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 //   Navigator.pop(context, false);
                                 // },
                                 // controller: searchAddressController,
+
                                 autofocus: true,
                                 decoration: InputDecoration.collapsed(
                                   hintText: "".tr().toString(),
@@ -642,8 +672,12 @@ class _OrderScreenState extends State<OrderScreen> {
                               ),
 
                               suggestionsCallback: (pattern) async {
-                                return await searchProducts(pattern);
+                                if (pattern.length >= 3) {
+                                  return await searchProducts(pattern);
+                                } else
+                                  return null;
                               },
+
                               hideOnEmpty: true,
                               // suggestionsBoxController:
                               //     suggestionsBoxController,
@@ -805,7 +839,7 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: FutureBuilder(
-              future: getCategory(),
+              future: _categories,
               builder: (context, snapshot) {
                 return snapshot.hasData
                     ? ListView.builder(
