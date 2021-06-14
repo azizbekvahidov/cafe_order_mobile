@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cafe_mostbyte/helper/dio_connection.dart';
+import 'package:requests/requests.dart';
 
 import '../print.dart';
 import './mian_screen.dart';
@@ -346,6 +347,26 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
+  sendPrint() async {
+    try {
+      Map<String, dynamic> data = {
+        "table": widget.tableName,
+        "emp": globals.userData["name"],
+        "departments": globals.userData["department"],
+        "data": _orderChange
+      };
+      Map<String, String> headers = {};
+      var response =
+          await connect.postHttp('print', orderScreenState, headers, data);
+      if (response["statusCode"] == 200) {
+        var json = response["result"];
+        // return json;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   final Print prints = new Print();
   addProduct() async {
     try {
@@ -359,19 +380,19 @@ class _OrderScreenState extends State<OrderScreen> {
           "params": _orderChange,
           "all_prods": _order,
         };
-        print(data);
+        print(_orderChange);
         if (!_orderChange.isEmpty) {
           Map<String, dynamic> temp = {
             "table_name": widget.tableName,
             "employee_name": globals.userData["name"]
           };
 
-          var response = await connect.postHttp(
+          response = await connect.postHttp(
               'create-order', orderScreenState, headers, data);
           if (response["statusCode"] == 200) {
-            print(globals.userData["department"]);
-            prints.testPrint("192.168.1.200", context, "check",
-                {"expense": temp, "order": _orderChange});
+            sendPrint();
+            // prints.testPrint("192.168.1.200", context, "check",
+            //     {"expense": temp, "order": _orderChange});
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (BuildContext ctx) {
               return MainScreen();
@@ -393,8 +414,9 @@ class _OrderScreenState extends State<OrderScreen> {
               orderScreenState, headers, data);
           if (response["statusCode"] == 200) {
             print(globals.userData["department"]);
-            prints.testPrint("192.168.1.200", context, "check",
-                {"expense": expense_data, "order": _orderChange});
+            sendPrint();
+            // prints.testPrint("192.168.1.200", context, "check",
+            //     {"expense": expense_data, "order": _orderChange});
             quit();
           }
         } else {

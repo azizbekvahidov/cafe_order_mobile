@@ -43,6 +43,7 @@ class DioConnection {
   }
 
   postHttp(url, state, headers, data) async {
+    print(data);
     try {
       var res = {};
       url = '${globals.apiLink}/$url';
