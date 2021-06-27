@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cafe_mostbyte/helper/dio_connection.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:requests/requests.dart';
 
 import '../print.dart';
@@ -155,6 +156,21 @@ class _OrderScreenState extends State<OrderScreen> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<bool> checkPrint() async {
+    try {
+      Map<String, String> headers = {};
+      var response = await connect.getHttp(
+          'checkPrint/${widget.expenseId}', orderScreenState, headers);
+      if (response["statusCode"] == 200) {
+        return response["result"];
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
   }
 
@@ -810,12 +826,17 @@ class _OrderScreenState extends State<OrderScreen> {
                             ),
                           ),
                           InkWell(
-                            onTap: () {
-                              prints.testPrint(
-                                  globals.userData["printer"],
-                                  context,
-                                  "reciept",
-                                  {"expense": expense_data, "order": _order});
+                            onTap: () async {
+                              var res = await checkPrint();
+                              if (res == true) {
+                                prints.testPrint(
+                                    globals.userData["printer"],
+                                    context,
+                                    "reciept",
+                                    {"expense": expense_data, "order": _order});
+                              } else {
+                                print("no print enymore");
+                              }
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
