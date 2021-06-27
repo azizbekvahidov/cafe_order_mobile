@@ -41,6 +41,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Future _categories;
   List<dynamic> _order = [];
   List<dynamic> _orderChange = [];
+  bool sendRequest = false;
 
   double totalSum;
   getTotal() {
@@ -370,61 +371,68 @@ class _OrderScreenState extends State<OrderScreen> {
   final Print prints = new Print();
   addProduct() async {
     try {
-      var response;
-      Map<String, String> headers = {};
-      if (widget.expenseId == null) {
-        Map<String, dynamic> data = {
-          "table": widget.tableId,
-          "employee_id": globals.userData["employee_id"],
-          "expSum": totalSum,
-          "params": _orderChange,
-          "all_prods": _order,
-        };
-        print(_orderChange);
-        if (!_orderChange.isEmpty) {
-          Map<String, dynamic> temp = {
-            "table_name": widget.tableName,
-            "employee_name": globals.userData["name"]
+      if (!sendRequest) {
+        sendRequest = true;
+        var response;
+        Map<String, String> headers = {};
+        if (widget.expenseId == null) {
+          Map<String, dynamic> data = {
+            "table": widget.tableId,
+            "employee_id": globals.userData["employee_id"],
+            "expSum": totalSum,
+            "params": _orderChange,
+            "all_prods": _order,
           };
+          print(_orderChange);
+          if (!_orderChange.isEmpty) {
+            Map<String, dynamic> temp = {
+              "table_name": widget.tableName,
+              "employee_name": globals.userData["name"]
+            };
 
-          response = await connect.postHttp(
-              'create-order', orderScreenState, headers, data);
-          if (response["statusCode"] == 200) {
-            sendPrint();
-            // prints.testPrint("192.168.1.200", context, "check",
-            //     {"expense": temp, "order": _orderChange});
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext ctx) {
-              return MainScreen();
-            }), (route) => false);
-          }
-        } else {
-          quit();
-        }
-      } else {
-        Map<String, dynamic> data = {
-          "table": widget.tableId,
-          "employee_id": globals.userData["employee_id"],
-          "expSum": totalSum,
-          "params": _orderChange,
-          "all_prods": _order,
-        };
-        if (!_orderChange.isEmpty) {
-          response = await connect.postHttp('update-order/${widget.expenseId}',
-              orderScreenState, headers, data);
-          if (response["statusCode"] == 200) {
-            print(globals.userData["department"]);
-            sendPrint();
-            // prints.testPrint("192.168.1.200", context, "check",
-            //     {"expense": expense_data, "order": _orderChange});
+            response = await connect.postHttp(
+                'create-order', orderScreenState, headers, data);
+            if (response["statusCode"] == 200) {
+              sendPrint();
+
+              // prints.testPrint("192.168.1.200", context, "check",
+              //     {"expense": temp, "order": _orderChange});
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (BuildContext ctx) {
+                return MainScreen();
+              }), (route) => false);
+            }
+          } else {
             quit();
           }
         } else {
-          quit();
+          Map<String, dynamic> data = {
+            "table": widget.tableId,
+            "employee_id": globals.userData["employee_id"],
+            "expSum": totalSum,
+            "params": _orderChange,
+            "all_prods": _order,
+          };
+          if (!_orderChange.isEmpty) {
+            response = await connect.postHttp(
+                'update-order/${widget.expenseId}',
+                orderScreenState,
+                headers,
+                data);
+            if (response["statusCode"] == 200) {
+              sendPrint();
+              // prints.testPrint("192.168.1.200", context, "check",
+              //     {"expense": expense_data, "order": _orderChange});
+              quit();
+            }
+          } else {
+            quit();
+          }
         }
       }
     } catch (e) {
       print(e);
+      sendRequest = false;
     }
   }
 
