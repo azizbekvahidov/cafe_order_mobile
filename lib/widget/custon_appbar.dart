@@ -1,7 +1,7 @@
 import '../screen/mian_screen.dart';
 import './network_status.dart';
 import 'package:flutter/material.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
 
 class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {

@@ -2,7 +2,7 @@ import './mian_screen.dart';
 import '../widget/custon_appbar.dart';
 import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flutter/material.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {

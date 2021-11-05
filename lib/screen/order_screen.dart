@@ -10,7 +10,7 @@ import '../widget/custon_appbar.dart';
 import '../widget/order_row.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/svg.dart';
 

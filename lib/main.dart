@@ -7,7 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './globals.dart' as globals;
+import 'config/globals.dart' as globals;
 
 void main() {
   runApp(EasyLocalization(

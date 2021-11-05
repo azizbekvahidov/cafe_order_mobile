@@ -3,7 +3,7 @@ import 'package:cafe_mostbyte/helper/dio_connection.dart';
 import './order_screen.dart';
 import '../widget/custon_appbar.dart';
 import 'package:flutter/material.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 
 _TableScreenState tableScreenState;
 

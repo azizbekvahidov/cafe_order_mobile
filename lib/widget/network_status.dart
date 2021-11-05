@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flutter/material.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 
 /// Виджет, отображающий наличие сети или её отстутствие
 class NetworkStatus extends StatefulWidget {

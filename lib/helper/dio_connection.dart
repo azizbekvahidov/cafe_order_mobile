@@ -1,5 +1,5 @@
 import 'package:requests/requests.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 
 class DioConnection {
   // getHttp(url, state, headers) async {

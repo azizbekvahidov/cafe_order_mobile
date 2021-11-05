@@ -17,6 +17,7 @@ String authName = "Aziz";
 String code = "";
 bool isOrder = false;
 List? tables;
+String token = "";
 List? department;
 
 bool isServerConnection = false;

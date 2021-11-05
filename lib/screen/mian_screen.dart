@@ -3,7 +3,7 @@ import 'package:cafe_mostbyte/helper/dio_connection.dart';
 import './table_screen.dart';
 import '../widget/custon_appbar.dart';
 import '../widget/login_btn.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

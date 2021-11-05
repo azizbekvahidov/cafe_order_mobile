@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:image/image.dart';
-import './globals.dart' as globals;
+import 'config/globals.dart' as globals;
 
 class Print {
   Future<void> printReceipt(NetworkPrinter printer, Map data) async {

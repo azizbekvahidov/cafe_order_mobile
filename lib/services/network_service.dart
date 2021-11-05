@@ -56,9 +56,11 @@ class NetworkService {
     return cookie;
   }
 
-  Future<dynamic> get(String url, {String token = ""}) {
-    if (token != "") {
-      headers.addAll({"Authorization": "token $token"});
+  Future<dynamic> get(String url) {
+    if (globals.token != "") {
+      headers.addAll({"Authorization": "token ${globals.token}"});
+    } else {
+      headers.remove("Authorization");
     }
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
@@ -72,9 +74,11 @@ class NetworkService {
     });
   }
 
-  Future<dynamic> post(String url, {body, encoding, token = ""}) {
-    if (token != "") {
-      headers.addAll({"Authorization": "token $token"});
+  Future<dynamic> post(String url, {body, encoding}) {
+    if (globals.token != "") {
+      headers.addAll({"Authorization": "token ${globals.token}"});
+    } else {
+      headers.remove("Authorization");
     }
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
@@ -90,9 +94,43 @@ class NetworkService {
     });
   }
 
-  Future<dynamic> put(String url, {body, encoding, token = ""}) {
-    if (token != "") {
-      headers.addAll({"Authorization": "token $token"});
+  Future<dynamic> postMultipart(String url, {body, encoding, file}) async {
+    var req = http.MultipartRequest("POST", Uri.parse(url));
+    if (globals.token != "") {
+      req.headers.addAll({"Authorization": "token ${globals.token}"});
+    } else {
+      req.headers.remove("Authorization");
+    }
+    // req.fields.addAll(body);
+    body.forEach((index, value) {
+      req.fields.addAll({"$index": "$value"});
+    });
+    if (file != null) {
+      String _fileName = file.path;
+      req.files.add(await http.MultipartFile.fromPath("file", _fileName));
+      // (
+      //     "file", file.readAsBytes().asStream(), file.lengthSync(),
+      //     filename: _fileName.split('/').last));
+    }
+    var response = await req.send();
+    var result = http.Response.fromStream(response);
+    // HttpClient httpClient = new HttpClient()
+    //   ..badCertificateCallback =
+    //       ((X509Certificate cert, String host, int port) => true);
+    // IOClient ioClient = new IOClient(httpClient);
+    // return ioClient
+    //     .post(Uri.parse(url),
+    //         body: _encoder.convert(body), headers: headers, encoding: encoding)
+    //     .then((http.Response response) {
+    //   _updateCookie(response);
+
+    return result;
+    // });
+  }
+
+  Future<dynamic> put(String url, {body, encoding}) {
+    if (globals.token != "") {
+      headers.addAll({"Authorization": "token ${globals.token}"});
     }
     HttpClient httpClient = new HttpClient()
       ..badCertificateCallback =
