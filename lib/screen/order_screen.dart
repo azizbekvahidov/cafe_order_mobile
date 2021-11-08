@@ -1,14 +1,13 @@
 import 'dart:convert';
 
-import 'package:cafe_mostbyte/helper/dio_connection.dart';
+import 'package:cafe_mostbyte/services/network_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:requests/requests.dart';
+import 'package:intl/intl.dart';
 
 import '../print.dart';
 import './mian_screen.dart';
 import '../widget/custon_appbar.dart';
 import '../widget/order_row.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
@@ -16,19 +15,19 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-_OrderScreenState orderScreenState;
+_OrderScreenState? orderScreenState;
 
 class OrderScreen extends StatefulWidget {
-  final int tableId;
-  final int expenseId;
-  final String tableName;
-  OrderScreen({this.tableId, this.expenseId, this.tableName, Key key})
+  final int? tableId;
+  final int? expenseId;
+  final String? tableName;
+  OrderScreen({this.tableId, this.expenseId, this.tableName, Key? key})
       : super(key: key);
 
   @override
   _OrderScreenState createState() {
     orderScreenState = _OrderScreenState();
-    return orderScreenState;
+    return orderScreenState!;
   }
 }
 
@@ -36,22 +35,22 @@ class _OrderScreenState extends State<OrderScreen> {
   bool _showReciept = false;
   final formatter = new NumberFormat("# ### ###");
   String orderStatus = "create";
-  Map<String, dynamic> expense_data;
+  Map<String, dynamic>? expense_data;
   List<dynamic> _products = [];
-  var connect = new DioConnection();
-  Future _categories;
+  var connect = new NetworkService();
+  Future? _categories;
   List<dynamic> _order = [];
   List<dynamic> _orderChange = [];
   bool sendRequest = false;
 
-  double totalSum;
+  double? totalSum;
   getTotal() {
     double sum = 0;
 
     _order.forEach((element) {
       sum += element["price"] * element["cnt"];
     });
-    return sum + (sum / 100 * globals.userData['percent']);
+    return sum + (sum / 100 * globals.userData!['percent']);
   }
 
   @override
@@ -67,11 +66,12 @@ class _OrderScreenState extends State<OrderScreen> {
 
   getOrderStruct() async {
     try {
-      Map<String, String> headers = {};
-      var response = await connect.getHttp(
-          'order-struct/${widget.expenseId}', orderScreenState, headers);
-      if (response["statusCode"] == 200) {
-        var res = response["result"];
+      var response = await connect
+          .get('${globals.apiLink}/order-struct/${widget.expenseId}');
+      orderScreenState!.setState(() {});
+      globals.isServerConnection = true;
+      if (response.statusCode == 200) {
+        var res = json.decode(response.body);
         expense_data = res["expense"];
         if (res["dish"].length != 0) {
           res["dish"].forEach((item) {
@@ -111,9 +111,10 @@ class _OrderScreenState extends State<OrderScreen> {
         }
         setState(() {});
       } else {
-        dynamic json = response["result"];
+        dynamic res = json.decode(response.body);
       }
     } catch (e) {
+      globals.isServerConnection = false;
       print(e);
     }
   }
@@ -161,15 +162,18 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Future<bool> checkPrint() async {
     try {
-      Map<String, String> headers = {};
-      var response = await connect.getHttp(
-          'checkPrint/${widget.expenseId}', orderScreenState, headers);
-      if (response["statusCode"] == 200) {
-        return response["result"];
+      var response = await connect
+          .get('${globals.apiLink}/checkPrint/${widget.expenseId}');
+
+      globals.isServerConnection = true;
+      orderScreenState!.setState(() {});
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
       } else {
         return false;
       }
     } catch (e) {
+      globals.isServerConnection = false;
       return false;
     }
   }
@@ -199,15 +203,16 @@ class _OrderScreenState extends State<OrderScreen> {
 
   Future getCategory() async {
     try {
-      Map<String, String> headers = {};
-      var response =
-          await connect.getHttp('categories', orderScreenState, headers);
-      if (response["statusCode"] == 200) {
-        return response["result"];
+      var response = await connect.get('${globals.apiLink}/categories');
+      orderScreenState!.setState(() {});
+      globals.isServerConnection = true;
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
       } else {
-        dynamic json = response["result"];
+        dynamic res = json.decode(response.body);
       }
     } catch (e) {
+      globals.isServerConnection = false;
       print(e);
     }
   }
@@ -218,11 +223,12 @@ class _OrderScreenState extends State<OrderScreen> {
 
     try {
       Map<String, String> headers = {};
-      var response =
-          await connect.getHttp('prod-list/$id', orderScreenState, headers);
-      if (response["statusCode"] == 200) {
+      var response = await connect.get('${globals.apiLink}/prod-list/$id');
+      orderScreenState!.setState(() {});
+      globals.isServerConnection = true;
+      if (response.statusCode == 200) {
         _products = [];
-        var menu = response["result"];
+        var menu = json.decode(response);
         if (menu["dish"].length != 0) {
           menu["dish"].forEach((val) {
             var temp = {
@@ -263,6 +269,7 @@ class _OrderScreenState extends State<OrderScreen> {
         Navigator.of(context).pop();
       }
     } catch (e) {
+      globals.isServerConnection = false;
       print(e);
     }
   }
@@ -352,10 +359,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
   searchProducts(String value) async {
     try {
-      Map<String, String> headers = {};
-      var response = await connect.getHttp(
-          'search-prod?q=$value', orderScreenState, headers);
-      if (response["statusCode"] == 200) {
+      var response = await connect.get('search-prod?q=$value');
+      orderScreenState!.setState(() {});
+      globals.isServerConnection = true;
+      if (response.statusCode == 200) {
         var json = response["result"];
         return json;
       }
@@ -368,18 +375,19 @@ class _OrderScreenState extends State<OrderScreen> {
     try {
       Map<String, dynamic> data = {
         "table": widget.tableName,
-        "emp": globals.userData["name"],
-        "departments": globals.userData["department"],
+        "emp": globals.userData!["name"],
+        "departments": globals.userData!["department"],
         "data": _orderChange
       };
-      Map<String, String> headers = {};
-      var response =
-          await connect.postHttp('print', orderScreenState, headers, data);
-      if (response["statusCode"] == 200) {
-        var json = response["result"];
+      var response = await connect.post('${globals.apiLink}/print', body: data);
+      orderScreenState!.setState(() {});
+      globals.isServerConnection = true;
+      if (response.statusCode == 200) {
+        var res = json.decode(response);
         // return json;
       }
     } catch (e) {
+      globals.isServerConnection = false;
       print(e);
     }
   }
@@ -394,7 +402,7 @@ class _OrderScreenState extends State<OrderScreen> {
         if (widget.expenseId == null) {
           Map<String, dynamic> data = {
             "table": widget.tableId,
-            "employee_id": globals.userData["employee_id"],
+            "employee_id": globals.userData!["employee_id"],
             "expSum": totalSum,
             "params": _orderChange,
             "all_prods": _order,
@@ -403,12 +411,14 @@ class _OrderScreenState extends State<OrderScreen> {
           if (!_orderChange.isEmpty) {
             Map<String, dynamic> temp = {
               "table_name": widget.tableName,
-              "employee_name": globals.userData["name"]
+              "employee_name": globals.userData!["name"]
             };
 
-            response = await connect.postHttp(
-                'create-order', orderScreenState, headers, data);
-            if (response["statusCode"] == 200) {
+            response = await connect.post('${globals.apiLink}/create-order',
+                body: data);
+            orderScreenState!.setState(() {});
+            globals.isServerConnection = true;
+            if (response.statusCode == 200) {
               sendPrint();
 
               // prints.testPrint("192.168.1.200", context, "check",
@@ -424,17 +434,15 @@ class _OrderScreenState extends State<OrderScreen> {
         } else {
           Map<String, dynamic> data = {
             "table": widget.tableId,
-            "employee_id": globals.userData["employee_id"],
+            "employee_id": globals.userData!["employee_id"],
             "expSum": totalSum,
             "params": _orderChange,
             "all_prods": _order,
           };
           if (!_orderChange.isEmpty) {
-            response = await connect.postHttp(
-                'update-order/${widget.expenseId}',
-                orderScreenState,
-                headers,
-                data);
+            response = await connect.post(
+                '${globals.apiLink}/update-order/${widget.expenseId}',
+                body: data);
             if (response["statusCode"] == 200) {
               sendPrint();
               // prints.testPrint("192.168.1.200", context, "check",
@@ -447,6 +455,7 @@ class _OrderScreenState extends State<OrderScreen> {
         }
       }
     } catch (e) {
+      globals.isServerConnection = false;
       print(e);
       sendRequest = false;
     }
@@ -677,8 +686,6 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                                 borderRadius: BorderRadius.circular(8)),
                             child: TypeAheadField(
-                              addWidth: 30,
-                              offsetLeft: 10,
                               textFieldConfiguration: TextFieldConfiguration(
                                 // onSubmitted: (value) {
                                 //   Navigator.pop(context, false);
@@ -687,11 +694,11 @@ class _OrderScreenState extends State<OrderScreen> {
 
                                 autofocus: true,
                                 decoration: InputDecoration.collapsed(
-                                  hintText: "".tr().toString(),
-                                  hintStyle: Theme.of(context)
-                                      .textTheme
-                                      .display1
-                                      .copyWith(fontSize: 18),
+                                  hintText: "",
+                                  // hintStyle: Theme.of(context)
+                                  //     .textTheme
+                                  //     .display1
+                                  //     .copyWith(fontSize: 18),
                                 ),
                               ),
 
@@ -699,7 +706,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 if (pattern.length >= 3) {
                                   return await searchProducts(pattern);
                                 } else
-                                  return null;
+                                  return {};
                               },
 
                               hideOnEmpty: true,
@@ -713,8 +720,8 @@ class _OrderScreenState extends State<OrderScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("${suggestion['name']}"),
-                                          Text("${suggestion['price']}"),
+                                          // Text("${suggestion!['name']}"),
+                                          // Text("${suggestion['price']}"),
                                         ],
                                       ),
                                     ),
@@ -734,7 +741,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 });
                               },
                               noItemsFoundBuilder: (context) {
-                                return Text("not_found".tr().toString());
+                                return Text("not_found");
                               },
                             ),
                           )
@@ -762,7 +769,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            "Итого: +${globals.userData["percent"]}%",
+                            "Итого: +${globals.userData!["percent"]}%",
                             style: TextStyle(
                               fontFamily: globals.font,
                               fontSize: 20,
@@ -830,7 +837,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               var res = await checkPrint();
                               if (res == true) {
                                 prints.testPrint(
-                                    globals.userData["printer"],
+                                    globals.userData!["printer"],
                                     context,
                                     "reciept",
                                     {"expense": expense_data, "order": _order});
@@ -870,16 +877,16 @@ class _OrderScreenState extends State<OrderScreen> {
           child: FutureBuilder(
               future: _categories,
               builder: (context, snapshot) {
+                List res = snapshot.data as List;
                 return snapshot.hasData
                     ? ListView.builder(
-                        itemCount: snapshot.data.length,
+                        itemCount: res.length,
                         itemBuilder: (context, index) {
                           return Container(
                             margin: EdgeInsets.symmetric(horizontal: 7),
                             child: InkWell(
                               onTap: () {
-                                getProdByCategory(
-                                    snapshot.data[index]["type_id"]);
+                                getProdByCategory(res[index]["type_id"]);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -903,7 +910,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 alignment: Alignment.center,
                                 child: Center(
                                   child: Text(
-                                    snapshot.data[index]["name"],
+                                    res[index]["name"],
                                     textAlign: TextAlign.center,
                                   ),
                                 ),

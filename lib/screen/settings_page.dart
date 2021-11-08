@@ -1,12 +1,12 @@
 import './mian_screen.dart';
 import '../widget/custon_appbar.dart';
-import 'package:connectivity_widget/connectivity_widget.dart';
+// import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({Key key}) : super(key: key);
+  SettingsPage({Key? key}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -17,12 +17,12 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isPing = false;
 
   void onSave() async {
-    ConnectivityUtils.instance.setServerToPing(urlController.text);
-    ConnectivityUtils.instance.setCallback((response) {
-      isPing = true;
+    // ConnectivityUtils.instance.setServerToPing(urlController.text);
+    // ConnectivityUtils.instance.setCallback((response) {
+    //   isPing = true;
 
-      return true;
-    });
+    //   return true;
+    // });
     setSharedPref();
   }
 

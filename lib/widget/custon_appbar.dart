@@ -1,22 +1,22 @@
 import '../screen/mian_screen.dart';
-import './network_status.dart';
+// import './network_status.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
 
 class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
-  final String title;
-  final bool centerTitle;
-  final Color backgroundColor;
-  final Color textColor;
-  Function searchFunc;
+  final String? title;
+  final bool? centerTitle;
+  final Color? backgroundColor;
+  final Color? textColor;
+  Function? searchFunc;
   CustomAppbar(
       {this.title = "",
       this.centerTitle,
       this.backgroundColor,
       this.textColor,
       this.searchFunc,
-      Key key})
+      Key? key})
       : preferredSize = Size.fromHeight(kToolbarHeight),
         super(key: key);
   @override
@@ -39,7 +39,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
           children: [
             globals.isOrder
                 ? InkWell(
-                    onTap: () => widget.searchFunc(),
+                    onTap: () => widget.searchFunc!(),
                     child: Container(
                       child: SvgPicture.asset(
                         "assets/img/loupe.svg",
@@ -50,7 +50,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                 : Container(),
             Container(
               child: Text(
-                widget.title,
+                widget.title!,
                 style: TextStyle(
                     fontFamily: globals.font,
                     fontSize: 18,
@@ -75,7 +75,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         child: Row(
                           children: [
                             Text(
-                              globals.userData["name"],
+                              globals.userData!["name"],
                               style: TextStyle(
                                   fontFamily: globals.font,
                                   fontSize: 18,

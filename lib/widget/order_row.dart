@@ -4,17 +4,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/svg.dart';
 
 class OrderRow extends StatefulWidget {
-  Map orderRow;
-  Function plus;
-  Function minus;
-  Function customVal;
+  Map? orderRow;
+  Function? plus;
+  Function? minus;
+  Function? customVal;
 
   OrderRow({
     this.orderRow,
     this.plus,
     this.minus,
     this.customVal,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -74,7 +74,7 @@ class _OrderRowState extends State<OrderRow> {
                             backgroundColor: Colors.transparent,
                             body: TextField(
                               onSubmitted: (val) {
-                                widget.customVal(
+                                widget.customVal!(
                                     widget.orderRow, double.parse(val));
                                 Navigator.of(context).pop();
                                 cntController.text = "";
@@ -110,7 +110,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 6,
                 child: AutoSizeText(
-                  "${widget.orderRow["name"]}",
+                  "${widget.orderRow!["name"]}",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: globals.font,
@@ -122,7 +122,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow["price"]}",
+                  "${widget.orderRow!["price"]}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,
@@ -154,7 +154,7 @@ class _OrderRowState extends State<OrderRow> {
                         //   ),
                         // ),
                         Text(
-                          "${widget.orderRow["cnt"]}",
+                          "${widget.orderRow!["cnt"]}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: globals.font,
@@ -180,7 +180,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow["price"] * widget.orderRow["cnt"]}",
+                  "${widget.orderRow!["price"] * widget.orderRow!["cnt"]}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,
