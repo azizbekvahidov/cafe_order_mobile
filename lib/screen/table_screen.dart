@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import './order_screen.dart';
@@ -36,8 +38,8 @@ class _TableScreenState extends State<TableScreen> {
       tableScreenState!.setState(() {});
       globals.isServerConnection = true;
       var res = [];
-      if (response["statusCode"] == 200) {
-        res = response["result"];
+      if (response.statusCode == 200) {
+        res = json.decode(response.body);
       }
       return res;
     } catch (e) {

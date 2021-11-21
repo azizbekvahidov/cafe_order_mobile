@@ -228,7 +228,7 @@ class _OrderScreenState extends State<OrderScreen> {
       globals.isServerConnection = true;
       if (response.statusCode == 200) {
         _products = [];
-        var menu = json.decode(response);
+        var menu = json.decode(response.body);
         if (menu["dish"].length != 0) {
           menu["dish"].forEach((val) {
             var temp = {
@@ -363,8 +363,7 @@ class _OrderScreenState extends State<OrderScreen> {
       orderScreenState!.setState(() {});
       globals.isServerConnection = true;
       if (response.statusCode == 200) {
-        var json = response["result"];
-        return json;
+        return json.decode(response.body);
       }
     } catch (e) {
       print(e);

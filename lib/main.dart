@@ -55,7 +55,7 @@ class _LoadScreenState extends State<LoadScreen> {
   getStringValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     url = prefs.getString("url");
-    globals.apiLink = url!;
+    globals.apiLink = url ?? "";
     //Return String
     // setState(() {
 
