@@ -1,26 +1,28 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cafe_mostbyte/helper/dio_connection.dart';
+import 'package:cafe_mostbyte/services/network_service.dart';
 import './order_screen.dart';
 import '../widget/custon_appbar.dart';
 import 'package:flutter/material.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 
-_TableScreenState tableScreenState;
+_TableScreenState? tableScreenState;
 
 class TableScreen extends StatefulWidget {
-  TableScreen({Key key}) : super(key: key);
+  TableScreen({Key? key}) : super(key: key);
 
   @override
   _TableScreenState createState() {
     tableScreenState = _TableScreenState();
-    return tableScreenState;
+    return tableScreenState!;
   }
 }
 
 class _TableScreenState extends State<TableScreen> {
-  List<dynamic> _tables = globals.tables;
-  List<dynamic> _activeTables;
-  var connect = new DioConnection();
+  List<dynamic>? _tables = globals.tables;
+  List<dynamic>? _activeTables;
+  var connect = NetworkService();
   @override
   void initState() {
     super.initState();
@@ -31,16 +33,17 @@ class _TableScreenState extends State<TableScreen> {
   Future getExpenses() async {
     try {
       Map<String, String> headers = {};
-      var response = await connect.getHttp(
-          'expenses?user=${globals.userData["employee_id"]}',
-          tableScreenState,
-          headers);
+      var response = await connect.get(
+          '${globals.apiLink}/expenses?user=${globals.userData!["employee_id"]}');
+      tableScreenState!.setState(() {});
+      globals.isServerConnection = true;
       var res = [];
-      if (response["statusCode"] == 200) {
-        res = response["result"];
+      if (response.statusCode == 200) {
+        res = json.decode(response.body);
       }
       return res;
     } catch (e) {
+      globals.isServerConnection = false;
       print(e);
     }
   }
@@ -68,19 +71,20 @@ class _TableScreenState extends State<TableScreen> {
                 child: FutureBuilder(
                   future: getExpenses(),
                   builder: (conxtext, snapshot) {
+                    List data = snapshot.data as List;
                     return snapshot.hasData
                         ? ListView.builder(
                             physics: BouncingScrollPhysics(),
-                            itemCount: _tables.length,
+                            itemCount: _tables!.length,
                             itemBuilder: (BuildContext context, int index) {
                               bool _isMy = false;
                               var active;
                               try {
-                                active = snapshot.data.firstWhere((e) =>
-                                    e["table"] == _tables[index]["table_num"]);
+                                active = data.firstWhere((e) =>
+                                    e["table"] == _tables![index]["table_num"]);
                                 if (active != null &&
                                     active["employee_id"] ==
-                                        globals.userData["employee_id"]) {
+                                        globals.userData!["employee_id"]) {
                                   _isMy = true;
                                 }
                               } catch (e) {
@@ -97,10 +101,10 @@ class _TableScreenState extends State<TableScreen> {
                                           MaterialPageRoute(
                                               builder: (BuildContext ctx) {
                                         return OrderScreen(
-                                            tableId: _tables[index]
+                                            tableId: _tables![index]
                                                 ["table_num"],
                                             expenseId: active["expense_id"],
-                                            tableName: _tables[index]
+                                            tableName: _tables![index]
                                                     ["table_num"]
                                                 .toString());
                                       }));
@@ -110,8 +114,9 @@ class _TableScreenState extends State<TableScreen> {
                                           MaterialPageRoute(
                                               builder: (BuildContext ctx) {
                                         return OrderScreen(
-                                          tableId: _tables[index]["table_num"],
-                                          tableName: _tables[index]["table_num"]
+                                          tableId: _tables![index]["table_num"],
+                                          tableName: _tables![index]
+                                                  ["table_num"]
                                               .toString(),
                                         );
                                       }));
@@ -142,7 +147,7 @@ class _TableScreenState extends State<TableScreen> {
                                     height: 50,
                                     child: Center(
                                       child: AutoSizeText(
-                                        _tables[index]["table_num"].toString(),
+                                        _tables![index]["table_num"].toString(),
                                         style: TextStyle(
                                           fontSize: 26,
                                           fontFamily: globals.font,

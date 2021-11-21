@@ -10,12 +10,14 @@ Color mainColor = Color(0xff0D335D);
 Color secondaryColor = Color(0xffC70039);
 Color thirdColor = Color(0xffC1A1D3);
 Color fourthColor = Color(0xffFFF3E6);
+Map<String, String> headers = {"content-type": "application/json"};
 bool isLogin = false;
-Map<String, dynamic> userData;
+Map<String, dynamic>? userData;
 String authName = "Aziz";
 String code = "";
 bool isOrder = false;
-List tables;
-List department;
+List? tables;
+String token = "";
+List? department;
 
 bool isServerConnection = false;

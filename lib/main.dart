@@ -3,23 +3,15 @@ import 'dart:async';
 import './screen/mian_screen.dart';
 import './screen/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './globals.dart' as globals;
+import 'config/globals.dart' as globals;
 
 void main() {
-  runApp(EasyLocalization(
-    child: MyApp(),
-    path: "lang",
-    saveLocale: true,
-    supportedLocales: [
-      Locale('uz', 'UZ'),
-      Locale('ru', 'RU'),
-      Locale('en', 'US'),
-    ],
-  ));
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -58,12 +50,12 @@ class LoadScreen extends StatefulWidget {
 }
 
 class _LoadScreenState extends State<LoadScreen> {
-  Timer timer;
-  String url;
+  Timer? timer;
+  String? url;
   getStringValuesSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     url = prefs.getString("url");
-    globals.apiLink = url;
+    globals.apiLink = url ?? "";
     //Return String
     // setState(() {
 

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../globals.dart' as globals;
+import '../config/globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
 
 class LoginBtn extends StatelessWidget {
-  final String txt;
-  final Color color;
+  final String? txt;
+  final Color? color;
   final double top;
   final double bottom;
   final double left;
   final double right;
   final img;
-  final Function onTapBtn;
+  final Function? onTapBtn;
 
   const LoginBtn(
       {this.onTapBtn,
@@ -21,7 +21,7 @@ class LoginBtn extends StatelessWidget {
       this.right = 0,
       this.color,
       this.txt,
-      Key key})
+      Key? key})
       : super(key: key);
 
   @override
@@ -32,9 +32,9 @@ class LoginBtn extends StatelessWidget {
       child: InkWell(
         onTap: () {
           if (img == null) {
-            onTapBtn(txt);
+            onTapBtn!(txt);
           } else {
-            onTapBtn();
+            onTapBtn!();
           }
         },
         child: Container(
@@ -59,7 +59,7 @@ class LoginBtn extends StatelessWidget {
           child: Center(
             child: img == null
                 ? Text(
-                    txt,
+                    txt!,
                     style: TextStyle(
                       color: globals.mainColor,
                       fontSize: 28,
