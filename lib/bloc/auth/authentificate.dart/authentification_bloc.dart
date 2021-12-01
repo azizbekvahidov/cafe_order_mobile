@@ -1,14 +1,16 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cafe_mostbyte/services/api_provider/data_api_provider.dart';
 import './authentificate_event.dart';
 import './authentification_state.dart';
-import '../../services/api_provider/user/user_repository.dart';
-import '../../config/globals.dart' as globals;
+import '../../../services/api_provider/user/user_repository.dart';
+import '../../../config/globals.dart' as globals;
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthentifacionState> {
   final UserRepository userRepository;
+  DataApiProvider dataProvider = DataApiProvider();
 
   AuthenticationBloc({required this.userRepository})
       : super(AuthenticationUninitialized());
@@ -21,11 +23,12 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      final bool hasToken = await userRepository.hasToken();
+      final bool hasToken = await userRepository.hasId();
+      print(hasToken);
       if (hasToken) {
         globals.isAuth = hasToken;
         globals.userData = await userRepository.getUser();
-
+        dataProvider.getSettings();
         yield AuthenticationAuthenticated();
       } else {
         yield AuthenticationUnauthenticated();

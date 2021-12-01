@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '/bloc/authentificate.dart/authentification_bloc.dart';
-import '/bloc/authentificate.dart/authentification_state.dart';
+import '/bloc/auth/authentificate.dart/authentification_bloc.dart';
+import '/bloc/auth/authentificate.dart/authentification_state.dart';
 import '/screen/splash_screen.dart';
 import '/services/api_provider/user/user_repository.dart';
 import './config/app_language.dart';
@@ -15,7 +15,7 @@ import './generated/loc_delegate.dart';
 import './screen/home_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './config/globals.dart' as globals;
-import 'bloc/authentificate.dart/authentificate_event.dart';
+import 'bloc/auth/authentificate.dart/authentificate_event.dart';
 
 class MyHttpOerrides extends HttpOverrides {
   @override
