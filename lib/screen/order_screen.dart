@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../print.dart';
 import './mian_screen.dart';
-import '../widget/custon_appbar.dart';
+import '../widget/custom_appbar.dart';
 import '../widget/order_row.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
@@ -57,8 +57,8 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getOrderStruct();
-    _categories = getCategory();
+    // getOrderStruct();
+    // _categories = getCategory();
     if (widget.expenseId != null) {
       orderStatus = "update";
     }

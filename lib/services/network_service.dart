@@ -70,7 +70,10 @@ class NetworkService {
         .get(Uri.parse(url), headers: headers)
         .then((http.Response response) {
       _updateCookie(response);
+      globals.isServerConnection = true;
       return response;
+    }).catchError((error) {
+      globals.isServerConnection = false;
     });
   }
 
@@ -89,8 +92,11 @@ class NetworkService {
             body: _encoder.convert(body), headers: headers, encoding: encoding)
         .then((http.Response response) {
       _updateCookie(response);
+      globals.isServerConnection = true;
 
       return response;
+    }).catchError((error) {
+      globals.isServerConnection = false;
     });
   }
 

@@ -26,9 +26,9 @@ class AuthenticationBloc
       final bool hasToken = await userRepository.hasId();
       print(hasToken);
       if (hasToken) {
+        await dataProvider.getSettings();
         globals.isAuth = hasToken;
         globals.userData = await userRepository.getUser();
-        dataProvider.getSettings();
         yield AuthenticationAuthenticated();
       } else {
         yield AuthenticationUnauthenticated();
