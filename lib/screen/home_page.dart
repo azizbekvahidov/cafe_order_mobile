@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,18 +34,18 @@ class _HomePageState extends State<HomePage> {
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
-      // PersistentBottomNavBarItem(
-      //   textStyle: Theme.of(context).textTheme.bodyText2,
-      //   icon: SvgPicture.asset(
-      //     "assets/img/home_selected.svg",
-      //   ),
-      //   inactiveIcon: SvgPicture.asset(
-      //     "assets/img/home_icon.svg",
-      //   ),
-      //   title: ("Главная"),
-      //   activeColorPrimary: Theme.of(context).bottomAppBarColor,
-      //   inactiveColorPrimary: Theme.of(context).hintColor,
-      // ),
+      PersistentBottomNavBarItem(
+        textStyle: Theme.of(context).textTheme.bodyText2,
+        icon: SvgPicture.asset(
+          "assets/img/home_selected.svg",
+        ),
+        inactiveIcon: SvgPicture.asset(
+          "assets/img/home_icon.svg",
+        ),
+        title: ("Главная"),
+        activeColorPrimary: Theme.of(context).bottomAppBarColor,
+        inactiveColorPrimary: Theme.of(context).hintColor,
+      ),
       // PersistentBottomNavBarItem(
       //   textStyle: Theme.of(context).textTheme.bodyText2,
       //   icon: SvgPicture.asset(
@@ -89,10 +90,10 @@ class _HomePageState extends State<HomePage> {
     return PersistentTabView.custom(
       context,
       routeAndNavigatorSettings: CutsomWidgetRouteAndNavigatorSettings(),
-      itemCount: 0,
+      itemCount: 1,
       controller: _controller,
       screens: [
-        // Container(),
+        OrderScreen(),
         // Container(),
         // Container(),
         // Container(),

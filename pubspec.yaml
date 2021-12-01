@@ -89,6 +89,9 @@ flutter:
     - locales/OZ_OZ.json
     - locales/RU_RU.json
     # image in app
+    - assets/img/shopping_cart.svg
+    - assets/img/home_icon.svg
+    - assets/img/home_selected.svg
     - assets/img/bin.svg
     - assets/img/logo.png
     - assets/img/clear.svg

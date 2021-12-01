@@ -1,7 +1,9 @@
+import 'package:cafe_mostbyte/bloc/auth/auth_repository.dart';
 import 'package:cafe_mostbyte/generated/locale_base.dart';
 import 'package:cafe_mostbyte/screen/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import '../../config/globals.dart' as globals;
 
 class Auth extends StatefulWidget {
   Auth({Key? key}) : super(key: key);
@@ -12,20 +14,16 @@ class Auth extends StatefulWidget {
 
 class _AuthState extends State<Auth> {
   Duration get loginTime => Duration(milliseconds: 2250);
+  AuthRepository authRepo = AuthRepository();
 
   Future<String?> _authUser(LoginData data) {
     // debugPrint('Name: ${data.name}, Password: ${data.password}');
-    // return Future.delayed(loginTime).then((_) {
-    //   if (!users.containsKey(data.name)) {
-    //     return 'User not exists';
-    //   }
-    //   if (users[data.name] != data.password) {
-    //     return 'Password does not match';
-    //   }
-    //   return null;
-    // });
+    authRepo.login(login: data.name, pass: data.password);
     return Future.delayed(loginTime).then((_) {
-      return 'User not exists';
+      if (globals.userData == null) {
+        return 'User not exists';
+      }
+      return null;
     });
   }
 
@@ -53,7 +51,7 @@ class _AuthState extends State<Auth> {
   Widget build(BuildContext context) {
     var loc = Localizations.of<LocaleBase>(context, LocaleBase)!;
     return FlutterLogin(
-      title: 'ECORP',
+      title: '',
       logo: AssetImage('assets/img/logo.png'),
       onLogin: _authUser,
       onSignup: _signupUser,
@@ -62,6 +60,7 @@ class _AuthState extends State<Auth> {
           builder: (context) => HomePage(),
         ));
       },
+      hideForgotPasswordButton: true,
       userValidator: (value) {
         print("goo");
       },
@@ -74,11 +73,15 @@ class _AuthState extends State<Auth> {
         // signupButton: 'REGISTER',
         // forgotPasswordButton: 'Forgot huh?',
         // recoverPasswordButton: 'HELP ME',
-        goBackButton: 'GO BACK',
+        goBackButton: loc.auth.go_back,
         // confirmPasswordError: 'Not match!',
         // recoverPasswordDescription:
         //     'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
         // recoverPasswordSuccess: 'Password rescued successfully',
+      ),
+      theme: LoginTheme(
+        titleStyle: Theme.of(context).textTheme.headline1,
+        buttonStyle: Theme.of(context).textTheme.headline2,
       ),
     );
   }

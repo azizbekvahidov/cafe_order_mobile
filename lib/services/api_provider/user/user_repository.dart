@@ -28,4 +28,13 @@ class UserRepository {
     // await Future.delayed(Duration(seconds: 1));
     return res;
   }
+
+  Future<bool> hasId() async {
+    bool res = await helper.checkData("id");
+    if (res) {
+      globals.id = await helper.getData("id", type: "int");
+    }
+    // await Future.delayed(Duration(seconds: 1));
+    return res;
+  }
 }

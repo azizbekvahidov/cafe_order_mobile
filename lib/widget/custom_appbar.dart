@@ -29,6 +29,7 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppbarState extends State<CustomAppbar> {
   @override
   Widget build(BuildContext context) {
+    print(globals.isServerConnection);
     return AppBar(
       elevation: 1,
       iconTheme: IconThemeData(color: globals.mainColor),
@@ -74,13 +75,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         },
                         child: Row(
                           children: [
-                            Text(
-                              globals.userData!.name,
-                              style: TextStyle(
-                                  fontFamily: globals.font,
-                                  fontSize: 18,
-                                  color: globals.mainColor),
-                            ),
+                            Text(globals.userData!.name,
+                                style: Theme.of(context).textTheme.bodyText1),
                             Padding(
                               padding: EdgeInsets.only(left: 5),
                             ),

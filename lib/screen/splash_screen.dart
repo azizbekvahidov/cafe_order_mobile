@@ -27,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: SvgPicture.asset(
                 "assets/img/logo-cafe.svg",
+                height: 250,
               ),
             ),
           ],

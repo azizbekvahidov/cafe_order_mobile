@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../app_status.dart';
+import '../../app_status.dart';
 
 class AuthentifacionState extends Equatable {
   AppStatus? appStatus;
