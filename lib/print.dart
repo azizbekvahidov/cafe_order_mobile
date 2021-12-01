@@ -23,7 +23,7 @@ class Print {
       // printer.textEncoded(encTxt4, styles: PosStyles(codeTable: "CP866"));
 
       Uint8List kafeTxt =
-          await CharsetConverter.encode("CP866", globals.userData!["kafename"]);
+          await CharsetConverter.encode("CP866", globals.userData!.cafe_name);
       printer.textEncoded(kafeTxt,
           styles: PosStyles(
             align: PosAlign.center,
@@ -138,7 +138,7 @@ class Print {
 
       Uint8List discTxt =
           await CharsetConverter.encode("CP866", "Обслуживание :");
-      double percent = total / 100 * globals.userData!["percent"];
+      double percent = total / 100 * globals.userData!.percent;
       printer.row([
         PosColumn(
             textEncoded: discTxt,
@@ -295,7 +295,7 @@ class Print {
           printer.disconnect();
         }
       } else if (type == "check") {
-        globals.userData!["department"].forEach((val) async {
+        globals.userData!.department.forEach((val) async {
           printedCheck(printer, val, data);
         });
       }
