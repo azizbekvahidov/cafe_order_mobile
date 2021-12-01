@@ -1,93 +1,133 @@
-import 'dart:async';
+import 'dart:io';
 
-import './screen/mian_screen.dart';
-import './screen/settings_page.dart';
+import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'config/globals.dart' as globals;
+import '/bloc/authentificate.dart/authentification_bloc.dart';
+import '/bloc/authentificate.dart/authentification_state.dart';
+import '/screen/splash_screen.dart';
+import '/services/api_provider/user/user_repository.dart';
+import './config/app_language.dart';
+import './config/theme.dart';
+import './generated/loc_delegate.dart';
+import './screen/home_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import './config/globals.dart' as globals;
+import 'bloc/authentificate.dart/authentificate_event.dart';
 
-void main() {
-  runApp(
-    MyApp(),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyHttpOerrides extends HttpOverrides {
   @override
-  Widget build(BuildContext context) {
-    initializeDateFormatting("ru");
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Cafe Order',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primaryColor: Color(0xff1A508B),
-
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: LoadScreen(),
-    );
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
-class LoadScreen extends StatefulWidget {
-  @override
-  _LoadScreenState createState() => _LoadScreenState();
+void main() async {
+  HttpOverrides.global = MyHttpOerrides();
+  AppLanguage appLanguage = AppLanguage();
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  await appLanguage.fetchLocale(prefs);
+  runApp(RepositoryProvider(
+      create: (context) => UserRepository(),
+      child:
+          MyApp(appLanguage: appLanguage, userRepository: UserRepository())));
 }
 
-class _LoadScreenState extends State<LoadScreen> {
-  Timer? timer;
-  String? url;
-  getStringValuesSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    url = prefs.getString("url");
-    globals.apiLink = url ?? "";
-    //Return String
-    // setState(() {
+class MyApp extends StatefulWidget {
+  final AppLanguage appLanguage;
+  final UserRepository userRepository;
 
-    // });
-  }
+  const MyApp(
+      {required this.appLanguage, required this.userRepository, Key? key})
+      : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+  }
 
-    getStringValuesSF();
-
-    Timer(Duration(seconds: 2), () {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext ctx) {
-        return url != null ? MainScreen() : SettingsPage();
-      }));
-    });
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          child: SvgPicture.asset(
-            'assets/img/logo-cafe.svg',
-            height: 120,
+    return ChangeNotifierProvider<AppLanguage>(
+      create: (_) => widget.appLanguage,
+      child: Consumer<AppLanguage>(builder: (context, model, child) {
+        return BlocProvider<AuthenticationBloc>(
+          create: (context) => AuthenticationBloc(
+            userRepository: context.read<UserRepository>(),
           ),
-        ),
-      ),
+          child: BlocBuilder<AuthenticationBloc, AuthentifacionState>(
+              builder: (BuildContext context, AuthentifacionState state) {
+            var _page;
+            if (state is AuthenticationUninitialized) {
+              context.read<AuthenticationBloc>().add(AppStarted());
+              _page = SplashScreen();
+            } else if (state is AuthenticationAuthenticated) {
+              _page = MaterialApp(
+                title: 'Yoshlar Portali',
+                theme: basicTheme(),
+                themeMode: ThemeMode.light,
+                // debugShowMaterialGrid: true,
+                debugShowCheckedModeBanner: true,
+                localizationsDelegates: const [
+                  LocDelegate(),
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                home: HomePage(),
+                //globals.isAuth ? MainPage() : MainAuth(),
+              );
+            } else {
+              _page = MaterialApp(
+                title: 'Yoshlar Portali',
+                theme: basicTheme(),
+                themeMode: ThemeMode.light,
+                // debugShowMaterialGrid: true,
+                debugShowCheckedModeBanner: true,
+                localizationsDelegates: const [
+                  LocDelegate(),
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                home: Auth(),
+                //globals.isAuth ? MainPage() : MainAuth(),
+              );
+            }
+            return AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: _page,
+            );
+          }),
+        );
+      }),
     );
+  }
+}
+
+class MainPage extends StatefulWidget {
+  MainPage({Key? key}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  Widget build(BuildContext context) {
+    return HomePage();
   }
 }

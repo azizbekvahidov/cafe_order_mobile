@@ -33,8 +33,8 @@ class _TableScreenState extends State<TableScreen> {
   Future getExpenses() async {
     try {
       Map<String, String> headers = {};
-      var response = await connect.get(
-          '${globals.apiLink}/expenses?user=${globals.userData!["employee_id"]}');
+      var response = await connect
+          .get('${globals.apiLink}/expenses?user=${globals.userData!.id}');
       tableScreenState!.setState(() {});
       globals.isServerConnection = true;
       var res = [];
@@ -84,7 +84,7 @@ class _TableScreenState extends State<TableScreen> {
                                     e["table"] == _tables![index]["table_num"]);
                                 if (active != null &&
                                     active["employee_id"] ==
-                                        globals.userData!["employee_id"]) {
+                                        globals.userData!.id) {
                                   _isMy = true;
                                 }
                               } catch (e) {

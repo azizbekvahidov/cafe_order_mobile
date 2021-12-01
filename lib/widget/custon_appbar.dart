@@ -75,7 +75,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         child: Row(
                           children: [
                             Text(
-                              globals.userData!["name"],
+                              globals.userData!.name,
                               style: TextStyle(
                                   fontFamily: globals.font,
                                   fontSize: 18,
