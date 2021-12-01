@@ -102,6 +102,7 @@ ThemeData basicTheme() {
       color: Colors.white,
       size: 20.0,
     ),
+    splashColor: const Color(0xFF212121),
     backgroundColor: Colors.white,
     colorScheme: ColorScheme.fromSwatch().copyWith(
       primaryVariant: Color(0xff4829b2),
