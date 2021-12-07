@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:window_manager/window_manager.dart';
 import '/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import '/bloc/auth/authentificate.dart/authentification_state.dart';
 import '/screen/splash_screen.dart';
@@ -30,6 +31,15 @@ void main() async {
   HttpOverrides.global = MyHttpOerrides();
   AppLanguage appLanguage = AppLanguage();
   WidgetsFlutterBinding.ensureInitialized();
+  // Must add this line.
+  await windowManager.ensureInitialized();
+
+  // Use it only after calling `hiddenWindowAtLaunch`
+  windowManager.waitUntilReadyToShow().then((_) async {
+    // Set to frameless window
+    await WindowManager.instance.setFullScreen(true);
+    windowManager.show();
+  });
   final prefs = await SharedPreferences.getInstance();
   await appLanguage.fetchLocale(prefs);
   runApp(RepositoryProvider(
@@ -78,7 +88,7 @@ class _MyAppState extends State<MyApp> {
               _page = SplashScreen();
             } else if (state is AuthenticationAuthenticated) {
               _page = MaterialApp(
-                title: 'Yoshlar Portali',
+                title: 'Mostbyte Cafe',
                 theme: basicTheme(),
                 themeMode: ThemeMode.light,
                 // debugShowMaterialGrid: true,
@@ -93,7 +103,7 @@ class _MyAppState extends State<MyApp> {
               );
             } else {
               _page = MaterialApp(
-                title: 'Yoshlar Portali',
+                title: 'Mostbyte Cafe',
                 theme: basicTheme(),
                 themeMode: ThemeMode.light,
                 // debugShowMaterialGrid: true,

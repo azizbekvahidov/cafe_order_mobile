@@ -8,7 +8,7 @@ class UserRepository {
   Future<User> getUser() => _userProvider.getUser();
   Future<void> deleteToken() async {
     /// delete from keystore/keychain
-    helper.deleteData('token');
+    helper.deleteData('id');
     // await Future.delayed(Duration(seconds: 1));
     return;
   }

@@ -23,10 +23,9 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
+      await dataProvider.getSettings();
       final bool hasToken = await userRepository.hasId();
-      print(hasToken);
       if (hasToken) {
-        await dataProvider.getSettings();
         globals.isAuth = hasToken;
         globals.userData = await userRepository.getUser();
         yield AuthenticationAuthenticated();
