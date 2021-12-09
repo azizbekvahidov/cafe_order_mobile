@@ -10,6 +10,8 @@ String apiLink = "http://87.237.234.154/api/v1/";
 String lang = "ru";
 var loc;
 bool isAuth = false;
+List? categories;
+
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);
 Color secondaryColor = Color(0xffC70039);

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cafe_mostbyte/screen/order_screen.dart';
+import 'package:cafe_mostbyte/screen/remote_order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
+        onPressed: (index) => print("good $index"),
         textStyle: Theme.of(context).textTheme.bodyText2,
         icon: SvgPicture.asset(
           "assets/img/home_selected.svg",
@@ -46,18 +48,18 @@ class _HomePageState extends State<HomePage> {
         activeColorPrimary: Theme.of(context).bottomAppBarColor,
         inactiveColorPrimary: Theme.of(context).hintColor,
       ),
-      // PersistentBottomNavBarItem(
-      //   textStyle: Theme.of(context).textTheme.bodyText2,
-      //   icon: SvgPicture.asset(
-      //     "assets/img/fire_selected.svg",
-      //   ),
-      //   inactiveIcon: SvgPicture.asset(
-      //     "assets/img/fire_icon.svg",
-      //   ),
-      //   title: ("Возможности"),
-      //   activeColorPrimary: Theme.of(context).bottomAppBarColor,
-      //   inactiveColorPrimary: Theme.of(context).hintColor,
-      // ),
+      PersistentBottomNavBarItem(
+        textStyle: Theme.of(context).textTheme.bodyText2,
+        icon: SvgPicture.asset(
+          "assets/img/fire_selected.svg",
+        ),
+        inactiveIcon: SvgPicture.asset(
+          "assets/img/fire_icon.svg",
+        ),
+        title: ("Возможности"),
+        activeColorPrimary: Theme.of(context).bottomAppBarColor,
+        inactiveColorPrimary: Theme.of(context).hintColor,
+      ),
       // PersistentBottomNavBarItem(
       //   textStyle: Theme.of(context).textTheme.bodyText2,
       //   icon: SvgPicture.asset(
@@ -90,11 +92,11 @@ class _HomePageState extends State<HomePage> {
     return PersistentTabView.custom(
       context,
       routeAndNavigatorSettings: CutsomWidgetRouteAndNavigatorSettings(),
-      itemCount: 1,
+      itemCount: 2,
       controller: _controller,
       screens: [
         OrderScreen(),
-        // Container(),
+        RemoteOrder(),
         // Container(),
         // Container(),
       ],

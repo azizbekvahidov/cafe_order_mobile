@@ -54,6 +54,7 @@ dependencies:
   flutter_typeahead: ^3.2.1
   flutter_login: ^3.0.0
   persistent_bottom_nav_bar: ^4.0.2
+  tabbed_view: ^1.10.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -93,6 +94,8 @@ flutter:
     - assets/img/shopping_cart.svg
     - assets/img/home_icon.svg
     - assets/img/home_selected.svg
+    - assets/img/fire_icon.svg
+    - assets/img/fire_selected.svg
     - assets/img/bin.svg
     - assets/img/logo.png
     - assets/img/clear.svg

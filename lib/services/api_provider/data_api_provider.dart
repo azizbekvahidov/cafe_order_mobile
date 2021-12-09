@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cafe_mostbyte/models/category.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
 
 import '../network_service.dart';
@@ -18,6 +19,50 @@ class DataApiProvider {
         globals.settings = Settings.fromJson(settings);
       } else {
         throw Exception("error fetching users");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<dynamic>> getCategory() async {
+    try {
+      final response = await net.get('${globals.apiLink}menu/category');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        globals.categories = res["data"];
+        return res["data"];
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<dynamic>> getProducts({id}) async {
+    try {
+      final response =
+          await net.get('${globals.apiLink}menu/list?category_id=$id');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return res["data"];
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<dynamic>> getExpenses({id}) async {
+    try {
+      final response = await net.get('${globals.apiLink}expense/list/$id');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return res["data"];
+      } else {
+        throw Exception("error fetching category");
       }
     } catch (e) {
       throw Exception(e.toString());

@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
+import 'package:cafe_mostbyte/components/custom_block/custom_drawer.dart';
+import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/product_card.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -32,23 +36,25 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  bool _showReciept = false;
+  bool _showReciept = true;
   final formatter = new NumberFormat("# ### ###");
   String orderStatus = "create";
   Map<String, dynamic>? expense_data;
   List<dynamic> _products = [];
   var connect = new NetworkService();
-  Future? _categories;
+  var _categories;
   List<dynamic> _order = [];
   List<dynamic> _orderChange = [];
   bool sendRequest = false;
+  ScrollController _menuController = ScrollController();
+  ScrollController _checkController = ScrollController();
 
   double? totalSum;
   getTotal() {
     double sum = 0;
 
     _order.forEach((element) {
-      sum += element["price"] * element["cnt"];
+      // sum += element["price"] * element["cnt"];
     });
     return sum + (sum / 100 * int.parse(globals.settings!.percent));
   }
@@ -57,11 +63,14 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getOrderStruct();
-    // _categories = getCategory();
+    loadData();
     if (widget.expenseId != null) {
       orderStatus = "update";
     }
+  }
+
+  loadData() async {
+    await orderBloc.fetchCategory();
   }
 
   getOrderStruct() async {
@@ -197,22 +206,6 @@ class _OrderScreenState extends State<OrderScreen> {
         }
       }
     } catch (e) {
-      print(e);
-    }
-  }
-
-  Future getCategory() async {
-    try {
-      var response = await connect.get('${globals.apiLink}/categories');
-      orderScreenState!.setState(() {});
-      globals.isServerConnection = true;
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        dynamic res = json.decode(response.body);
-      }
-    } catch (e) {
-      globals.isServerConnection = false;
       print(e);
     }
   }
@@ -476,196 +469,47 @@ class _OrderScreenState extends State<OrderScreen> {
           children: [
             Positioned(
               top: 0,
+              left: 0,
               child: Container(
-                width: dWidth - 40,
-                height: dHeight - appbar.preferredSize.height - 150,
-                child: GridView.builder(
-                    padding: EdgeInsets.all(0),
-                    physics: BouncingScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2 / 1.6,
-                    ),
-                    itemCount: _products.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.only(
-                            bottom: 10, left: index % 2 == 0 ? 0 : 10),
-                        child: InkWell(
-                          onTap: () {
-                            addToOrder(_products[index]);
-                            addToOrderChange(_products[index]);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 1, color: globals.mainColor))
-                                // border: Border.all(width: 1, color: Colors.black),
-                                ),
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: globals.fourthColor,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                        ),
-                                        border: Border.all(
-                                          color: globals.fourthColor,
-                                          width: 1,
-                                        )),
-                                    height: dWidth / 2 / 1.6 - 40,
-                                    width: dWidth,
-                                    // color: Colors.grey,
-                                    child: FittedBox(
-                                        fit: _products[index]["image"] != null
-                                            ? BoxFit.cover
-                                            : BoxFit.contain,
-                                        child: _products[index]["image"] != null
-                                            ? Image.network(
-                                                _products[index]["image"])
-                                            : SvgPicture.asset(
-                                                "assets/img/no-photo.svg",
-                                                height: 40,
-                                                color: globals.thirdColor,
-                                              )),
-                                  ),
-                                ),
-                                Positioned(
-                                    top: 5,
-                                    right: 5,
-                                    child: Container(
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4),
-                                        color: globals.mainColor,
-                                      ),
-                                      child: AutoSizeText(
-                                        "${_products[index]["price"]}",
-                                        style: TextStyle(
-                                          fontFamily: globals.font,
-                                          color: globals.fourthColor,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    )),
-                                Positioned(
-                                  bottom: 5,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: dWidth / 2 / 1.6 -
-                                        (dWidth / 2 / 1.6 - 40),
-                                    width: dWidth / 2 - 20,
-                                    child: AutoSizeText(
-                                      _products[index]["name"],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: globals.font,
-                                        fontSize: 7,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                width: dWidth * 0.77,
+                height: dHeight - appbar.preferredSize.height - 170,
+                child: SingleChildScrollView(
+                  controller: _menuController,
+                  child: StreamBuilder(
+                    stream: orderBloc.productList,
+                    builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                      if (snapshot.hasData) {
+                        List _products = snapshot.data as List;
+                        return Wrap(
+                          children: [
+                            for (Map _product in _products)
+                              ProductCard(product: _product)
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text(snapshot.error.toString());
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  ),
+                ),
               ),
             ),
-            _showReciept
-                ? Positioned(
-                    top: 0,
-                    child: Container(
-                      color: Colors.white,
-                      width: dWidth - 40,
-                      height: dHeight - appbar.preferredSize.height - 150,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 6,
-                                child: AutoSizeText(
-                                  "Наименование",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: globals.font,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  "Цена",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: globals.font,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  "Кол-во",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: globals.font,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  "Сумма",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: globals.font,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Divider(
-                            color: globals.mainColor,
-                            thickness: 1,
-                          ),
-                          Container(
-                            height: dHeight - appbar.preferredSize.height - 235,
-                            child: ListView.builder(
-                                itemCount: _order.length,
-                                itemBuilder: (content, index) {
-                                  return OrderRow(
-                                    orderRow: _order[index],
-                                    plus: plusCnt,
-                                    minus: minusCnt,
-                                    customVal: setDefaultVal,
-                                  );
-                                }),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                : Container(),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                        left: BorderSide(width: 1, color: Colors.black))),
+                width: dWidth * 0.27,
+                height: dHeight - appbar.preferredSize.height - 170,
+                child: SingleChildScrollView(
+                    controller: _checkController,
+                    child: ExpenseCard(order: _order)),
+              ),
+            ),
             _isSearch
                 ? Positioned(
                     top: 0,
@@ -870,58 +714,7 @@ class _OrderScreenState extends State<OrderScreen> {
           ],
         ),
       ),
-      drawer: Drawer(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: FutureBuilder(
-              future: _categories,
-              builder: (context, snapshot) {
-                List res = snapshot.data as List;
-                return snapshot.hasData
-                    ? ListView.builder(
-                        itemCount: res.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(horizontal: 7),
-                            child: InkWell(
-                              onTap: () {
-                                getProdByCategory(res[index]["type_id"]);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  // border:
-                                  //     Border.all(width: 1, color: Colors.black),
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.7),
-                                      spreadRadius: 0,
-                                      blurRadius: 5,
-                                      offset: Offset(
-                                          2, 2), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 5),
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                alignment: Alignment.center,
-                                child: Center(
-                                  child: Text(
-                                    res[index]["name"],
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : Container();
-              }),
-        ),
-      ),
+      drawer: CustomDrawer(),
     );
   }
 }
