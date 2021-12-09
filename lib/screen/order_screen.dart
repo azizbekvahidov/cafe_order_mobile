@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../print.dart';
 import './mian_screen.dart';
-import '../widget/custon_appbar.dart';
+import '../widget/custom_appbar.dart';
 import '../widget/order_row.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
@@ -50,15 +50,15 @@ class _OrderScreenState extends State<OrderScreen> {
     _order.forEach((element) {
       sum += element["price"] * element["cnt"];
     });
-    return sum + (sum / 100 * globals.userData!['percent']);
+    return sum + (sum / 100 * int.parse(globals.settings!.percent));
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getOrderStruct();
-    _categories = getCategory();
+    // getOrderStruct();
+    // _categories = getCategory();
     if (widget.expenseId != null) {
       orderStatus = "update";
     }
@@ -370,26 +370,26 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
-  sendPrint() async {
-    try {
-      Map<String, dynamic> data = {
-        "table": widget.tableName,
-        "emp": globals.userData!["name"],
-        "departments": globals.userData!["department"],
-        "data": _orderChange
-      };
-      var response = await connect.post('${globals.apiLink}/print', body: data);
-      orderScreenState!.setState(() {});
-      globals.isServerConnection = true;
-      if (response.statusCode == 200) {
-        var res = json.decode(response);
-        // return json;
-      }
-    } catch (e) {
-      globals.isServerConnection = false;
-      print(e);
-    }
-  }
+  // sendPrint() async {
+  //   try {
+  //     Map<String, dynamic> data = {
+  //       "table": widget.tableName,
+  //       "emp": globals.userData!.name,
+  //       "departments": globals.userData!.department,
+  //       "data": _orderChange
+  //     };
+  //     var response = await connect.post('${globals.apiLink}/print', body: data);
+  //     orderScreenState!.setState(() {});
+  //     globals.isServerConnection = true;
+  //     if (response.statusCode == 200) {
+  //       var res = json.decode(response);
+  //       // return json;
+  //     }
+  //   } catch (e) {
+  //     globals.isServerConnection = false;
+  //     print(e);
+  //   }
+  // }
 
   final Print prints = new Print();
   addProduct() async {
@@ -401,7 +401,7 @@ class _OrderScreenState extends State<OrderScreen> {
         if (widget.expenseId == null) {
           Map<String, dynamic> data = {
             "table": widget.tableId,
-            "employee_id": globals.userData!["employee_id"],
+            "employee_id": globals.userData!.id,
             "expSum": totalSum,
             "params": _orderChange,
             "all_prods": _order,
@@ -410,7 +410,7 @@ class _OrderScreenState extends State<OrderScreen> {
           if (!_orderChange.isEmpty) {
             Map<String, dynamic> temp = {
               "table_name": widget.tableName,
-              "employee_name": globals.userData!["name"]
+              "employee_name": globals.userData!.name
             };
 
             response = await connect.post('${globals.apiLink}/create-order',
@@ -418,7 +418,7 @@ class _OrderScreenState extends State<OrderScreen> {
             orderScreenState!.setState(() {});
             globals.isServerConnection = true;
             if (response.statusCode == 200) {
-              sendPrint();
+              // sendPrint();
 
               // prints.testPrint("192.168.1.200", context, "check",
               //     {"expense": temp, "order": _orderChange});
@@ -433,7 +433,7 @@ class _OrderScreenState extends State<OrderScreen> {
         } else {
           Map<String, dynamic> data = {
             "table": widget.tableId,
-            "employee_id": globals.userData!["employee_id"],
+            "employee_id": globals.userData!.id,
             "expSum": totalSum,
             "params": _orderChange,
             "all_prods": _order,
@@ -443,7 +443,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 '${globals.apiLink}/update-order/${widget.expenseId}',
                 body: data);
             if (response["statusCode"] == 200) {
-              sendPrint();
+              // sendPrint();
               // prints.testPrint("192.168.1.200", context, "check",
               //     {"expense": expense_data, "order": _orderChange});
               quit();
@@ -768,7 +768,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AutoSizeText(
-                            "Итого: +${globals.userData!["percent"]}%",
+                            "Итого: +${globals.settings!.percent}%",
                             style: TextStyle(
                               fontFamily: globals.font,
                               fontSize: 20,
@@ -836,7 +836,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               var res = await checkPrint();
                               if (res == true) {
                                 prints.testPrint(
-                                    globals.userData!["printer"],
+                                    globals.settings!.printer,
                                     context,
                                     "reciept",
                                     {"expense": expense_data, "order": _order});

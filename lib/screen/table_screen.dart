@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import './order_screen.dart';
-import '../widget/custon_appbar.dart';
+import '../widget/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 
@@ -33,8 +33,8 @@ class _TableScreenState extends State<TableScreen> {
   Future getExpenses() async {
     try {
       Map<String, String> headers = {};
-      var response = await connect.get(
-          '${globals.apiLink}/expenses?user=${globals.userData!["employee_id"]}');
+      var response = await connect
+          .get('${globals.apiLink}/expenses?user=${globals.userData!.id}');
       tableScreenState!.setState(() {});
       globals.isServerConnection = true;
       var res = [];
@@ -84,7 +84,7 @@ class _TableScreenState extends State<TableScreen> {
                                     e["table"] == _tables![index]["table_num"]);
                                 if (active != null &&
                                     active["employee_id"] ==
-                                        globals.userData!["employee_id"]) {
+                                        globals.userData!.id) {
                                   _isMy = true;
                                 }
                               } catch (e) {

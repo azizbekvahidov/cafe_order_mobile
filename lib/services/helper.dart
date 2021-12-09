@@ -133,3 +133,11 @@ unformatDate(dateStr) {
       DateTime.parse(DateFormat('yyyy-MM-dd').parseUTC(dateStr).toString()));
   return res;
 }
+
+Map<String, dynamic> parseSettings(List data) {
+  Map<String, dynamic> res = {};
+  data.forEach((element) {
+    res.addAll({element["setting_name"]: element["setting_value"]});
+  });
+  return res;
+}
