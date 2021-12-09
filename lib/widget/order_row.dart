@@ -110,7 +110,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 6,
                 child: AutoSizeText(
-                  "${widget.orderRow!["name"]}",
+                  "${widget.orderRow!["product"]["name_uz"]}",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: globals.font,
@@ -122,7 +122,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow!["price"]}",
+                  "${widget.orderRow!["product"]["price"]}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,
@@ -154,7 +154,7 @@ class _OrderRowState extends State<OrderRow> {
                         //   ),
                         // ),
                         Text(
-                          "${widget.orderRow!["cnt"]}",
+                          "${widget.orderRow!["amount"]}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: globals.font,
@@ -180,7 +180,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow!["price"] * widget.orderRow!["cnt"]}",
+                  "${widget.orderRow!["product"]["price"] * widget.orderRow!["amount"]}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,

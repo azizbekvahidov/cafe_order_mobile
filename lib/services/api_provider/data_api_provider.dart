@@ -68,4 +68,18 @@ class DataApiProvider {
       throw Exception(e.toString());
     }
   }
+
+  Future<Map<String, dynamic>> getExpense({id}) async {
+    try {
+      final response = await net.get('${globals.apiLink}expense/$id');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return res["data"];
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

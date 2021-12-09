@@ -11,6 +11,7 @@ String lang = "ru";
 var loc;
 bool isAuth = false;
 List? categories;
+int filial = 1;
 
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);

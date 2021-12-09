@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/custom_block/custom_drawer.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/menu_list.dart';
 import 'package:cafe_mostbyte/components/product_card.dart';
+import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 import '../print.dart';
 import './mian_screen.dart';
@@ -46,8 +49,7 @@ class _OrderScreenState extends State<OrderScreen> {
   List<dynamic> _order = [];
   List<dynamic> _orderChange = [];
   bool sendRequest = false;
-  ScrollController _menuController = ScrollController();
-  ScrollController _checkController = ScrollController();
+  TabbedViewController controller = TabbedViewController([]);
 
   double? totalSum;
   getTotal() {
@@ -71,6 +73,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   loadData() async {
     await orderBloc.fetchCategory();
+    await orderBloc.fetchExpenses(id: globals.filial);
   }
 
   getOrderStruct() async {
@@ -467,49 +470,9 @@ class _OrderScreenState extends State<OrderScreen> {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Stack(
           children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                width: dWidth * 0.77,
-                height: dHeight - appbar.preferredSize.height - 170,
-                child: SingleChildScrollView(
-                  controller: _menuController,
-                  child: StreamBuilder(
-                    stream: orderBloc.productList,
-                    builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-                      if (snapshot.hasData) {
-                        List _products = snapshot.data as List;
-                        return Wrap(
-                          children: [
-                            for (Map _product in _products)
-                              ProductCard(product: _product)
-                          ],
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text(snapshot.error.toString());
-                      }
-                      return Center(child: CircularProgressIndicator());
-                    },
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                        left: BorderSide(width: 1, color: Colors.black))),
-                width: dWidth * 0.27,
-                height: dHeight - appbar.preferredSize.height - 170,
-                child: SingleChildScrollView(
-                    controller: _checkController,
-                    child: ExpenseCard(order: _order)),
-              ),
-            ),
+            Tabs(),
+            MenuList(appbarSize: appbar.preferredSize.height),
+            ExpenseCard(order: _order, appbarSize: appbar.preferredSize.height),
             _isSearch
                 ? Positioned(
                     top: 0,

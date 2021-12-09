@@ -9,4 +9,6 @@ class OrderRepository {
       dataApiProvider.getProducts(id: id);
   Future<List<dynamic>> expenseList({id}) =>
       dataApiProvider.getExpenses(id: id);
+  Future<Map<String, dynamic>> expense({id}) =>
+      dataApiProvider.getExpense(id: id);
 }
