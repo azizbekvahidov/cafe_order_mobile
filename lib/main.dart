@@ -36,8 +36,8 @@ void main() async {
 
   // Use it only after calling `hiddenWindowAtLaunch`
   windowManager.waitUntilReadyToShow().then((_) async {
-    // Set to frameless window
-    await WindowManager.instance.setFullScreen(true);
+    windowManager.setFullScreen(true);
+    windowManager.setClosable(true);
     windowManager.show();
   });
   final prefs = await SharedPreferences.getInstance();

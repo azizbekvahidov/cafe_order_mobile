@@ -108,6 +108,7 @@ flutter:
     - assets/img/visibility.svg
     - assets/img/no-photo.svg
     - assets/img/logo-cafe.svg
+    - assets/img/power.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
