@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
+import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/widget/order_row.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
@@ -93,14 +95,13 @@ class _ExpenseCardState extends State<ExpenseCard> {
                   Container(
                     child: StreamBuilder(
                       stream: orderBloc.expense,
-                      builder: (context,
-                          AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                      builder: (context, AsyncSnapshot<Expense> snapshot) {
                         if (snapshot.hasData) {
                           var expense = snapshot.data;
 
                           return Column(
                             children: [
-                              for (var item in expense!["order"])
+                              for (Order item in expense!.order)
                                 OrderRow(
                                   orderRow: item,
                                   plus: () {}, //plusCnt,

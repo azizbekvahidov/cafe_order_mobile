@@ -1,10 +1,11 @@
+import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/svg.dart';
 
 class OrderRow extends StatefulWidget {
-  Map? orderRow;
+  Order? orderRow;
   Function? plus;
   Function? minus;
   Function? customVal;
@@ -36,7 +37,8 @@ class _OrderRowState extends State<OrderRow> {
         pageBuilder: (BuildContext buildContext, Animation animation,
             Animation secondaryAnimation) {
           return Container(
-            padding: EdgeInsets.only(top: 100, left: 20, right: 20),
+            padding: EdgeInsets.only(
+                top: 100, left: dWidth * 0.2, right: dWidth * 0.2),
             alignment: Alignment.topCenter,
             child: Container(
               decoration: BoxDecoration(
@@ -45,8 +47,8 @@ class _OrderRowState extends State<OrderRow> {
               width: MediaQuery.of(context).size.width,
               height: 50, //MediaQuery.of(context).size.height * 0.5,
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                width: double.infinity,
+                padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
+                // width: double.infinity,
                 height: 45,
                 decoration: BoxDecoration(
                   color: Color(0xffF5F6F9),
@@ -65,10 +67,11 @@ class _OrderRowState extends State<OrderRow> {
                           // widget.streetNode.requestFocus();
                         },
                         child: Container(
+                          alignment: Alignment.center,
                           width: (mediaQuery.size.width -
                                   mediaQuery.padding.left -
                                   mediaQuery.padding.right) *
-                              0.74,
+                              0.5,
                           margin: EdgeInsets.only(top: 20),
                           child: Scaffold(
                             backgroundColor: Colors.transparent,
@@ -85,7 +88,7 @@ class _OrderRowState extends State<OrderRow> {
                               decoration: InputDecoration.collapsed(
                                 hintText: "",
                                 hintStyle: TextStyle(
-                                    fontFamily: globals.font, fontSize: 18),
+                                    fontFamily: globals.font, fontSize: 28),
                               ),
                             ),
                           ),
@@ -110,7 +113,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 6,
                 child: AutoSizeText(
-                  "${widget.orderRow!["product"]["name_uz"]}",
+                  "${widget.orderRow!.product.name}",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: globals.font,
@@ -122,7 +125,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow!["product"]["price"]}",
+                  "${widget.orderRow!.product.price}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,
@@ -154,7 +157,7 @@ class _OrderRowState extends State<OrderRow> {
                         //   ),
                         // ),
                         Text(
-                          "${widget.orderRow!["amount"]}",
+                          "${widget.orderRow!.amount}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: globals.font,
@@ -180,7 +183,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow!["product"]["price"] * widget.orderRow!["amount"]}",
+                  "${widget.orderRow!.product.price * widget.orderRow!.amount}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,

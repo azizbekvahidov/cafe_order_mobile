@@ -1,4 +1,5 @@
 import 'package:cafe_mostbyte/bloc/order/order_repository.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OrderBloc {
@@ -6,12 +7,12 @@ class OrderBloc {
   final _categoryFetcher = PublishSubject<List<dynamic>>();
   final _productFetcher = PublishSubject<List<dynamic>>();
   final _expensesFetcher = PublishSubject<List<dynamic>>();
-  final _expenseFetcher = PublishSubject<Map<String, dynamic>>();
+  final _expenseFetcher = PublishSubject<Expense>();
 
   Stream<List<dynamic>> get categoryList => _categoryFetcher.stream;
   Stream<List<dynamic>> get productList => _productFetcher.stream;
   Stream<List<dynamic>> get expenseList => _expensesFetcher.stream;
-  Stream<Map<String, dynamic>> get expense => _expenseFetcher.stream;
+  Stream<Expense> get expense => _expenseFetcher.stream;
 
   fetchCategory() async {
     List<dynamic> response = await repo.categoryList();
@@ -29,7 +30,7 @@ class OrderBloc {
   }
 
   fetchExpense({id}) async {
-    Map<String, dynamic> response = await repo.expense(id: id);
+    Expense response = await repo.expense(id: id);
     _expenseFetcher.sink.add(response);
   }
 

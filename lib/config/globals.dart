@@ -12,6 +12,8 @@ var loc;
 bool isAuth = false;
 List? categories;
 int filial = 1;
+int currentExpenseId = 0;
+int currentExpenseSum = 0;
 
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);

@@ -40,7 +40,7 @@ class _MenuListState extends State<MenuList> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               }
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Text("Get Category"));
             },
           ),
         ),

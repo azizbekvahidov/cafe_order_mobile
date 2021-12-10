@@ -4,12 +4,13 @@ import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/custom_block/custom_drawer.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/components/menu_list.dart';
+import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/components/product_card.dart';
+import 'package:cafe_mostbyte/components/search.dart';
 import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:tabbed_view/tabbed_view.dart';
 
 import '../print.dart';
 import './mian_screen.dart';
@@ -49,7 +50,6 @@ class _OrderScreenState extends State<OrderScreen> {
   List<dynamic> _order = [];
   List<dynamic> _orderChange = [];
   bool sendRequest = false;
-  TabbedViewController controller = TabbedViewController([]);
 
   double? totalSum;
   getTotal() {
@@ -69,6 +69,12 @@ class _OrderScreenState extends State<OrderScreen> {
     if (widget.expenseId != null) {
       orderStatus = "update";
     }
+  }
+
+  @override
+  void dispose() {
+    globals.currentExpenseId = 0;
+    super.dispose();
   }
 
   loadData() async {
@@ -353,19 +359,6 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
-  searchProducts(String value) async {
-    try {
-      var response = await connect.get('search-prod?q=$value');
-      orderScreenState!.setState(() {});
-      globals.isServerConnection = true;
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   // sendPrint() async {
   //   try {
   //     Map<String, dynamic> data = {
@@ -458,8 +451,6 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var dHeight = MediaQuery.of(context).size.height;
-    var dWidth = MediaQuery.of(context).size.width;
     var appbar = CustomAppbar(
       searchFunc: searchProd,
     );
@@ -474,206 +465,11 @@ class _OrderScreenState extends State<OrderScreen> {
             MenuList(appbarSize: appbar.preferredSize.height),
             ExpenseCard(order: _order, appbarSize: appbar.preferredSize.height),
             _isSearch
-                ? Positioned(
-                    top: 0,
-                    child: Container(
-                      color: Colors.white,
-                      width: dWidth - 40,
-                      height: dHeight - appbar.preferredSize.height - 150,
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1,
-                                  color: globals.mainColor,
-                                ),
-                                borderRadius: BorderRadius.circular(8)),
-                            child: TypeAheadField(
-                              textFieldConfiguration: TextFieldConfiguration(
-                                // onSubmitted: (value) {
-                                //   Navigator.pop(context, false);
-                                // },
-                                // controller: searchAddressController,
-
-                                autofocus: true,
-                                decoration: InputDecoration.collapsed(
-                                  hintText: "",
-                                  // hintStyle: Theme.of(context)
-                                  //     .textTheme
-                                  //     .display1
-                                  //     .copyWith(fontSize: 18),
-                                ),
-                              ),
-
-                              suggestionsCallback: (pattern) async {
-                                if (pattern.length >= 3) {
-                                  return await searchProducts(pattern);
-                                } else
-                                  return {};
-                              },
-
-                              hideOnEmpty: true,
-                              // suggestionsBoxController:
-                              //     suggestionsBoxController,
-                              itemBuilder: (context, suggestion) {
-                                return Column(
-                                  children: [
-                                    ListTile(
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          // Text("${suggestion!['name']}"),
-                                          // Text("${suggestion['price']}"),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(
-                                      height: 0,
-                                    ),
-                                  ],
-                                );
-                              },
-                              suggestionsBoxDecoration:
-                                  SuggestionsBoxDecoration(offsetX: -10.0),
-                              onSuggestionSelected: (suggestion) {
-                                addToOrder(suggestion);
-                                addToOrderChange(suggestion);
-                                setState(() {
-                                  _isSearch = false;
-                                });
-                              },
-                              noItemsFoundBuilder: (context) {
-                                return Text("not_found");
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
+                ? Search(
+                    isSearch: _isSearch,
+                    appbarSize: appbar.preferredSize.height)
                 : Container(),
-            Positioned(
-                bottom: 0,
-                child: Container(
-                  padding: EdgeInsets.only(bottom: 5),
-                  width: dWidth - 40,
-                  child: Column(
-                    children: [
-                      Divider(
-                        endIndent: 0,
-                        indent: 0,
-                        thickness: 1,
-                        height: 10,
-                        color: globals.mainColor,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          AutoSizeText(
-                            "Итого: +${globals.settings!.percent}%",
-                            style: TextStyle(
-                              fontFamily: globals.font,
-                              fontSize: 20,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                _showReciept = !_showReciept;
-                              });
-                            },
-                            child: Row(children: [
-                              SvgPicture.asset(
-                                _showReciept
-                                    ? "assets/img/eye.svg"
-                                    : "assets/img/visibility.svg",
-                                height: _showReciept ? 15 : 24,
-                              ),
-                              Padding(padding: EdgeInsets.only(left: 5)),
-                              AutoSizeText(
-                                "${totalSum = getTotal()}",
-                                style: TextStyle(
-                                  fontFamily: globals.font,
-                                  fontSize: 24,
-                                ),
-                              ),
-                            ]),
-                          ),
-                        ],
-                      ),
-                      Padding(padding: EdgeInsets.only(top: 10)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              addProduct();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black,
-                                ),
-                                color: globals.fourthColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  AutoSizeText(
-                                    "Отправить на кухню",
-                                    style: TextStyle(
-                                        fontFamily: globals.font, fontSize: 16),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(left: 10)),
-                                  SvgPicture.asset("assets/img/receipt.svg")
-                                ],
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              var res = await checkPrint();
-                              if (res == true) {
-                                prints.testPrint(
-                                    globals.settings!.printer,
-                                    context,
-                                    "reciept",
-                                    {"expense": expense_data, "order": _order});
-                              } else {
-                                print("no print enymore");
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 5),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.black,
-                                ),
-                                color: globals.fourthColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset("assets/img/print.svg")
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                )),
+            OrderFooter(),
           ],
         ),
       ),
