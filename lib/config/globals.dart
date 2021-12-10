@@ -1,5 +1,6 @@
 library cafe_order.globals;
 
+import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
 import 'package:cafe_mostbyte/models/user.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ List? categories;
 int filial = 1;
 int currentExpenseId = 0;
 int currentExpenseSum = 0;
+Expense? currentExpense;
 
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);

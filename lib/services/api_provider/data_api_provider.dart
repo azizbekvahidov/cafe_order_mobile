@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cafe_mostbyte/models/category.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
+import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
 
@@ -42,13 +43,14 @@ class DataApiProvider {
     }
   }
 
-  Future<List<dynamic>> getProducts({id}) async {
+  Future<List<MenuItem>> getProducts({id}) async {
     try {
       final response =
           await net.get('${globals.apiLink}menu/list?category_id=$id');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
-        return res["data"];
+        return List<MenuItem>.from(
+            res["data"].map((x) => MenuItem.fromJson(x)));
       } else {
         throw Exception("error fetching category");
       }

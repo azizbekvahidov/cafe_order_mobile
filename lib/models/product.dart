@@ -2,14 +2,14 @@ class Product {
   int id;
   String name;
   int price;
-  int departmentId;
+  int department_id;
   String? image;
 
   Product({
     required this.id,
     required this.name,
     required this.price,
-    required this.departmentId,
+    required this.department_id,
     required this.image,
   });
 
@@ -18,7 +18,7 @@ class Product {
       id: json["id"],
       name: json["name_uz"],
       price: json["price"],
-      departmentId: json["department_id"],
+      department_id: json["department_id"],
       image: json["image"],
     );
   }

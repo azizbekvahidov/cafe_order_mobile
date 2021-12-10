@@ -77,10 +77,7 @@ class _OrderRowState extends State<OrderRow> {
                             backgroundColor: Colors.transparent,
                             body: TextField(
                               onSubmitted: (val) {
-                                widget.customVal!(
-                                    widget.orderRow, double.parse(val));
-                                Navigator.of(context).pop();
-                                cntController.text = "";
+                                Navigator.pop(context);
                               },
                               autofocus: true,
                               controller: cntController,
@@ -137,8 +134,20 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                   flex: 2,
                   child: InkWell(
-                    onTap: () {
-                      customValDialog(context);
+                    onTap: () async {
+                      await customValDialog(context);
+                      setState(() {
+                        var orderRow =
+                            globals.currentExpense!.order.where((element) {
+                          return element.product_id ==
+                              widget.orderRow!.product_id;
+                        });
+                        if (orderRow.length != 0) {
+                          orderRow.first.amount =
+                              double.parse(cntController.text);
+                        }
+                      });
+                      cntController.text = "";
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -4,6 +4,7 @@ import 'package:cafe_mostbyte/bloc/auth/expense/expense_repository.dart';
 import 'package:cafe_mostbyte/bloc/auth/expense/expense_state.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
+import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,8 +63,8 @@ class _TabsState extends State<Tabs> {
                               children: [
                                 for (var _expense in expenses)
                                   InkWell(
-                                    onTap: () {
-                                      orderBloc.fetchExpense(
+                                    onTap: () async {
+                                      await orderBloc.fetchExpense(
                                           id: _expense["id"]);
                                       setState(() {
                                         globals.currentExpenseId =

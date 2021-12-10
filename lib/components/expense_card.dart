@@ -6,6 +6,8 @@ import 'package:cafe_mostbyte/widget/order_row.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 
+_ExpenseCardState expenseCardPageState = _ExpenseCardState();
+
 class ExpenseCard extends StatefulWidget {
   var appbarSize;
   List order;
@@ -13,7 +15,10 @@ class ExpenseCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ExpenseCardState createState() => _ExpenseCardState();
+  _ExpenseCardState createState() {
+    expenseCardPageState = _ExpenseCardState();
+    return expenseCardPageState;
+  }
 }
 
 class _ExpenseCardState extends State<ExpenseCard> {
@@ -97,29 +102,21 @@ class _ExpenseCardState extends State<ExpenseCard> {
                       stream: orderBloc.expense,
                       builder: (context, AsyncSnapshot<Expense> snapshot) {
                         if (snapshot.hasData) {
-                          var expense = snapshot.data;
+                          globals.currentExpense = snapshot.data;
 
                           return Column(
                             children: [
-                              for (Order item in expense!.order)
-                                OrderRow(
-                                  orderRow: item,
-                                  plus: () {}, //plusCnt,
-                                  minus: () {}, //minusCnt,
-                                  customVal: () {}, //setDefaultVal,
-                                )
+                              if (globals.currentExpense != null)
+                                for (Order item
+                                    in globals.currentExpense!.order)
+                                  OrderRow(
+                                    orderRow: item,
+                                    plus: () {}, //plusCnt,
+                                    minus: () {}, //minusCnt,
+                                    customVal: () {}, //setDefaultVal,
+                                  )
                             ],
                           );
-                          // ListView.builder(
-                          //     itemCount: expense!["order"].length,
-                          //     itemBuilder: (content, index) {
-                          //       return OrderRow(
-                          //         orderRow: expense["order"][index],
-                          //         plus: () {}, //plusCnt,
-                          //         minus: () {}, //minusCnt,
-                          //         customVal: () {}, //setDefaultVal,
-                          //       );
-                          //     });
                         } else if (snapshot.hasError) {
                           return Text(snapshot.error.toString());
                         }
