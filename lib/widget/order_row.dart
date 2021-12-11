@@ -1,8 +1,9 @@
+import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_svg/svg.dart';
+import '../services/helper.dart' as helper;
 
 class OrderRow extends StatefulWidget {
   Order? orderRow;
@@ -77,6 +78,18 @@ class _OrderRowState extends State<OrderRow> {
                             backgroundColor: Colors.transparent,
                             body: TextField(
                               onSubmitted: (val) {
+                                setState(() {
+                                  var orderRow = globals.currentExpense!.order
+                                      .where((element) {
+                                    return element.product_id ==
+                                        widget.orderRow!.product_id;
+                                  });
+                                  if (orderRow.length != 0) {
+                                    orderRow.first.amount =
+                                        double.parse(cntController.text);
+                                  }
+                                });
+                                cntController.text = "";
                                 Navigator.pop(context);
                               },
                               autofocus: true,
@@ -109,14 +122,35 @@ class _OrderRowState extends State<OrderRow> {
             children: [
               Expanded(
                 flex: 6,
-                child: AutoSizeText(
-                  "${widget.orderRow!.product.name}",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: globals.font,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 10,
-                  ),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        expenseCardPageState.setState(() {
+                          globals.currentExpense!.order.removeWhere((element) =>
+                              element.product_id ==
+                                  widget.orderRow!.product_id &&
+                              element.type == widget.orderRow!.type);
+                        });
+                        helper.calculateTotalSum();
+                      },
+                      child: Center(
+                        child: Icon(
+                          Icons.close,
+                          color: Theme.of(context).indicatorColor,
+                        ),
+                      ),
+                    ),
+                    AutoSizeText(
+                      "${widget.orderRow!.product.name}",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: globals.font,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Expanded(
@@ -134,20 +168,8 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                   flex: 2,
                   child: InkWell(
-                    onTap: () async {
-                      await customValDialog(context);
-                      setState(() {
-                        var orderRow =
-                            globals.currentExpense!.order.where((element) {
-                          return element.product_id ==
-                              widget.orderRow!.product_id;
-                        });
-                        if (orderRow.length != 0) {
-                          orderRow.first.amount =
-                              double.parse(cntController.text);
-                        }
-                      });
-                      cntController.text = "";
+                    onTap: () {
+                      // customValDialog(context);
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

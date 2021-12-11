@@ -10,7 +10,7 @@ class Product {
     required this.name,
     required this.price,
     required this.department_id,
-    required this.image,
+    this.image = null,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {

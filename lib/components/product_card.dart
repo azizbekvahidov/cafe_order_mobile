@@ -5,6 +5,7 @@ import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../config/globals.dart' as globals;
+import '../services/helper.dart' as helper;
 
 class ProductCard extends StatelessWidget {
   MenuItem data;
@@ -20,7 +21,8 @@ class ProductCard extends StatelessWidget {
         onTap: () {
           expenseCardPageState.setState(() {
             var orderRow = globals.currentExpense!.order.where((element) {
-              return element.product_id == data.product.id;
+              return element.product_id == data.product.id &&
+                  element.type == data.type;
             });
             if (orderRow.length != 0) {
               orderRow.first.amount += 1;
@@ -34,8 +36,7 @@ class ProductCard extends StatelessWidget {
               globals.currentExpense!.order.add(newOrderRow);
             }
           });
-          // addToOrder(product);
-          // addToOrderChange(product);
+          helper.calculateTotalSum();
         },
         child: Container(
           width: dWidth * 0.13,

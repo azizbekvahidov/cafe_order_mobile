@@ -49,8 +49,9 @@ class DataApiProvider {
           await net.get('${globals.apiLink}menu/list?category_id=$id');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
-        return List<MenuItem>.from(
-            res["data"].map((x) => MenuItem.fromJson(x)));
+        return List<MenuItem>.from(res["data"].map((x) {
+          return MenuItem.fromJson(x);
+        }));
       } else {
         throw Exception("error fetching category");
       }

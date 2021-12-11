@@ -1,11 +1,13 @@
 library yoshlar_portali.helper;
 
+import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import '../config/globals.dart' as globals;
 
 String removeTag({required htmlString, strLength}) {
   var document = parse(htmlString);
@@ -16,6 +18,20 @@ String removeTag({required htmlString, strLength}) {
         : parsedString;
   }
   return parsedString;
+}
+
+void calculateTotalSum() {
+  var sum = 0;
+  if (globals.currentExpense != null) {
+    globals.currentExpense!.order.every((element) {
+      double currentSum = element.amount * element.product.price;
+      sum += (currentSum / 100).ceil() * 100;
+      return true;
+    });
+    globals.currentExpense!.expense_sum = sum;
+  }
+  globals.currentExpenseSum = sum;
+  orderFooterPageState.setState(() {});
 }
 
 void getToast(msg, BuildContext context) {
