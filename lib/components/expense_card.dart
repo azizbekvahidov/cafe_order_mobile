@@ -103,6 +103,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                       builder: (context, AsyncSnapshot<Expense> snapshot) {
                         if (snapshot.hasData) {
                           globals.currentExpense = snapshot.data;
+                          globals.expenseState = snapshot.data;
 
                           return Column(
                             children: [

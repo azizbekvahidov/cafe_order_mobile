@@ -24,4 +24,20 @@ class ExpenseRepository {
       return e.toString();
     }
   }
+
+  Future<String?> updateExpense() async {
+    try {
+      var data = globals.currentExpense!.toJson();
+      print(data);
+      final response =
+          await net.post('${globals.apiLink}expense/update', body: data);
+      if (response.statusCode == 200) {
+      } else {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return res["message"];
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }

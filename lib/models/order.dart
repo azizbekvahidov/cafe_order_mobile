@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cafe_mostbyte/models/product.dart';
 
 class Order {
@@ -21,4 +23,11 @@ class Order {
       product: Product.fromJson(json["product"]),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "product_id": product_id,
+        "type": type,
+        "amount": amount,
+        // "product": product.toJson(),
+      };
 }

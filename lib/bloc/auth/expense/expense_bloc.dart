@@ -22,6 +22,14 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       } catch (e) {
         yield state.copyWith(formStatus: SubmissionFailed(e));
       }
+    } else if (event is ExpenseUpdate) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        await repo.updateExpense();
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
     } else {
       yield state.copyWith(formStatus: FormSubmitting());
       try {

@@ -40,6 +40,7 @@ class _TabsState extends State<Tabs> {
               var formStatus = state.formStatus;
               if (formStatus is SubmissionSuccess) {
                 orderBloc.fetchExpenses(id: globals.filial);
+                context.read<ExpenseBloc>().add(ExpenseInitialized());
               } else if (formStatus is SubmissionFailed) {}
               // TODO: implement listener
             },

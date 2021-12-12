@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cafe_mostbyte/models/order.dart';
 
 class Expense {
@@ -23,5 +25,16 @@ class Expense {
       discount: json["discount"],
       order: List<Order>.from(json["order"].map((x) => Order.fromJson(x))),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    // print([order.map((e) => jsonEncode(e.toJson()))]);
+    return {
+      "id": id,
+      "order_date": order_date,
+      "expense_sum": expense_sum,
+      "discount": discount,
+      "order": order.map((e) => e.toJson()).toList(),
+    };
   }
 }
