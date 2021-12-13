@@ -1,3 +1,4 @@
+import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
@@ -25,93 +26,6 @@ class OrderRow extends StatefulWidget {
 
 class _OrderRowState extends State<OrderRow> {
   TextEditingController cntController = new TextEditingController();
-  customValDialog(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    var dWidth = MediaQuery.of(context).size.width;
-    return showGeneralDialog(
-        context: context,
-        barrierDismissible: true,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor: Colors.black45,
-        transitionDuration: const Duration(milliseconds: 200),
-        pageBuilder: (BuildContext buildContext, Animation animation,
-            Animation secondaryAnimation) {
-          return Container(
-            padding: EdgeInsets.only(
-                top: 100, left: dWidth * 0.2, right: dWidth * 0.2),
-            alignment: Alignment.topCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-              ),
-              width: MediaQuery.of(context).size.width,
-              height: 50, //MediaQuery.of(context).size.height * 0.5,
-              child: Container(
-                padding: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                // width: double.infinity,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Color(0xffF5F6F9),
-                  borderRadius: BorderRadius.circular(22.5),
-                  border: Border.all(
-                    color: Color.fromRGBO(178, 183, 208, 0.5),
-                    style: BorderStyle.solid,
-                    width: 0.5,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    FocusScope(
-                      child: Focus(
-                        onFocusChange: (focus) {
-                          // widget.streetNode.requestFocus();
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: (mediaQuery.size.width -
-                                  mediaQuery.padding.left -
-                                  mediaQuery.padding.right) *
-                              0.5,
-                          margin: EdgeInsets.only(top: 20),
-                          child: Scaffold(
-                            backgroundColor: Colors.transparent,
-                            body: TextField(
-                              onSubmitted: (val) {
-                                setState(() {
-                                  var orderRow = globals.currentExpense!.order
-                                      .where((element) {
-                                    return element.product_id ==
-                                        widget.orderRow!.product_id;
-                                  });
-                                  if (orderRow.length != 0) {
-                                    orderRow.first.amount =
-                                        double.parse(cntController.text);
-                                  }
-                                });
-                                cntController.text = "";
-                                Navigator.pop(context);
-                              },
-                              autofocus: true,
-                              controller: cntController,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration.collapsed(
-                                hintText: "",
-                                hintStyle: TextStyle(
-                                    fontFamily: globals.font, fontSize: 28),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +100,30 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                   flex: 2,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      var modal = Modal(ctx: context, child: Container());
+                      var res = await modal.customValDialog(context);
+                      print(res.runtimeType);
+                      if (res != "0") {
+                        setState(() {
+                          var orderRow =
+                              globals.currentExpense!.order.where((element) {
+                            return element.product_id ==
+                                widget.orderRow!.product_id;
+                          });
+                          if (orderRow.length != 0) {
+                            orderRow.first.amount = double.parse(res);
+                          }
+                        });
+                      } else {
+                        expenseCardPageState.setState(() {
+                          globals.currentExpense!.order.removeWhere((element) {
+                            return element.product_id ==
+                                widget.orderRow!.product_id;
+                          });
+                        });
+                      }
+                      helper.calculateTotalSum();
                       // customValDialog(context);
                     },
                     child: Row(
