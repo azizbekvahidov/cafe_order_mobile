@@ -1,6 +1,8 @@
 library cafe_order.globals;
 
+import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
+import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
 import 'package:cafe_mostbyte/models/user.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,10 @@ int filial = 1;
 int currentExpenseId = 0;
 int currentExpenseSum = 0;
 Expense? currentExpense;
-Expense? expenseState;
+List<Order> orderState = [];
+User? userData;
+Settings? settings;
+List<Department>? department;
 
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);
@@ -25,14 +30,11 @@ Color thirdColor = Color(0xffC1A1D3);
 Color fourthColor = Color(0xffFFF3E6);
 Map<String, String> headers = {"content-type": "application/json"};
 bool isLogin = false;
-User? userData;
-Settings? settings;
 String authName = "Aziz";
 String code = "";
 bool isOrder = false;
 List? tables;
 String token = "";
 int? id;
-List? department;
 
 bool isServerConnection = false;

@@ -132,6 +132,24 @@ class _OrderRowState extends State<OrderRow> {
                                   widget.orderRow!.product_id &&
                               element.type == widget.orderRow!.type);
                         });
+
+                        var orderState = globals.orderState.where((element) {
+                          return element.product_id ==
+                                  widget.orderRow!.product.id &&
+                              element.type == widget.orderRow!.type;
+                        });
+                        if (orderState.length != 0) {
+                          orderState.first.amount = widget.orderRow!.amount *
+                              -orderState.first.amount;
+                        } else {
+                          Order newOrder = Order(
+                            amount: widget.orderRow!.amount * -1,
+                            product_id: widget.orderRow!.product.id,
+                            type: widget.orderRow!.type,
+                            product: widget.orderRow!.product,
+                          );
+                          globals.orderState.add(newOrder);
+                        }
                         helper.calculateTotalSum();
                       },
                       child: Center(

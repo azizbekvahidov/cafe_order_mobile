@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/order.dart';
-import 'package:cafe_mostbyte/widget/order_row.dart';
+import 'package:cafe_mostbyte/components/order_row.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 
@@ -103,7 +103,6 @@ class _ExpenseCardState extends State<ExpenseCard> {
                       builder: (context, AsyncSnapshot<Expense> snapshot) {
                         if (snapshot.hasData) {
                           globals.currentExpense = snapshot.data;
-                          globals.expenseState = snapshot.data;
 
                           return Column(
                             children: [

@@ -75,6 +75,7 @@ class _TabsState extends State<Tabs> {
                                         globals.currentExpenseSum =
                                             _expense["expense_sum"];
                                       });
+                                      globals.orderState = [];
                                     },
                                     child: Container(
                                         margin: const EdgeInsets.symmetric(

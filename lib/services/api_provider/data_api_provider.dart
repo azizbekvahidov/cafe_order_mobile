@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cafe_mostbyte/models/category.dart';
+import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
@@ -20,6 +21,21 @@ class DataApiProvider {
         var res = json.decode(utf8.decode(response.bodyBytes));
         var settings = helper.parseSettings(res["data"]);
         globals.settings = Settings.fromJson(settings);
+      } else {
+        throw Exception("error fetching users");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> getDepartment() async {
+    try {
+      final response = await net.get('${globals.apiLink}departments');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        globals.department = List<Department>.from(
+            res["data"].map((x) => Department.fromJson(x)));
       } else {
         throw Exception("error fetching users");
       }

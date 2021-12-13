@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 import '../print.dart';
 import './mian_screen.dart';
 import '../widget/custom_appbar.dart';
-import '../widget/order_row.dart';
+import '../components/order_row.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';

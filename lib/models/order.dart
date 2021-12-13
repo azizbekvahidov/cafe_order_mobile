@@ -28,6 +28,6 @@ class Order {
         "product_id": product_id,
         "type": type,
         "amount": amount,
-        // "product": product.toJson(),
+        "product": product.toJson(),
       };
 }

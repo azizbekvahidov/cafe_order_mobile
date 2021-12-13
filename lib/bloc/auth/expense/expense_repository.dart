@@ -28,9 +28,28 @@ class ExpenseRepository {
   Future<String?> updateExpense() async {
     try {
       var data = globals.currentExpense!.toJson();
-      print(data);
       final response =
           await net.post('${globals.apiLink}expense/update', body: data);
+      if (response.statusCode == 200) {
+        await sendCheck();
+      } else {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return res["message"];
+      }
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<String?> sendCheck() async {
+    try {
+      var data = {
+        "table": 0,
+        "emp": globals.userData!.name,
+        "departments": globals.department!.map((e) => e.toJson()).toList(),
+        "data": globals.orderState.map((e) => e.toJson()).toList(),
+      };
+      final response = await net.post('http://api/print', body: data);
       if (response.statusCode == 200) {
       } else {
         var res = json.decode(utf8.decode(response.bodyBytes));
