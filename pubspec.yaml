@@ -46,14 +46,9 @@ dependencies:
   url_launcher: ^6.0.10
   image: ^3.0.8
   window_manager: ^0.1.1
-  # esc_pos_printer: ^4.0.3
-  # qr_flutter: ^4.0.0
-  # esc_pos_utils: ^1.0.0
-  # charset_converter: ^1.0.3
 
   flutter_typeahead: ^3.2.1
   flutter_login: ^3.0.0
-  persistent_bottom_nav_bar: ^4.0.2
 
 
   # The following adds the Cupertino Icons font to your application.

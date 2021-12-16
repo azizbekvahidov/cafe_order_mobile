@@ -389,10 +389,10 @@ class _OrderScreenState extends State<OrderScreen> {
         Map<String, String> headers = {};
         if (widget.expenseId == null) {
           Map<String, dynamic> data = {
-            "table": widget.tableId,
+            "table": "table",
             "employee_id": globals.userData!.id,
-            "expSum": totalSum,
-            "params": _orderChange,
+            "expSum": globals.currentExpense!.expense_sum,
+            "params": globals.currentExpense!.order,
             "all_prods": _order,
           };
           print(_orderChange);

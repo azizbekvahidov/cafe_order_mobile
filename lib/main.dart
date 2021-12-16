@@ -15,7 +15,6 @@ import '/services/api_provider/user/user_repository.dart';
 import './config/app_language.dart';
 import './config/theme.dart';
 import './generated/loc_delegate.dart';
-import './screen/home_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './config/globals.dart' as globals;
 import 'bloc/auth/authentificate.dart/authentificate_event.dart';

@@ -103,7 +103,6 @@ class _OrderRowState extends State<OrderRow> {
                     onTap: () async {
                       var modal = Modal(ctx: context, child: Container());
                       var res = await modal.customValDialog(context);
-                      print(res.runtimeType);
                       if (res != "0") {
                         setState(() {
                           var orderRow =
