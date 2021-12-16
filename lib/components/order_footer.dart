@@ -38,7 +38,7 @@ class _OrderFooterState extends State<OrderFooter> {
             if (formStatus is SubmissionSuccess) {
               orderBloc.fetchExpenses(id: globals.filial);
               orderBloc.fetchExpense(id: globals.currentExpenseId);
-              globals.orderState = [];
+              globals.orderState = {};
               context.read<ExpenseBloc>().add(ExpenseInitialized());
             } else if (formStatus is SubmissionFailed) {}
             // TODO: implement listener

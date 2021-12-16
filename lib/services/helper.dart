@@ -1,6 +1,7 @@
 library yoshlar_portali.helper;
 
 import 'package:cafe_mostbyte/components/order_footer.dart';
+import 'package:cafe_mostbyte/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
@@ -156,4 +157,40 @@ Map<String, dynamic> parseSettings(List data) {
     res.addAll({element["setting_name"]: element["setting_value"]});
   });
   return res;
+}
+
+generateCheck(
+    {required Product data, required type, required amount, comment = ""}) {
+  globals.orderState["expense_id"] = globals.currentExpense!.id;
+  globals.orderState["table"] = globals.currentExpense!.table != null
+      ? globals.currentExpense!.table!.name
+      : "С собой";
+  globals.orderState["emoloyee"] = globals.currentExpense!.employee.name;
+  if (globals.orderState.containsKey("data")) {
+    if (globals.orderState["data"].where((element) {
+      return element.containsKey(data.department.name);
+    })) {
+      if (globals.orderState["data"][data.department.name].where((element) {
+        return element["product_id"] == data.id && element["type"] == type;
+      })) {
+        var sum = (globals.orderState["data"][data.department.name]["amount"] +
+            amount) as double;
+        sum = double.parse(sum.toStringAsFixed(1));
+        globals.orderState["data"][data.department.name]["amount"] = sum;
+      } else {
+        globals.orderState["data"][data.department.name]["amount"] = amount;
+        globals.orderState["data"][data.department.name]["product_id"] =
+            data.id;
+        globals.orderState["data"][data.department.name]["type"] = type;
+        globals.orderState["data"][data.department.name]["name"] = data.name;
+        globals.orderState["data"][data.department.name]["comment"] = comment;
+      }
+    } else {
+      globals.orderState["data"][data.department.name]["amount"] = amount;
+      globals.orderState["data"][data.department.name]["product_id"] = data.id;
+      globals.orderState["data"][data.department.name]["type"] = type;
+      globals.orderState["data"][data.department.name]["name"] = data.name;
+      globals.orderState["data"][data.department.name]["comment"] = comment;
+    }
+  }
 }

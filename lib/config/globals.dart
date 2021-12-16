@@ -18,7 +18,7 @@ int filial = 1;
 int currentExpenseId = 0;
 int currentExpenseSum = 0;
 Expense? currentExpense;
-List<Order> orderState = [];
+Map orderState = {};
 User? userData;
 Settings? settings;
 List<Department>? department;

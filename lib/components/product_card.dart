@@ -36,21 +36,22 @@ class ProductCard extends StatelessWidget {
               globals.currentExpense!.order.add(newOrderRow);
             }
           });
-          var orderState = globals.orderState.where((element) {
-            return element.product_id == data.product.id &&
-                element.type == data.type;
-          });
-          if (orderState.length != 0) {
-            orderState.first.amount += 1;
-          } else {
-            Order newOrder = Order(
-              amount: 1,
-              product_id: data.product.id,
-              type: data.type,
-              product: data.product,
-            );
-            globals.orderState.add(newOrder);
-          }
+          helper.generateCheck(data: data.product, type: data.type, amount: 1);
+          // var orderState = globals.orderState.where((element) {
+          //   return element.product_id == data.product.id &&
+          //       element.type == data.type;
+          // });
+          // if (orderState.length != 0) {
+          //   orderState.first.amount += 1;
+          // } else {
+          //   Order newOrder = Order(
+          //     amount: 1,
+          //     product_id: data.product.id,
+          //     type: data.type,
+          //     product: data.product,
+          //   );
+          //   globals.orderState.add(newOrder);
+          // }
           helper.calculateTotalSum();
         },
         child: Container(

@@ -3,6 +3,7 @@ import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import '../../config/globals.dart' as globals;
+import '../../services/helper.dart' as helper;
 
 class AddingBtn extends StatefulWidget {
   Order data;
@@ -27,12 +28,17 @@ class _AddingBtnState extends State<AddingBtn> {
               child: InkWell(
                 onTap: () {
                   double temp = (widget.data.amount - 0.1).toDouble();
+                  temp = double.parse(temp.toStringAsFixed(1));
                   if (temp <= 0) {
                     expenseCardPageState.setState(() {
                       globals.currentExpense!.order.removeWhere((element) {
                         return element.product_id == widget.data.product_id;
                       });
                     });
+                    helper.generateCheck(
+                        data: widget.data.product,
+                        type: widget.data.type,
+                        amount: -0.1);
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
@@ -63,6 +69,31 @@ class _AddingBtnState extends State<AddingBtn> {
             Expanded(
               flex: 4,
               child: InkWell(
+                onTap: () {
+                  double temp = (widget.data.amount - 0.5).toDouble();
+                  temp = double.parse(temp.toStringAsFixed(1));
+                  if (temp <= 0) {
+                    expenseCardPageState.setState(() {
+                      globals.currentExpense!.order.removeWhere((element) {
+                        return element.product_id == widget.data.product_id;
+                      });
+                    });
+                    helper.generateCheck(
+                        data: widget.data.product,
+                        type: widget.data.type,
+                        amount: -0.5);
+                  } else {
+                    expenseCardPageState.setState(() {
+                      var orderRow =
+                          globals.currentExpense!.order.where((element) {
+                        return element.product_id == widget.data.product_id;
+                      });
+                      if (orderRow.length != 0) {
+                        orderRow.first.amount = temp;
+                      }
+                    });
+                  }
+                },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   alignment: Alignment.center,
@@ -81,11 +112,36 @@ class _AddingBtnState extends State<AddingBtn> {
             Expanded(
               flex: 4,
               child: InkWell(
+                onTap: () {
+                  double temp = (widget.data.amount + 0.5).toDouble();
+                  temp = double.parse(temp.toStringAsFixed(1));
+                  if (temp <= 0) {
+                    expenseCardPageState.setState(() {
+                      globals.currentExpense!.order.removeWhere((element) {
+                        return element.product_id == widget.data.product_id;
+                      });
+                    });
+                    helper.generateCheck(
+                        data: widget.data.product,
+                        type: widget.data.type,
+                        amount: 0.5);
+                  } else {
+                    expenseCardPageState.setState(() {
+                      var orderRow =
+                          globals.currentExpense!.order.where((element) {
+                        return element.product_id == widget.data.product_id;
+                      });
+                      if (orderRow.length != 0) {
+                        orderRow.first.amount = temp;
+                      }
+                    });
+                  }
+                },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   alignment: Alignment.center,
                   child: AutoSizeText(
-                    "-0.1",
+                    "0.5",
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 32),
                   ),
@@ -99,6 +155,31 @@ class _AddingBtnState extends State<AddingBtn> {
             Expanded(
               flex: 4,
               child: InkWell(
+                onTap: () {
+                  double temp = (widget.data.amount + 0.1).toDouble();
+                  temp = double.parse(temp.toStringAsFixed(1));
+                  if (temp <= 0) {
+                    expenseCardPageState.setState(() {
+                      globals.currentExpense!.order.removeWhere((element) {
+                        return element.product_id == widget.data.product_id;
+                      });
+                    });
+                    helper.generateCheck(
+                        data: widget.data.product,
+                        type: widget.data.type,
+                        amount: 0.1);
+                  } else {
+                    expenseCardPageState.setState(() {
+                      var orderRow =
+                          globals.currentExpense!.order.where((element) {
+                        return element.product_id == widget.data.product_id;
+                      });
+                      if (orderRow.length != 0) {
+                        orderRow.first.amount = temp;
+                      }
+                    });
+                  }
+                },
                 child: Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.symmetric(horizontal: 8),

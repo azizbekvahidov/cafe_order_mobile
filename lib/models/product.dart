@@ -1,15 +1,17 @@
+import 'package:cafe_mostbyte/models/department.dart';
+
 class Product {
   int id;
   String name;
   int price;
-  int department_id;
+  Department department;
   String? image;
 
   Product({
     required this.id,
     required this.name,
     required this.price,
-    required this.department_id,
+    required this.department,
     this.image = null,
   });
 
@@ -18,7 +20,7 @@ class Product {
       id: json["id"],
       name: json["name_uz"],
       price: json["price"],
-      department_id: json["department_id"],
+      department: Department.fromJson(json["department"]),
       image: json["image"],
     );
   }
@@ -27,7 +29,7 @@ class Product {
         "id": id,
         "name": name,
         "price": price,
-        "department_id": department_id,
+        "department_id": department.toJson(),
         "image": image,
       };
 }
