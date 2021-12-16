@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cafe_mostbyte/bloc/auth/auth_repository.dart';
 import 'package:cafe_mostbyte/generated/locale_base.dart';
-import 'package:cafe_mostbyte/screen/home_page.dart';
+import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -78,7 +78,7 @@ class _AuthState extends State<Auth> {
         onSignup: _signupUser,
         onSubmitAnimationCompleted: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => OrderScreen(),
           ));
         },
         hideForgotPasswordButton: true,
