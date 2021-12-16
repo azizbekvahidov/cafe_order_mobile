@@ -1,3 +1,4 @@
+import 'package:cafe_mostbyte/components/custom_block/adding_btn.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/models/order.dart';
@@ -101,27 +102,33 @@ class _OrderRowState extends State<OrderRow> {
                   flex: 2,
                   child: InkWell(
                     onTap: () async {
-                      var modal = Modal(ctx: context, child: Container());
-                      var res = await modal.customValDialog(context);
-                      if (res != "0") {
-                        setState(() {
-                          var orderRow =
-                              globals.currentExpense!.order.where((element) {
-                            return element.product_id ==
-                                widget.orderRow!.product_id;
-                          });
-                          if (orderRow.length != 0) {
-                            orderRow.first.amount = double.parse(res);
-                          }
-                        });
-                      } else {
-                        expenseCardPageState.setState(() {
-                          globals.currentExpense!.order.removeWhere((element) {
-                            return element.product_id ==
-                                widget.orderRow!.product_id;
-                          });
-                        });
-                      }
+                      var modal = Modal(
+                          ctx: context,
+                          child: AddingBtn(
+                            data: widget.orderRow!,
+                          ),
+                          heightIndex: 0.3);
+                      var res = await modal.customDialog();
+                      // print(res.runtimeType);
+                      // if (res != "0") {
+                      //   setState(() {
+                      //     var orderRow =
+                      //         globals.currentExpense!.order.where((element) {
+                      //       return element.product_id ==
+                      //           widget.orderRow!.product_id;
+                      //     });
+                      //     if (orderRow.length != 0) {
+                      //       orderRow.first.amount = double.parse(res);
+                      //     }
+                      //   });
+                      // } else {
+                      //   expenseCardPageState.setState(() {
+                      //     globals.currentExpense!.order.removeWhere((element) {
+                      //       return element.product_id ==
+                      //           widget.orderRow!.product_id;
+                      //     });
+                      //   });
+                      // }
                       helper.calculateTotalSum();
                       // customValDialog(context);
                     },
