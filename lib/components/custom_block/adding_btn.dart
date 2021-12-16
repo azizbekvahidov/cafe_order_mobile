@@ -35,10 +35,6 @@ class _AddingBtnState extends State<AddingBtn> {
                         return element.product_id == widget.data.product_id;
                       });
                     });
-                    helper.generateCheck(
-                        data: widget.data.product,
-                        type: widget.data.type,
-                        amount: -0.1);
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
@@ -50,6 +46,11 @@ class _AddingBtnState extends State<AddingBtn> {
                       }
                     });
                   }
+                  helper.generateCheck(
+                      data: widget.data.product,
+                      type: widget.data.type,
+                      amount: -0.1);
+                  helper.calculateTotalSum();
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -78,10 +79,6 @@ class _AddingBtnState extends State<AddingBtn> {
                         return element.product_id == widget.data.product_id;
                       });
                     });
-                    helper.generateCheck(
-                        data: widget.data.product,
-                        type: widget.data.type,
-                        amount: -0.5);
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
@@ -93,6 +90,11 @@ class _AddingBtnState extends State<AddingBtn> {
                       }
                     });
                   }
+                  helper.generateCheck(
+                      data: widget.data.product,
+                      type: widget.data.type,
+                      amount: -0.5);
+                  helper.calculateTotalSum();
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -121,10 +123,6 @@ class _AddingBtnState extends State<AddingBtn> {
                         return element.product_id == widget.data.product_id;
                       });
                     });
-                    helper.generateCheck(
-                        data: widget.data.product,
-                        type: widget.data.type,
-                        amount: 0.5);
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
@@ -136,12 +134,17 @@ class _AddingBtnState extends State<AddingBtn> {
                       }
                     });
                   }
+                  helper.generateCheck(
+                      data: widget.data.product,
+                      type: widget.data.type,
+                      amount: 0.5);
+                  helper.calculateTotalSum();
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   alignment: Alignment.center,
                   child: AutoSizeText(
-                    "0.5",
+                    "+0.5",
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 32),
                   ),
@@ -164,10 +167,6 @@ class _AddingBtnState extends State<AddingBtn> {
                         return element.product_id == widget.data.product_id;
                       });
                     });
-                    helper.generateCheck(
-                        data: widget.data.product,
-                        type: widget.data.type,
-                        amount: 0.1);
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
@@ -179,6 +178,11 @@ class _AddingBtnState extends State<AddingBtn> {
                       }
                     });
                   }
+                  helper.generateCheck(
+                      data: widget.data.product,
+                      type: widget.data.type,
+                      amount: 0.1);
+                  helper.calculateTotalSum();
                 },
                 child: Container(
                   alignment: Alignment.center,

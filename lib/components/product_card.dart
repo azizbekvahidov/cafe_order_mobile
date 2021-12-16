@@ -20,21 +20,39 @@ class ProductCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           expenseCardPageState.setState(() {
-            var orderRow = globals.currentExpense!.order.where((element) {
+            Order order = globals.currentExpense!.order.firstWhere((element) {
               return element.product_id == data.product.id &&
                   element.type == data.type;
-            });
-            if (orderRow.length != 0) {
-              orderRow.first.amount += 1;
-            } else {
-              Order newOrderRow = Order(
-                amount: 1,
+            }, orElse: () {
+              return Order(
+                amount: 0,
                 product_id: data.product.id,
                 type: data.type,
                 product: data.product,
               );
-              globals.currentExpense!.order.add(newOrderRow);
+            });
+            print(order);
+            if (order.amount == 0) {
+              order.amount += 1;
+              globals.currentExpense!.order.add(order);
+            } else {
+              order.amount += 1;
             }
+            // var orderRow = globals.currentExpense!.order.where((element) {
+            //   return element.product_id == data.product.id &&
+            //       element.type == data.type;
+            // });
+            // if (orderRow.length != 0) {
+            //   orderRow.first.amount += 1;
+            // } else {
+            //   Order newOrderRow = Order(
+            //     amount: 1,
+            //     product_id: data.product.id,
+            //     type: data.type,
+            //     product: data.product,
+            //   );
+            //   globals.currentExpense!.order.add(newOrderRow);
+            // }
           });
           helper.generateCheck(data: data.product, type: data.type, amount: 1);
           // var orderState = globals.orderState.where((element) {
