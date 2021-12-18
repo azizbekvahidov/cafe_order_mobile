@@ -42,6 +42,13 @@ class _OrderRowState extends State<OrderRow> {
                     InkWell(
                       onTap: () {
                         expenseCardPageState.setState(() {
+                          // var order_row = globals.currentExpense!.order.firstWhere((element) =>
+                          //     element.product_id ==
+                          //         widget.orderRow!.product_id &&
+                          //     element.type == widget.orderRow!.type);
+                          // if(globals.orderState["data"][order_row.product.department.name].){
+
+                          // }
                           globals.currentExpense!.order.removeWhere((element) =>
                               element.product_id ==
                                   widget.orderRow!.product_id &&
@@ -75,7 +82,7 @@ class _OrderRowState extends State<OrderRow> {
                       ),
                     ),
                     AutoSizeText(
-                      "${widget.orderRow!.product.name}",
+                      "${widget.orderRow!.product!.name}",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontFamily: globals.font,
@@ -89,7 +96,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow!.product.price}",
+                  "${widget.orderRow!.product!.price}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,
@@ -109,28 +116,7 @@ class _OrderRowState extends State<OrderRow> {
                           ),
                           heightIndex: 0.3);
                       var res = await modal.customDialog();
-                      // print(res.runtimeType);
-                      // if (res != "0") {
-                      //   setState(() {
-                      //     var orderRow =
-                      //         globals.currentExpense!.order.where((element) {
-                      //       return element.product_id ==
-                      //           widget.orderRow!.product_id;
-                      //     });
-                      //     if (orderRow.length != 0) {
-                      //       orderRow.first.amount = double.parse(res);
-                      //     }
-                      //   });
-                      // } else {
-                      //   expenseCardPageState.setState(() {
-                      //     globals.currentExpense!.order.removeWhere((element) {
-                      //       return element.product_id ==
-                      //           widget.orderRow!.product_id;
-                      //     });
-                      //   });
-                      // }
                       helper.calculateTotalSum();
-                      // customValDialog(context);
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -153,8 +139,8 @@ class _OrderRowState extends State<OrderRow> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: globals.font,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
                           ),
                         ),
                         // InkWell(
@@ -175,7 +161,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${widget.orderRow!.product.price * widget.orderRow!.amount}",
+                  "${(widget.orderRow!.product!.price * widget.orderRow!.amount).toInt()}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,

@@ -31,7 +31,6 @@ class ProductCard extends StatelessWidget {
                 product: data.product,
               );
             });
-            print(order);
             if (order.amount == 0) {
               order.amount += 1;
               globals.currentExpense!.order.add(order);

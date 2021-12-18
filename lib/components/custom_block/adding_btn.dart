@@ -32,22 +32,22 @@ class _AddingBtnState extends State<AddingBtn> {
                   if (temp <= 0) {
                     expenseCardPageState.setState(() {
                       globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id;
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
                     });
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
-                          globals.currentExpense!.order.where((element) {
-                        return element.product_id == widget.data.product_id;
+                          globals.currentExpense!.order.firstWhere((element) {
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
-                      if (orderRow.length != 0) {
-                        orderRow.first.amount = temp;
-                      }
+                      orderRow.amount = temp;
                     });
                   }
                   helper.generateCheck(
-                      data: widget.data.product,
+                      data: widget.data.product!,
                       type: widget.data.type,
                       amount: -0.1);
                   helper.calculateTotalSum();
@@ -76,22 +76,22 @@ class _AddingBtnState extends State<AddingBtn> {
                   if (temp <= 0) {
                     expenseCardPageState.setState(() {
                       globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id;
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
                     });
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
-                          globals.currentExpense!.order.where((element) {
-                        return element.product_id == widget.data.product_id;
+                          globals.currentExpense!.order.firstWhere((element) {
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
-                      if (orderRow.length != 0) {
-                        orderRow.first.amount = temp;
-                      }
+                      orderRow.amount = temp;
                     });
                   }
                   helper.generateCheck(
-                      data: widget.data.product,
+                      data: widget.data.product!,
                       type: widget.data.type,
                       amount: -0.5);
                   helper.calculateTotalSum();
@@ -120,22 +120,22 @@ class _AddingBtnState extends State<AddingBtn> {
                   if (temp <= 0) {
                     expenseCardPageState.setState(() {
                       globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id;
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
                     });
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
-                          globals.currentExpense!.order.where((element) {
-                        return element.product_id == widget.data.product_id;
+                          globals.currentExpense!.order.firstWhere((element) {
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
-                      if (orderRow.length != 0) {
-                        orderRow.first.amount = temp;
-                      }
+                      orderRow.amount = temp;
                     });
                   }
                   helper.generateCheck(
-                      data: widget.data.product,
+                      data: widget.data.product!,
                       type: widget.data.type,
                       amount: 0.5);
                   helper.calculateTotalSum();
@@ -164,22 +164,22 @@ class _AddingBtnState extends State<AddingBtn> {
                   if (temp <= 0) {
                     expenseCardPageState.setState(() {
                       globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id;
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
                     });
                   } else {
                     expenseCardPageState.setState(() {
                       var orderRow =
-                          globals.currentExpense!.order.where((element) {
-                        return element.product_id == widget.data.product_id;
+                          globals.currentExpense!.order.firstWhere((element) {
+                        return element.product_id == widget.data.product_id &&
+                            element.type == widget.data.type;
                       });
-                      if (orderRow.length != 0) {
-                        orderRow.first.amount = temp;
-                      }
+                      orderRow.amount = temp;
                     });
                   }
                   helper.generateCheck(
-                      data: widget.data.product,
+                      data: widget.data.product!,
                       type: widget.data.type,
                       amount: 0.1);
                   helper.calculateTotalSum();

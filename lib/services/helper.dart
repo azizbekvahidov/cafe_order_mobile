@@ -1,6 +1,11 @@
 library yoshlar_portali.helper;
 
+import 'dart:convert';
+
 import 'package:cafe_mostbyte/components/order_footer.dart';
+import 'package:cafe_mostbyte/models/department.dart';
+import 'package:cafe_mostbyte/models/order.dart';
+import 'package:cafe_mostbyte/models/print_data.dart';
 import 'package:cafe_mostbyte/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
@@ -25,7 +30,7 @@ void calculateTotalSum() {
   var sum = 0;
   if (globals.currentExpense != null) {
     globals.currentExpense!.order.every((element) {
-      double currentSum = element.amount * element.product.price;
+      double currentSum = element.amount * element.product!.price;
       sum += (currentSum / 100).ceil() * 100;
       return true;
     });
@@ -161,36 +166,101 @@ Map<String, dynamic> parseSettings(List data) {
 
 generateCheck(
     {required Product data, required type, required amount, comment = ""}) {
-  globals.orderState["expense_id"] = globals.currentExpense!.id;
-  globals.orderState["table"] = globals.currentExpense!.table != null
-      ? globals.currentExpense!.table!.name
-      : "С собой";
-  globals.orderState["emoloyee"] = globals.currentExpense!.employee.name;
-  if (globals.orderState.containsKey("data")) {
-    if (globals.orderState["data"].where((element) {
-      return element.containsKey(data.department.name);
-    })) {
-      if (globals.orderState["data"][data.department.name].where((element) {
-        return element["product_id"] == data.id && element["type"] == type;
-      })) {
-        var sum = (globals.orderState["data"][data.department.name]["amount"] +
-            amount) as double;
-        sum = double.parse(sum.toStringAsFixed(1));
-        globals.orderState["data"][data.department.name]["amount"] = sum;
-      } else {
-        globals.orderState["data"][data.department.name]["amount"] = amount;
-        globals.orderState["data"][data.department.name]["product_id"] =
-            data.id;
-        globals.orderState["data"][data.department.name]["type"] = type;
-        globals.orderState["data"][data.department.name]["name"] = data.name;
-        globals.orderState["data"][data.department.name]["comment"] = comment;
-      }
+  if (globals.orderState == null) {
+    PrintData orderState = new PrintData(
+        expense_id: globals.currentExpense!.id,
+        employee: globals.currentExpense!.employee.name,
+        table: globals.currentExpense!.table != null
+            ? globals.currentExpense!.table!.name
+            : "С собой",
+        departments: [
+          Department(
+              department_id: data.department.department_id,
+              printer: data.department.printer,
+              name: data.department.name,
+              orders: [
+                Order(
+                    product_id: data.id,
+                    type: type,
+                    amount: amount,
+                    product: null)
+              ])
+        ]);
+    globals.orderState = orderState;
+  } else {
+    Department? s = globals.orderState!.departments!.firstWhere((e) {
+      return e.department_id == data.department.department_id;
+    }, orElse: () {
+      return Department(
+        department_id: data.department.department_id,
+        printer: data.department.printer,
+        name: data.department.name,
+        orders: null,
+      );
+    });
+    if (s.orders == null) {
+      s.orders?.add(Order(
+          product_id: data.id, type: type, amount: amount, product: null));
     } else {
-      globals.orderState["data"][data.department.name]["amount"] = amount;
-      globals.orderState["data"][data.department.name]["product_id"] = data.id;
-      globals.orderState["data"][data.department.name]["type"] = type;
-      globals.orderState["data"][data.department.name]["name"] = data.name;
-      globals.orderState["data"][data.department.name]["comment"] = comment;
+      Order order = s.orders!.firstWhere(
+          (element) => element.product_id == data.id && element.type == type,
+          orElse: () =>
+              Order(product_id: data.id, type: type, amount: 0, product: null));
+      order.amount += amount;
     }
+    print(jsonEncode(s.toJson()));
   }
+
+  // if (globals.orderState.containsKey("data")) {
+  //   if (globals.orderState["data"].containsKey(data.department.name)) {
+  //     var cur_item =
+  //         globals.orderState["data"][data.department.name].firstWere((element) {
+  //       return element["product_id"] == data.id && element["type"] == type;
+  //     }, orElse: () {
+  //       Map record = {
+  //         "amount": amount,
+  //         "product_id": data.id,
+  //         "type": type,
+  //         "name": data.name,
+  //         "comment": comment,
+  //       };
+  //       globals.orderState["data"][data.department.name].addAll(record);
+  //     });
+  //     if (cur_item) {
+  //       var sum = (cur_item["amount"] + amount) as double;
+  //       sum = double.parse(sum.toStringAsFixed(1));
+  //       globals.orderState["data"][data.department.name]["amount"] = sum;
+  //     }
+  //   } else {
+  //     Map record = {
+  //       data.department.name: [
+  //         {
+  //           "amount": amount,
+  //           "product_id": data.id,
+  //           "type": type,
+  //           "name": data.name,
+  //           "comment": comment,
+  //         }
+  //       ]
+  //     };
+  //     globals.orderState["data"].addAll(record);
+  //   }
+  // } else {
+  //   Map record = {
+  //     "data": {
+  //       data.department.name: {
+  //         [
+  //           {
+  //             "amount": amount,
+  //             "product_id": data.id,
+  //             "type": type,
+  //             "name": data.name,
+  //             "comment": comment,
+  //           }
+  //         ]
+  //       }
+  //     }
+  //   };
+  //   globals.orderState.addAll(record);
+  // }
 }

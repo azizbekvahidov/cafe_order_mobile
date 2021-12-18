@@ -6,7 +6,7 @@ class Order {
   int product_id;
   int type;
   double amount;
-  Product product;
+  Product? product;
 
   Order({
     required this.product_id,
@@ -28,6 +28,6 @@ class Order {
         "product_id": product_id,
         "type": type,
         "amount": amount,
-        "product": product.toJson(),
+        "product": product != null ? product!.toJson() : null,
       };
 }
