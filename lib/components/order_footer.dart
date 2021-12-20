@@ -5,10 +5,12 @@ import 'package:cafe_mostbyte/bloc/auth/expense/expense_repository.dart';
 import 'package:cafe_mostbyte/bloc/auth/expense/expense_state.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
+import 'package:cafe_mostbyte/print.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../config/globals.dart' as globals;
+import '../services/helper.dart' as helper;
 
 _OrderFooterState orderFooterPageState = _OrderFooterState();
 
@@ -23,6 +25,7 @@ class OrderFooter extends StatefulWidget {
 }
 
 class _OrderFooterState extends State<OrderFooter> {
+  Print print = new Print();
   @override
   Widget build(BuildContext context) {
     var dHeight = MediaQuery.of(context).size.height;
@@ -33,11 +36,12 @@ class _OrderFooterState extends State<OrderFooter> {
         create: (context) =>
             ExpenseBloc(repo: context.read<ExpenseRepository>()),
         child: BlocListener<ExpenseBloc, ExpenseState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             var formStatus = state.formStatus;
             if (formStatus is SubmissionSuccess) {
               orderBloc.fetchExpenses(id: globals.filial);
               orderBloc.fetchExpense(id: globals.currentExpenseId);
+              await print.printedCheck();
               globals.orderState = null;
               context.read<ExpenseBloc>().add(ExpenseInitialized());
             } else if (formStatus is SubmissionFailed) {}

@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 
 class Department {
   int department_id;
-  String printer;
+  String? printer;
   String name;
   List<Order>? orders;
 
   Department({
     required this.department_id,
-    required this.printer,
+    this.printer = null,
     required this.name,
     this.orders = null,
   });

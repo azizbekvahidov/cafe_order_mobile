@@ -182,8 +182,8 @@ generateCheck(
                 Order(
                     product_id: data.id,
                     type: type,
-                    amount: amount,
-                    product: null)
+                    amount: double.parse(amount.toString()),
+                    product: data)
               ])
         ]);
     globals.orderState = orderState;
@@ -199,16 +199,26 @@ generateCheck(
       );
     });
     if (s.orders == null) {
-      s.orders?.add(Order(
-          product_id: data.id, type: type, amount: amount, product: null));
+      s.orders = [
+        Order(
+            product_id: data.id,
+            type: type,
+            amount: double.parse(amount.toString()),
+            product: null)
+      ];
     } else {
       Order order = s.orders!.firstWhere(
           (element) => element.product_id == data.id && element.type == type,
-          orElse: () =>
-              Order(product_id: data.id, type: type, amount: 0, product: null));
-      order.amount += amount;
+          orElse: () => Order(
+              product_id: data.id, type: type, amount: 0.0, product: data));
+      if (order.amount == 0.0) {
+        order.amount += amount;
+        s.orders!.add(order);
+      } else {
+        order.amount += amount;
+      }
     }
-    print(jsonEncode(s.toJson()));
+    print(jsonEncode(globals.orderState!.toJson()));
   }
 
   // if (globals.orderState.containsKey("data")) {
