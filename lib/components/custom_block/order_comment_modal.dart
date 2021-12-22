@@ -17,6 +17,7 @@ class _OrderCommentModalState extends State<OrderCommentModal> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
+        alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: TextInput(
           initialValue: widget.data.comment == null ? "" : widget.data.comment!,

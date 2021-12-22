@@ -1,4 +1,4 @@
-import '../../form_submission_status.dart';
+import '../form_submission_status.dart';
 
 class ExpenseState {
   final FormSubmissionStatus formStatus;

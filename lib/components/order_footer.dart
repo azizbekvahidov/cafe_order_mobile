@@ -1,11 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_bloc.dart';
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_event.dart';
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_repository.dart';
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_state.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_bloc.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_event.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_repository.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_state.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
+import 'package:cafe_mostbyte/components/button/main_button.dart';
+import 'package:cafe_mostbyte/components/custom_block/modal.dart';
+import 'package:cafe_mostbyte/components/custom_block/terminal_modal.dart';
+import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/print.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,10 +46,18 @@ class _OrderFooterState extends State<OrderFooter> {
             if (formStatus is SubmissionSuccess) {
               orderBloc.fetchExpenses(id: globals.filial);
               orderBloc.fetchExpense(id: globals.currentExpenseId);
-              await print.printedCheck(ctx: context, data: globals.orderState);
-              globals.orderState = null;
+
+              if (globals.orderState != null) {
+                await print.printedCheck(
+                    ctx: context, data: globals.orderState);
+                globals.orderState = null;
+              }
+              expenseCardPageState.setState(() {});
+              orderFooterPageState.setState(() {});
               context.read<ExpenseBloc>().add(ExpenseInitialized());
-            } else if (formStatus is SubmissionFailed) {}
+            } else if (formStatus is SubmissionFailed) {
+              helper.getToast("Что то пошло не так", context);
+            }
             // TODO: implement listener
           },
           child: Positioned(
@@ -154,6 +167,109 @@ class _OrderFooterState extends State<OrderFooter> {
                             ),
                           ),
                         ),
+                        (globals.isKassa)
+                            ? Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: InkWell(
+                                      child: MainButton(
+                                        action: () {},
+                                        colour: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        text: "Аванс",
+                                        textColor:
+                                            Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: InkWell(
+                                      child: MainButton(
+                                        action: () {},
+                                        colour: Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary,
+                                        text: "Долг",
+                                        textColor:
+                                            Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child:
+                                        BlocBuilder<ExpenseBloc, ExpenseState>(
+                                      builder: (context, state) {
+                                        return MainButton(
+                                          action: () async {
+                                            int terminalSum = 0;
+                                            var modal = Modal(
+                                                ctx: context,
+                                                child: TerminalModal(
+                                                  terminalSum: terminalSum,
+                                                ),
+                                                heightIndex: 0.2);
+                                            await modal.customDialog();
+                                            if (modal.res) {
+                                              if (await confirm(context,
+                                                  content: Text("Вы уверены?"),
+                                                  textCancel: Text("Нет"),
+                                                  textOK: Text("Да"),
+                                                  title:
+                                                      Text("Закрытие счета"))) {
+                                                context.read<ExpenseBloc>().add(
+                                                    ExpenseTerminalClose());
+                                              }
+                                            }
+                                          },
+                                          colour: Theme.of(context)
+                                              .colorScheme
+                                              .surface,
+                                          text: "Терминал",
+                                          textColor:
+                                              Theme.of(context).primaryColor,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child:
+                                        BlocBuilder<ExpenseBloc, ExpenseState>(
+                                      builder: (context, state) {
+                                        return MainButton(
+                                          action: () async {
+                                            if (await confirm(context,
+                                                content: Text("Вы уверены?"),
+                                                textCancel: Text("Нет"),
+                                                textOK: Text("Да"),
+                                                title:
+                                                    Text("Закрытие счета"))) {
+                                              context
+                                                  .read<ExpenseBloc>()
+                                                  .add(ExpenseClose());
+                                            }
+                                          },
+                                          colour: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          text: "Закрыть",
+                                          textColor:
+                                              Theme.of(context).primaryColor,
+                                        );
+                                      },
+                                    ),
+                                  )
+                                ],
+                              )
+                            : Container(),
                       ],
                     )
                   ],

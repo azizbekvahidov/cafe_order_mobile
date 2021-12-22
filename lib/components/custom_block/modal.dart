@@ -29,6 +29,7 @@ class Modal {
           dialogContext = buildContext;
           return Center(
             child: Container(
+              alignment: Alignment.center,
               margin: const EdgeInsets.symmetric(horizontal: 32),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -41,7 +42,9 @@ class Modal {
               child: child,
             ),
           );
-        });
+        }).then((value) {
+      res = value;
+    });
   }
 
   Future modalDialog() async {

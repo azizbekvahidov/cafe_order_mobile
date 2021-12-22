@@ -1,7 +1,7 @@
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_repository.dart';
+import './expense_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../auth_repository.dart';
-import '../../form_submission_status.dart';
+import '../auth/auth_repository.dart';
+import '../form_submission_status.dart';
 import 'expense_event.dart';
 import 'expense_state.dart';
 
@@ -26,6 +26,22 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       yield state.copyWith(formStatus: FormSubmitting());
       try {
         await repo.updateExpense();
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
+    } else if (event is ExpenseClose) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        await repo.closeExpense();
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
+    } else if (event is ExpenseTerminalClose) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        await repo.terminalCloseExpense();
         yield state.copyWith(formStatus: SubmissionSuccess());
       } catch (e) {
         yield state.copyWith(formStatus: SubmissionFailed(e));

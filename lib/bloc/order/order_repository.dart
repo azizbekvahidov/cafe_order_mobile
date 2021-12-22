@@ -11,5 +11,5 @@ class OrderRepository {
       dataApiProvider.getProducts(id: id);
   Future<List<dynamic>> expenseList({id}) =>
       dataApiProvider.getExpenses(id: id);
-  Future<Expense> expense({id}) => dataApiProvider.getExpense(id: id);
+  Future<Expense?> expense({id}) => dataApiProvider.getExpense(id: id);
 }

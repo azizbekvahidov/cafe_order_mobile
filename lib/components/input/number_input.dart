@@ -14,6 +14,7 @@ class NumberInput extends StatefulWidget {
   final onChanged;
   final onSubmitted;
   final onEditingComplete;
+  final bool autofocus;
   final bool nextAction;
   const NumberInput(
       {required this.controller,
@@ -21,6 +22,7 @@ class NumberInput extends StatefulWidget {
       required this.hint,
       this.maxLength,
       this.onChanged,
+      this.autofocus = false,
       this.onSubmitted,
       this.onEditingComplete,
       required this.nextAction,
@@ -43,6 +45,7 @@ class _NumberInputState extends State<NumberInput> {
           onSubmitted: widget.onSubmitted,
           onEditingComplete: widget.onEditingComplete,
           name: widget.name,
+          autofocus: widget.autofocus,
           inputFormatters: [
             new LengthLimitingTextInputFormatter(widget.maxLength),
             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),

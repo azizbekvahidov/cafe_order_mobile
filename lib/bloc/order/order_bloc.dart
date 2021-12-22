@@ -8,12 +8,12 @@ class OrderBloc {
   final _categoryFetcher = PublishSubject<List<dynamic>>();
   final _productFetcher = PublishSubject<List<MenuItem>>();
   final _expensesFetcher = PublishSubject<List<dynamic>>();
-  final _expenseFetcher = PublishSubject<Expense>();
+  final _expenseFetcher = PublishSubject<Expense?>();
 
   Stream<List<dynamic>> get categoryList => _categoryFetcher.stream;
   Stream<List<MenuItem>> get productList => _productFetcher.stream;
   Stream<List<dynamic>> get expenseList => _expensesFetcher.stream;
-  Stream<Expense> get expense => _expenseFetcher.stream;
+  Stream<Expense?> get expense => _expenseFetcher.stream;
 
   fetchCategory() async {
     List<dynamic> response = await repo.categoryList();
@@ -31,7 +31,7 @@ class OrderBloc {
   }
 
   fetchExpense({id}) async {
-    Expense response = await repo.expense(id: id);
+    Expense? response = await repo.expense(id: id);
     _expenseFetcher.sink.add(response);
   }
 

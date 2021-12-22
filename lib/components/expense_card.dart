@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
+import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/components/order_row.dart';
@@ -100,10 +101,9 @@ class _ExpenseCardState extends State<ExpenseCard> {
                   Container(
                     child: StreamBuilder(
                       stream: orderBloc.expense,
-                      builder: (context, AsyncSnapshot<Expense> snapshot) {
+                      builder: (context, AsyncSnapshot<Expense?> snapshot) {
                         if (snapshot.hasData) {
                           globals.currentExpense = snapshot.data;
-
                           return Column(
                             children: [
                               if (globals.currentExpense != null)

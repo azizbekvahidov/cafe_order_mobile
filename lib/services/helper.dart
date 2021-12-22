@@ -45,16 +45,16 @@ void getToast(msg, BuildContext context) {
       context: context,
       animation: StyledToastAnimation.slideFromTopFade,
       reverseAnimation: StyledToastAnimation.slideToTopFade,
-      position: StyledToastPosition(align: Alignment.topCenter, offset: 0.0),
+      position: StyledToastPosition(align: Alignment.topCenter, offset: 60.0),
       startOffset: Offset(0.0, -3.0),
       reverseEndOffset: Offset(0.0, -3.0),
       duration: Duration(seconds: 4),
       //Animation duration   animDuration * 2 <= duration
       animDuration: Duration(seconds: 1),
       curve: Curves.fastLinearToSlowEaseIn,
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.error,
       textStyle: TextStyle(
-        color: Theme.of(context).colorScheme.error,
+        color: Theme.of(context).primaryColor,
         fontSize: 20,
       ),
       reverseCurve: Curves.fastOutSlowIn);

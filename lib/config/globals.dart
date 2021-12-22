@@ -24,6 +24,7 @@ PrintData? orderState;
 User? userData;
 Settings? settings;
 List<Department>? department;
+bool isKassa = true;
 
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);

@@ -8,6 +8,9 @@ class Expense {
   int print;
   int expense_sum;
   int? discount;
+  int? terminal;
+  int prepaid;
+  int prepaidSum;
   String? ready_time;
   String? phone;
   Employee employee;
@@ -20,6 +23,9 @@ class Expense {
     required this.print,
     required this.expense_sum,
     this.discount = null,
+    this.terminal = null,
+    required this.prepaid,
+    required this.prepaidSum,
     required this.ready_time,
     required this.phone,
     required this.employee,
@@ -34,6 +40,9 @@ class Expense {
       print: json["print"],
       expense_sum: json["expense_sum"],
       discount: json["discount"],
+      terminal: json["terminal"],
+      prepaid: json["prepaid"],
+      prepaidSum: json["prepaidSum"],
       ready_time: json["ready_time"],
       phone: json["phone"],
       employee: Employee.fromJson(json["employee"]),
@@ -49,6 +58,9 @@ class Expense {
       'print': print,
       "expense_sum": expense_sum,
       "discount": discount,
+      "terminal": terminal,
+      "prepaid": prepaid,
+      "prepaidSum": prepaidSum,
       'ready_time': ready_time,
       'phone': phone,
       'employee': employee.toJson(),

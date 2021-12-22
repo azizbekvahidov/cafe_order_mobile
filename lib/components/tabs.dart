@@ -1,7 +1,7 @@
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_bloc.dart';
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_event.dart';
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_repository.dart';
-import 'package:cafe_mostbyte/bloc/auth/expense/expense_state.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_bloc.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_event.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_repository.dart';
+import 'package:cafe_mostbyte/bloc/expense/expense_state.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
@@ -40,6 +40,10 @@ class _TabsState extends State<Tabs> {
               var formStatus = state.formStatus;
               if (formStatus is SubmissionSuccess) {
                 orderBloc.fetchExpenses(id: globals.filial);
+
+                orderBloc.fetchExpense(id: globals.currentExpenseId);
+                expenseCardPageState.setState(() {});
+                orderFooterPageState.setState(() {});
                 context.read<ExpenseBloc>().add(ExpenseInitialized());
               } else if (formStatus is SubmissionFailed) {}
               // TODO: implement listener

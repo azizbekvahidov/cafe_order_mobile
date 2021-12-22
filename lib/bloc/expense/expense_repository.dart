@@ -14,7 +14,8 @@ class ExpenseRepository {
           await net.post('${globals.apiLink}expense/create', body: data);
       if (response.statusCode == 200) {
         var result = json.decode(response.body);
-        globals.currentExpenseSum = result["data"]['id'];
+        globals.currentExpenseId = result["data"]['id'];
+        globals.currentExpenseSum = result["data"]['expense_sum'];
         return result["data"];
       } else {
         var res = json.decode(utf8.decode(response.bodyBytes));
@@ -38,6 +39,53 @@ class ExpenseRepository {
       }
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future<String?> closeExpense() async {
+    try {
+      if (globals.currentExpense != null) {
+        final response = await net.post(
+            '${globals.apiLink}expense/close/${globals.currentExpense!.id}',
+            body: {});
+        if (response.statusCode == 200) {
+          globals.currentExpense = null;
+          globals.orderState = null;
+          globals.currentExpenseId = 0;
+          globals.currentExpenseSum = 0;
+        } else {
+          var res = json.decode(utf8.decode(response.bodyBytes));
+          return res["message"];
+        }
+      } else {
+        throw Exception("");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<String?> terminalCloseExpense() async {
+    try {
+      if (globals.currentExpense != null) {
+        var data = globals.currentExpense!.toJson();
+        print(json.encode(data));
+        final response = await net
+            .post('${globals.apiLink}expense/terminalClose', body: data);
+        if (response.statusCode == 200) {
+          globals.currentExpense = null;
+          globals.orderState = null;
+          globals.currentExpenseId = 0;
+          globals.currentExpenseSum = 0;
+        } else {
+          var res = json.decode(utf8.decode(response.bodyBytes));
+          return res["message"];
+        }
+      } else {
+        throw Exception("");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
