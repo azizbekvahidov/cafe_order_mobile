@@ -1,17 +1,13 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/order.dart';
+import 'package:cafe_mostbyte/models/print_data.dart';
+import 'package:cafe_mostbyte/services/translit.dart';
 // import 'package:charset_converter/charset_converter.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:flutter/services.dart';
-import 'package:image/image.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart' hide Image;
-import 'package:windows1251/windows1251.dart';
 import 'config/globals.dart' as globals;
+import 'services/helper.dart' as helper;
 
 class Print {
   // Future<void> printReceipt(NetworkPrinter printer, Map data) async {
@@ -238,46 +234,64 @@ class Print {
   //   }
   // }
 
-  Future<void> printCheck(NetworkPrinter printer, Department data) async {
+  Future<void> printCheck(
+      NetworkPrinter printer, Department data, PrintData printData) async {
     try {
+      final profile = await CapabilityProfile.load();
+      final generator = Generator(PaperSize.mm80, profile);
+      List<int> bytes = [];
       // Uint8List depName = await CharsetConverter.encode("CP866", data.name);
-      printer.text(data
-          .name); //textEncoded(depName, styles: PosStyles(codeTable: "CP866"));
-      printer.hr();
+      bytes += generator.text(Translit().toTranslit(
+          source: data
+              .name)); //textEncoded(depName, styles: PosStyles(codeTable: "CP866"));
+      bytes += generator.hr();
       for (var i = 0; i < data.orders!.length; i++) {
         Order val = data.orders![i];
         List<PosColumn> pr = [
           PosColumn(
-              text: val.product!.name,
+              text: Translit().toTranslit(source: val.product!.name),
               //await CharsetConverter.encode("CP866", val.product!.name),
-              width: 11,
+              width: 10,
               styles: PosStyles(codeTable: "CP866")),
-          PosColumn(text: val.amount.toString(), width: 1),
+          PosColumn(text: val.amount.toString(), width: 2),
         ];
-        printer.row(pr);
+        bytes += generator.row(pr);
+        if (val.comment != null && val.comment != "") {
+          bytes += generator.row([
+            PosColumn(
+                text: Translit().toTranslit(source: val.comment!),
+                //await CharsetConverter.encode("CP866", val.product!.name),
+                width: 12,
+                styles: PosStyles(codeTable: "CP866"))
+          ]);
+        }
       }
-      printer.hr();
+
+      bytes += generator.hr();
 
       var newFormat = DateFormat("yy-MM-dd HH:mm");
 
-      printer.text(newFormat.format(DateTime.now()),
+      bytes += generator.text(newFormat.format(DateTime.now()),
           styles: PosStyles(align: PosAlign.center), linesAfter: 1);
 
       // Uint8List tableTxt = await CharsetConverter.encode(
       //     "CP866", "Стол №: ${globals.orderState!.table}");
       // Uint8List waiter = await CharsetConverter.encode(
       //     "CP866", "Официант: ${globals.orderState!.employee}");
-      printer.row([
+      bytes += generator.row([
         PosColumn(
-            text: "Официант: ${globals.orderState!.employee}",
+            text: Translit()
+                .toTranslit(source: "Официант: ${printData.employee}"),
             width: 6,
             styles: PosStyles(align: PosAlign.left, codeTable: "CP866")),
         PosColumn(
-            text: "Стол №: ${globals.orderState!.table}",
+            text: Translit().toTranslit(source: "Стол: ${printData.table}"),
             width: 6,
             styles: PosStyles(align: PosAlign.right, codeTable: "CP866")),
       ]);
 
+      generator.cut();
+      printer.rawBytes(bytes);
       printer.cut();
     } catch (e) {
       print(e);
@@ -289,62 +303,63 @@ class Print {
     final generator = Generator(PaperSize.mm80, profile);
     List<int> bytes = [];
 
-    bytes += generator.text(
-        'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
-    bytes += generator.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
-        styles: PosStyles(codeTable: 'CP1252'));
-    bytes += generator.textEncoded(windows1251.encode("фырро рфыровп фы"),
-        styles: PosStyles(codeTable: 'CP866'));
+    // bytes += generator.text(
+    //     'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
+    // bytes += generator.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
+    //     styles: PosStyles(codeTable: 'CP1252'));
+    bytes += generator.text("", styles: PosStyles(codeTable: 'CP1251'));
 
-    bytes += generator.text('Special 2: blåbærgrød',
-        styles: PosStyles(codeTable: 'CP1252'));
+    // bytes += generator.text('Special 2: blåbærgrød',
+    //     styles: PosStyles(codeTable: 'CP1252'));
 
-    bytes += generator.text('Bold text', styles: PosStyles(bold: true));
-    bytes += generator.text('Reverse text', styles: PosStyles(reverse: true));
-    bytes += generator.text('Underlined text',
-        styles: PosStyles(underline: true), linesAfter: 1);
-    bytes +=
-        generator.text('Align left', styles: PosStyles(align: PosAlign.left));
-    bytes += generator.text('Align center',
-        styles: PosStyles(align: PosAlign.center));
-    bytes += generator.text('Align right',
-        styles: PosStyles(align: PosAlign.right), linesAfter: 1);
+    // bytes += generator.text('Bold text', styles: PosStyles(bold: true));
+    // bytes += generator.text('Reverse text', styles: PosStyles(reverse: true));
+    // bytes += generator.text('Underlined text',
+    //     styles: PosStyles(underline: true), linesAfter: 1);
+    // bytes +=
+    //     generator.text('Align left', styles: PosStyles(align: PosAlign.left));
+    // bytes += generator.text('Align center',
+    //     styles: PosStyles(align: PosAlign.center));
+    // bytes += generator.text('Align right',
+    //     styles: PosStyles(align: PosAlign.right), linesAfter: 1);
 
-    bytes += generator.row([
-      PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: PosStyles(align: PosAlign.center, underline: true),
-      ),
-      PosColumn(
-        text: 'col6',
-        width: 6,
-        styles: PosStyles(align: PosAlign.center, underline: true),
-      ),
-      PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: PosStyles(align: PosAlign.center, underline: true),
-      ),
-    ]);
+    // bytes += generator.row([
+    //   PosColumn(
+    //     text: 'col3',
+    //     width: 3,
+    //     styles: PosStyles(align: PosAlign.center, underline: true),
+    //   ),
+    //   PosColumn(
+    //     text: 'col6',
+    //     width: 6,
+    //     styles: PosStyles(align: PosAlign.center, underline: true),
+    //   ),
+    //   PosColumn(
+    //     text: 'col3',
+    //     width: 3,
+    //     styles: PosStyles(align: PosAlign.center, underline: true),
+    //   ),
+    // ]);
 
-    bytes += generator.text('Text size 200%',
-        styles: PosStyles(
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-        ));
+    // bytes += generator.text('Text size 200%',
+    //     styles: PosStyles(
+    //       height: PosTextSize.size2,
+    //       width: PosTextSize.size2,
+    //     ));
 
     // Print image:
-    final ByteData data = await rootBundle.load('assets/img/logo.png');
-    final Uint8List imgBytes = data.buffer.asUint8List();
-    final Image image = decodeImage(imgBytes)!;
+    // final ByteData data =
+    //     await rootBundle.load('assets/img/logo-transparent.png');
+    // final Uint8List imgBytes = data.buffer.asUint8List();
+    // final Image image = decodeImage(imgBytes)!;
     // bytes += generator.image(image);
     // Print image using an alternative (obsolette) command
-    bytes += generator.imageRaster(image);
+    // bytes += generator.imageRaster(image);
 
     // Print barcode
-    final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
-    bytes += generator.barcode(Barcode.upcA(barData));
+    // final List<dynamic> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
+    // bytes += generator.barcode(Barcode.code128(barData));
+    // bytes += generator.qrcode("asdasdasdasd");
 
     // Print mixed (chinese + latin) text. Only for printers supporting Kanji mode
     // ticket.text(
@@ -382,30 +397,29 @@ class Print {
   //   }
   // }
 
-  printedCheck() async {
-    const PaperSize paper = PaperSize.mm80;
-    final profile = await CapabilityProfile.load(name: "default");
-    final printer = NetworkPrinter(paper, profile);
-    // List<Department>? list = globals.orderState!.departments;
-    final PosPrintResult res =
-        await printer.connect('192.168.2.16', port: 9100);
-    if (res == PosPrintResult.success) {
-      await test(printer);
-      printer.disconnect();
+  printedCheck({ctx, required PrintData? data}) async {
+    if (data != null) {
+      const PaperSize paper = PaperSize.mm80;
+      final profile = await CapabilityProfile.load(name: "default");
+      final printer = NetworkPrinter(paper, profile);
+      List<Department>? list = globals.orderState!.departments;
+
+      if (list != null) {
+        list.forEach((e) async {
+          final PosPrintResult res =
+              await printer.connect(e.printer!, port: 9100);
+
+          if (res == PosPrintResult.success) {
+            await printCheck(printer, e, data);
+            printer.disconnect();
+          } else {
+            printer.disconnect();
+            helper.getToast(res.msg, ctx);
+          }
+        });
+      }
+    } else {
+      helper.getToast("нет данных для печати", ctx);
     }
-    // if (list != null) {
-    //   list.forEach((e) async {
-    //     final PosPrintResult res =
-    //         await printer.connect(e.printer!, port: 9100);
-
-    //     if (res == PosPrintResult.success) {
-    //       await printCheck(printer, e);
-
-    //       printer.disconnect();
-    //     }
-    //   });
-    // }
-
-    globals.orderState = null;
   }
 }

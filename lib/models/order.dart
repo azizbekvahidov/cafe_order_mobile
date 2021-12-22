@@ -6,12 +6,14 @@ class Order {
   int product_id;
   int type;
   double amount;
+  String? comment;
   Product? product;
 
   Order({
     required this.product_id,
     required this.type,
     required this.amount,
+    this.comment = null,
     required this.product,
   });
 
@@ -20,6 +22,7 @@ class Order {
       product_id: json["product_id"],
       type: json["type"],
       amount: double.parse(json["amount"].toString()),
+      comment: json["comment"],
       product: Product.fromJson(json["product"]),
     );
   }
@@ -28,6 +31,7 @@ class Order {
         "product_id": product_id,
         "type": type,
         "amount": amount,
+        "comment": comment,
         "product": product != null ? product!.toJson() : null,
       };
 }

@@ -3,7 +3,7 @@ import 'package:cafe_mostbyte/models/department.dart';
 class Product {
   int id;
   String name;
-  int price;
+  int? price;
   Department department;
   String? image;
 
@@ -19,7 +19,7 @@ class Product {
     return Product(
       id: json["id"],
       name: json["name_uz"],
-      price: json["price"],
+      price: json["price"] == null ? 0 : json["price"],
       department: Department.fromJson(json["department"]),
       image: json["image"],
     );

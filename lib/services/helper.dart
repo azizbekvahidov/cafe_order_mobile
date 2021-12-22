@@ -30,7 +30,7 @@ void calculateTotalSum() {
   var sum = 0;
   if (globals.currentExpense != null) {
     globals.currentExpense!.order.every((element) {
-      double currentSum = element.amount * element.product!.price;
+      double currentSum = element.amount * element.product!.price!;
       sum += (currentSum / 100).ceil() * 100;
       return true;
     });
@@ -165,7 +165,7 @@ Map<String, dynamic> parseSettings(List data) {
 }
 
 generateCheck(
-    {required Product data, required type, required amount, comment = ""}) {
+    {required Product data, required type, required amount, comment = null}) {
   if (globals.orderState == null) {
     PrintData orderState = new PrintData(
         expense_id: globals.currentExpense!.id,
@@ -183,6 +183,7 @@ generateCheck(
                     product_id: data.id,
                     type: type,
                     amount: double.parse(amount.toString()),
+                    comment: comment,
                     product: data)
               ])
         ]);
@@ -204,18 +205,26 @@ generateCheck(
             product_id: data.id,
             type: type,
             amount: double.parse(amount.toString()),
-            product: null)
+            comment: comment,
+            product: data)
       ];
+      globals.orderState!.departments!.add(s);
     } else {
       Order order = s.orders!.firstWhere(
           (element) => element.product_id == data.id && element.type == type,
           orElse: () => Order(
-              product_id: data.id, type: type, amount: 0.0, product: data));
+              product_id: data.id,
+              type: type,
+              amount: 0.0,
+              product: data,
+              comment: comment));
       if (order.amount == 0.0) {
         order.amount += amount;
+        order.comment = comment;
         s.orders!.add(order);
       } else {
         order.amount += amount;
+        order.comment = comment;
       }
     }
     print(jsonEncode(globals.orderState!.toJson()));

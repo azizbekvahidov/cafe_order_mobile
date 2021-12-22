@@ -52,7 +52,7 @@ class Expense {
       'ready_time': ready_time,
       'phone': phone,
       'employee': employee.toJson(),
-      'table': table!.toJson(),
+      'table': table != null ? table!.toJson() : 0,
       "order": order.map((e) => e.toJson()).toList(),
     };
   }

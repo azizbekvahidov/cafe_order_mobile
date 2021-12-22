@@ -32,13 +32,12 @@ dependencies:
   fluttertoast: ^8.0.8
   cached_network_image: ^3.1.0
   skeleton_text: ^3.0.0
-  pull_to_refresh: ^2.0.0
-  lazy_load_scrollview: ^1.3.0
+  flutter_form_builder: ^6.0.1
   device_info: ^2.0.2
   auto_size_text: ^3.0.0
   esc_pos_printer: ^4.1.0
   esc_pos_utils_plus: ^2.0.1+6
-  windows1251: ^0.0.3
+  enough_convert: ^1.4.0
   
   connectivity: ^3.0.6
   http: ^0.13.3
@@ -108,6 +107,8 @@ flutter:
     - assets/img/visibility.svg
     - assets/img/no-photo.svg
     - assets/img/logo-cafe.svg
+    - assets/img/logo.jpg
+    - assets/img/logo-transparent.png
     - assets/img/power.svg
   # assets:
   #   - images/a_dot_burr.jpeg

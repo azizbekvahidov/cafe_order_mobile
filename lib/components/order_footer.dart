@@ -41,7 +41,7 @@ class _OrderFooterState extends State<OrderFooter> {
             if (formStatus is SubmissionSuccess) {
               orderBloc.fetchExpenses(id: globals.filial);
               orderBloc.fetchExpense(id: globals.currentExpenseId);
-              await print.printedCheck();
+              await print.printedCheck(ctx: context, data: globals.orderState);
               globals.orderState = null;
               context.read<ExpenseBloc>().add(ExpenseInitialized());
             } else if (formStatus is SubmissionFailed) {}
@@ -64,29 +64,6 @@ class _OrderFooterState extends State<OrderFooter> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(children: [
-                          AutoSizeText(
-                            "Итого: ",
-                            style: TextStyle(
-                              fontFamily: globals.font,
-                              fontSize: 20,
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.only(left: 5)),
-                          AutoSizeText(
-                            "${globals.currentExpenseSum}",
-                            style: TextStyle(
-                              fontFamily: globals.font,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ]),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 10)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         BlocBuilder<ExpenseBloc, ExpenseState>(
                           builder: (context, state) {
@@ -123,6 +100,29 @@ class _OrderFooterState extends State<OrderFooter> {
                             );
                           },
                         ),
+                        Row(children: [
+                          AutoSizeText(
+                            "Итого: ",
+                            style: TextStyle(
+                              fontFamily: globals.font,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.only(left: 5)),
+                          AutoSizeText(
+                            "${globals.currentExpenseSum}",
+                            style: TextStyle(
+                              fontFamily: globals.font,
+                              fontSize: 24,
+                            ),
+                          ),
+                        ]),
+                      ],
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         InkWell(
                           onTap: () async {
                             // var res = await checkPrint();

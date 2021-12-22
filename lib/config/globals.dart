@@ -9,7 +9,7 @@ import 'package:cafe_mostbyte/models/settings.dart';
 import 'package:cafe_mostbyte/models/user.dart';
 import 'package:flutter/material.dart';
 
-String apiLink = "http://87.237.234.154/api/v1/";
+String apiLink = "http://takes/api/v1/";
 // String apiLink = "http://localhost:3007/";
 
 String lang = "ru";

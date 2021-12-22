@@ -1,5 +1,6 @@
 import 'package:cafe_mostbyte/components/custom_block/adding_btn.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
+import 'package:cafe_mostbyte/components/custom_block/order_comment_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
@@ -42,36 +43,12 @@ class _OrderRowState extends State<OrderRow> {
                     InkWell(
                       onTap: () {
                         expenseCardPageState.setState(() {
-                          // var order_row = globals.currentExpense!.order.firstWhere((element) =>
-                          //     element.product_id ==
-                          //         widget.orderRow!.product_id &&
-                          //     element.type == widget.orderRow!.type);
-                          // if(globals.orderState["data"][order_row.product.department.name].){
-
-                          // }
                           globals.currentExpense!.order.removeWhere((element) =>
                               element.product_id ==
                                   widget.orderRow!.product_id &&
                               element.type == widget.orderRow!.type);
                         });
 
-                        // var orderState = globals.orderState.where((element) {
-                        //   return element.product_id ==
-                        //           widget.orderRow!.product.id &&
-                        //       element.type == widget.orderRow!.type;
-                        // });
-                        // if (orderState.length != 0) {
-                        //   orderState.first.amount = widget.orderRow!.amount *
-                        //       -orderState.first.amount;
-                        // } else {
-                        //   Order newOrder = Order(
-                        //     amount: widget.orderRow!.amount * -1,
-                        //     product_id: widget.orderRow!.product.id,
-                        //     type: widget.orderRow!.type,
-                        //     product: widget.orderRow!.product,
-                        //   );
-                        //   globals.orderState.add(newOrder);
-                        // }
                         helper.calculateTotalSum();
                       },
                       child: Center(
@@ -81,13 +58,24 @@ class _OrderRowState extends State<OrderRow> {
                         ),
                       ),
                     ),
-                    AutoSizeText(
-                      "${widget.orderRow!.product!.name}",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: globals.font,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 10,
+                    InkWell(
+                      onTap: () {
+                        var modal = Modal(
+                            ctx: context,
+                            child: OrderCommentModal(
+                              data: widget.orderRow!,
+                            ),
+                            heightIndex: 0.15);
+                        modal.customDialog();
+                      },
+                      child: AutoSizeText(
+                        "${widget.orderRow!.product!.name}",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: globals.font,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   ],
@@ -161,7 +149,7 @@ class _OrderRowState extends State<OrderRow> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "${(widget.orderRow!.product!.price * widget.orderRow!.amount).toInt()}",
+                  "${(widget.orderRow!.product!.price! * widget.orderRow!.amount).toInt()}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: globals.font,
