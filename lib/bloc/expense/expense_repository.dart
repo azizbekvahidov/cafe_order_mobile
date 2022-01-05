@@ -69,7 +69,6 @@ class ExpenseRepository {
     try {
       if (globals.currentExpense != null) {
         var data = globals.currentExpense!.toJson();
-        print(json.encode(data));
         final response = await net
             .post('${globals.apiLink}expense/terminalClose', body: data);
         if (response.statusCode == 200) {
@@ -89,15 +88,56 @@ class ExpenseRepository {
     }
   }
 
+  Future<String?> debtCloseExpense() async {
+    try {
+      if (globals.currentExpense != null) {
+        var data = globals.currentExpense!.toJson();
+        final response =
+            await net.post('${globals.apiLink}expense/debtClose', body: data);
+        if (response.statusCode == 200) {
+          globals.currentExpense = null;
+          globals.orderState = null;
+          globals.currentExpenseId = 0;
+          globals.currentExpenseSum = 0;
+        } else {
+          var res = json.decode(utf8.decode(response.bodyBytes));
+          return res["message"];
+        }
+      } else {
+        throw Exception("");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<String?> avansCloseExpense() async {
+    try {
+      if (globals.currentExpense != null) {
+        var data = globals.currentExpense!.toJson();
+        print(json.encode(data));
+        final response =
+            await net.post('${globals.apiLink}expense/avansClose', body: data);
+        if (response.statusCode == 200) {
+          globals.currentExpense = null;
+          globals.orderState = null;
+          globals.currentExpenseId = 0;
+          globals.currentExpenseSum = 0;
+        } else {
+          var res = json.decode(utf8.decode(response.bodyBytes));
+          return res["message"];
+        }
+      } else {
+        throw Exception("");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<String?> sendCheck() async {
     try {
-      // var data = {
-      //   "table": 0,
-      //   "emp": globals.userData!.name,
-      //   "departments": globals.department!.map((e) => e.toJson()).toList(),
-      //   "data": globals.orderState.map((e) => e.toJson()).toList(),
-      // };
-      // print(globals.orderState.map((e) => e.toJson()).toList());
+      // var data = globals.orderState!.toJson();
       // final response = await net.post('http://api/print', body: data);
       // if (response.statusCode == 200) {
       // } else {

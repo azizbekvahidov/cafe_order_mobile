@@ -227,7 +227,6 @@ generateCheck(
         order.comment = comment;
       }
     }
-    print(jsonEncode(globals.orderState!.toJson()));
   }
 
   // if (globals.orderState.containsKey("data")) {

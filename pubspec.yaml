@@ -36,8 +36,8 @@ dependencies:
   device_info: ^2.0.2
   auto_size_text: ^3.0.0
   esc_pos_printer: ^4.1.0
-  esc_pos_utils_plus: ^2.0.1+6
-  enough_convert: ^1.4.0
+  # esc_pos_utils_plus: ^2.0.1+6
+  windows1251: ^0.0.3
   confirm_dialog: ^1.0.0
   
   connectivity: ^3.0.6

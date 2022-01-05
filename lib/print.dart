@@ -6,6 +6,7 @@ import 'package:cafe_mostbyte/services/translit.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:intl/intl.dart';
+import 'package:windows1251/windows1251.dart';
 import 'config/globals.dart' as globals;
 import 'services/helper.dart' as helper;
 
@@ -241,6 +242,11 @@ class Print {
       final generator = Generator(PaperSize.mm80, profile);
       List<int> bytes = [];
       // Uint8List depName = await CharsetConverter.encode("CP866", data.name);
+
+      bytes += generator
+          .textEncoded(windows1251.encode("фывф ловфылв лфоырвл рофлыв"));
+      bytes += generator.text('Special 1:аппвпв àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
+          styles: PosStyles(codeTable: 'CP1252'));
       bytes += generator.text(Translit().toTranslit(
           source: data
               .name)); //textEncoded(depName, styles: PosStyles(codeTable: "CP866"));
@@ -406,8 +412,8 @@ class Print {
 
       if (list != null) {
         list.forEach((e) async {
-          final PosPrintResult res =
-              await printer.connect(e.printer!, port: 9100);
+          final PosPrintResult res = await printer.connect(e.printer!,
+              port: 9100, timeout: Duration(seconds: 5));
 
           if (res == PosPrintResult.success) {
             await printCheck(printer, e, data);

@@ -10,6 +10,8 @@ class Expense {
   int? discount;
   int? terminal;
   int prepaid;
+  int? debt_payed;
+  String comment;
   int prepaidSum;
   String? ready_time;
   String? phone;
@@ -24,6 +26,8 @@ class Expense {
     required this.expense_sum,
     this.discount = null,
     this.terminal = null,
+    this.debt_payed = null,
+    required this.comment,
     required this.prepaid,
     required this.prepaidSum,
     required this.ready_time,
@@ -42,6 +46,8 @@ class Expense {
       discount: json["discount"],
       terminal: json["terminal"],
       prepaid: json["prepaid"],
+      comment: json["comment"],
+      debt_payed: json["debt_payed"],
       prepaidSum: json["prepaidSum"],
       ready_time: json["ready_time"],
       phone: json["phone"],
@@ -59,7 +65,9 @@ class Expense {
       "expense_sum": expense_sum,
       "discount": discount,
       "terminal": terminal,
+      "comment": comment,
       "prepaid": prepaid,
+      "debt_payed": debt_payed,
       "prepaidSum": prepaidSum,
       'ready_time': ready_time,
       'phone': phone,

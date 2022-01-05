@@ -6,6 +6,8 @@ import 'package:cafe_mostbyte/bloc/expense/expense_state.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/button/main_button.dart';
+import 'package:cafe_mostbyte/components/custom_block/avans_modal.dart';
+import 'package:cafe_mostbyte/components/custom_block/debt_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/terminal_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
@@ -173,31 +175,87 @@ class _OrderFooterState extends State<OrderFooter> {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    child: InkWell(
-                                      child: MainButton(
-                                        action: () {},
-                                        colour: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        text: "Аванс",
-                                        textColor:
-                                            Theme.of(context).primaryColor,
-                                      ),
+                                    child:
+                                        BlocBuilder<ExpenseBloc, ExpenseState>(
+                                      builder: (context, state) {
+                                        return MainButton(
+                                          action: () async {
+                                            if (globals.currentExpense !=
+                                                null) {
+                                              var modal = Modal(
+                                                  ctx: context,
+                                                  child: AvansModal(),
+                                                  heightIndex: 0.2);
+                                              await modal.customDialog();
+                                              if (modal.res) {
+                                                if (await confirm(context,
+                                                    content:
+                                                        Text("Вы уверены?"),
+                                                    textCancel: Text("Нет"),
+                                                    textOK: Text("Да"),
+                                                    title: Text(
+                                                        "Сохранить аванс"))) {
+                                                  context
+                                                      .read<ExpenseBloc>()
+                                                      .add(ExpensAvansClose());
+                                                }
+                                              }
+                                            } else {
+                                              helper.getToast(
+                                                  "Выберите счет", context);
+                                            }
+                                          },
+                                          colour: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          text: "Аванс",
+                                          textColor:
+                                              Theme.of(context).primaryColor,
+                                        );
+                                      },
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
-                                    child: InkWell(
-                                      child: MainButton(
-                                        action: () {},
-                                        colour: Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary,
-                                        text: "Долг",
-                                        textColor:
-                                            Theme.of(context).primaryColor,
-                                      ),
+                                    child:
+                                        BlocBuilder<ExpenseBloc, ExpenseState>(
+                                      builder: (context, state) {
+                                        return MainButton(
+                                          action: () async {
+                                            if (globals.currentExpense !=
+                                                null) {
+                                              var modal = Modal(
+                                                  ctx: context,
+                                                  child: DebtModal(),
+                                                  heightIndex: 0.2);
+                                              await modal.customDialog();
+                                              if (modal.res) {
+                                                if (await confirm(context,
+                                                    content:
+                                                        Text("Вы уверены?"),
+                                                    textCancel: Text("Нет"),
+                                                    textOK: Text("Да"),
+                                                    title: Text(
+                                                        "Закрытие счет в долг"))) {
+                                                  context
+                                                      .read<ExpenseBloc>()
+                                                      .add(ExpenseDebtClose());
+                                                }
+                                              }
+                                            } else {
+                                              helper.getToast(
+                                                  "Выберите счет", context);
+                                            }
+                                          },
+                                          colour: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary,
+                                          text: "Долг",
+                                          textColor:
+                                              Theme.of(context).primaryColor,
+                                        );
+                                      },
                                     ),
                                   ),
                                   Padding(

@@ -10,4 +10,8 @@ class ExpenseClose extends ExpenseEvent {}
 
 class ExpenseTerminalClose extends ExpenseEvent {}
 
+class ExpenseDebtClose extends ExpenseEvent {}
+
+class ExpensAvansClose extends ExpenseEvent {}
+
 class LoginSubmitted extends ExpenseEvent {}

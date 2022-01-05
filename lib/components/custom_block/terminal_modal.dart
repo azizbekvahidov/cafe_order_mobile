@@ -53,7 +53,7 @@ class _TerminalModalState extends State<TerminalModal> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  "${globals.currentExpenseSum - terminalSum}",
+                  "Наличные: ${globals.currentExpenseSum - terminalSum}",
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ],
