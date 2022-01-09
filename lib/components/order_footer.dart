@@ -11,7 +11,7 @@ import 'package:cafe_mostbyte/components/custom_block/debt_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/terminal_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
-import 'package:cafe_mostbyte/print.dart';
+import 'package:cafe_mostbyte/services/print_service.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +32,7 @@ class OrderFooter extends StatefulWidget {
 }
 
 class _OrderFooterState extends State<OrderFooter> {
-  Print print = new Print();
+  PrintService print = new PrintService();
   @override
   Widget build(BuildContext context) {
     var dHeight = MediaQuery.of(context).size.height;
@@ -50,8 +50,7 @@ class _OrderFooterState extends State<OrderFooter> {
               orderBloc.fetchExpense(id: globals.currentExpenseId);
 
               if (globals.orderState != null) {
-                await print.printedCheck(
-                    ctx: context, data: globals.orderState);
+                await print.startPrinter(printData: globals.orderState);
                 globals.orderState = null;
               }
               expenseCardPageState.setState(() {});

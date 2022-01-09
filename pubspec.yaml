@@ -39,6 +39,7 @@ dependencies:
   # esc_pos_utils_plus: ^2.0.1+6
   windows1251: ^0.0.3
   confirm_dialog: ^1.0.0
+  path_provider: ^2.0.8
   
   connectivity: ^3.0.6
   http: ^0.13.3
@@ -52,6 +53,8 @@ dependencies:
 
   flutter_typeahead: ^3.2.1
   flutter_login: ^3.0.0
+  webcontent_converter: ^0.0.7
+  pos_printer_manager: ^0.0.5
 
 
   # The following adds the Cupertino Icons font to your application.
