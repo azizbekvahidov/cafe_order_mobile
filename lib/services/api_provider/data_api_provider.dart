@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cafe_mostbyte/models/category.dart';
 import 'package:cafe_mostbyte/models/department.dart';
@@ -6,6 +7,7 @@ import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../network_service.dart';
 import '../../config/globals.dart' as globals;
@@ -16,6 +18,7 @@ class DataApiProvider {
 
   Future<void> getSettings() async {
     try {
+      await getFileSettings();
       final response = await net.get('${globals.apiLink}get-settings');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
@@ -26,6 +29,24 @@ class DataApiProvider {
       }
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  Future<void> getFileSettings() async {
+    String text;
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/settings.json');
+      Map settings = json.decode(await file.readAsString());
+      globals.isKassa = settings["isKassa"];
+    } catch (e) {
+      Map settings = {
+        "isKassa": false,
+      };
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/settings.json');
+      await file.writeAsString(json.encode(settings));
+      globals.isKassa = settings["isKassa"];
     }
   }
 
