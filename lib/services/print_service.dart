@@ -17,19 +17,23 @@ class PrintService {
     _printers = printers;
   }
 
-  _connect(printer) async {
-    await _scan();
+  _connect(Department e, PrintData printData) async {
+    if (_printers == null) {
+      await _scan();
+    }
     USBPrinter _printer =
-        _printers!.firstWhere((element) => element.address == printer);
+        _printers!.firstWhere((element) => element.address == e.printer);
     var paperSize = PaperSize.mm80;
     var profile = await CapabilityProfile.load();
     var manager = USBPrinterManager(_printer, paperSize, profile);
     await manager.connect();
+    _manager = null;
+    setCheckPrint(e, printData, manager);
     _manager = manager;
   }
 
-  setPrint(Department e, PrintData printData) async {
-    await _connect(e.printer);
+  setCheckPrint(
+      Department e, PrintData printData, USBPrinterManager manager) async {
     final content = Demo.generateCheck(data: printData, department: e);
     var bytes = await WebcontentConverter.contentToImage(
       content: content,
@@ -38,19 +42,18 @@ class PrintService {
     var service = ESCPrinterService(bytes);
     var data = await service.getBytes();
 
-    if (_manager != null) {
-      print("isConnected ${_manager!.isConnected}");
-      _manager!.writeBytes(data, isDisconnect: false);
+    if (manager != null) {
+      print("isConnected ${e.printer} ${_manager!.isConnected}");
+      manager.writeBytes(data, isDisconnect: false);
     }
   }
 
-  startPrinter({PrintData? printData}) async {
+  checkPrinter({PrintData? printData}) async {
     List<Department>? list = printData!.departments;
 
     if (list != null) {
       list.forEach((e) async {
-        _manager = null;
-        setPrint(e, printData);
+        _connect(e, printData);
       });
     }
   }

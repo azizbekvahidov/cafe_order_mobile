@@ -50,7 +50,7 @@ class _OrderFooterState extends State<OrderFooter> {
               orderBloc.fetchExpense(id: globals.currentExpenseId);
 
               if (globals.orderState != null) {
-                await print.startPrinter(printData: globals.orderState);
+                await print.checkPrinter(printData: globals.orderState);
                 globals.orderState = null;
               }
               expenseCardPageState.setState(() {});
