@@ -27,13 +27,17 @@ String removeTag({required htmlString, strLength}) {
 }
 
 void calculateTotalSum() {
-  var sum = 0;
+  int sum = 0;
   if (globals.currentExpense != null) {
     globals.currentExpense!.order.every((element) {
       double currentSum = element.amount * element.product!.price!;
       sum += (currentSum / 100).ceil() * 100;
       return true;
     });
+    sum = sum +
+        (globals.isKassa
+            ? 0
+            : ((sum / 100).toInt() * int.parse(globals.settings!.percent)));
     globals.currentExpense!.expense_sum = sum;
   }
   globals.currentExpenseSum = sum;

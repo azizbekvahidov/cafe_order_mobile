@@ -1,9 +1,7 @@
 library cafe_order.globals;
 
-import 'package:cafe_mostbyte/bloc/order/order_state.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
-import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/print_data.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
 import 'package:cafe_mostbyte/models/user.dart';

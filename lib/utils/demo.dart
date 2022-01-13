@@ -1,6 +1,8 @@
 import 'package:cafe_mostbyte/models/department.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/print_data.dart';
 import 'package:intl/intl.dart';
+import '../config/globals.dart' as globals;
 
 class Demo {
   static String getInvoiceContent() {
@@ -1388,20 +1390,26 @@ class Demo {
    """;
   }
 
-  static String getReceiptContent() {
+  static String getReceiptContent({required Expense data}) {
+    String txt = "";
+    int sum = 0;
+    data.order.forEach((element) {
+      double currentSum = element.amount * element.product!.price!;
+      sum += (currentSum / 100).ceil() * 100;
+      txt += """
+            <p class="full-width inline-block font1" style='border-bottom:1px solid #000'>
+                <span class="left" style='width: 60%'>${element.product!.name}</span>
+                <span class="left" style='width: 15%'>${element.amount}</span>
+                <span class="right" style='width: 25%'> &nbsp; &nbsp; ${(element.amount * element.product!.price!.toDouble()).toInt()}</span>
+            </p>
+            """;
+    });
     return """
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RECEIPT</title>
-</head>
 
 <style>
     body,
     p {
+        font-family: Arial;
         margin: 0px;
         padding: 0px;
     }
@@ -1419,7 +1427,7 @@ class Demo {
     }
     
     .container {
-        padding: 5px 15px;
+        padding: 5px 0px;
     }
     
     hr {
@@ -1470,6 +1478,24 @@ class Demo {
     .inline-block {
         display: inline-block;
     }
+    .font1{
+      font-size: 0.8em;
+    }
+    .font2{
+      font-size: 1.2em;
+    }
+    .font3{
+      font-size: 1.4em;
+    }
+    .font4{
+      font-size: 1.6em;
+    }
+    .font5{
+      font-size: 1.8em;
+    }
+    h2{
+        margin-bottom:0;
+    }
 </style>
 
 <body>
@@ -1478,329 +1504,62 @@ class Demo {
         <div class="container">
             <!-- header part -->
             <div class="text-center">
-                <p>MYLEKHA STORE</p>
-                <hr>
-                <p class="total">320.00</p>
-                <span>Total</span>
+                <h2>${globals.settings!.cafe_name}</h2>
+                <p>Счет № <b style='font-size: 50px'>${data.id}</b></p>
             </div>
             <hr>
             <!-- end header part -->
 
-            <p>Cashier: owner</p>
-            <p>POS: POS 1</p>
+            <p class="full-width inline-block font1">
+                <span class=" ">Тип заказа: <b>Зал, С собой, Доставка</b></span> <br>
+                <span class=" ">Cтол №: <b>6</b></span> <br>
+                <span class=" ">Телефон: <b class='font5'>+998935193171</b></span> <br>
+                <span class=" ">Время доставки: <b>18:23</b></span> <br>
+                <span class=" ">Адрес: <b class='font5'>G'alaba 25a</b></span> <br>
+                <span class=" ">Открыт: <b>${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.parse(data.order_date))}</b></span> <br>
+                <span class=' '>Распечатано: <b>${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now())}</b></span><br>
+                <span class=" ">Официант: <b>${data.employee.name}</b></sp>
+            </p>
             <hr>
+            
+            <p class="full-width inline-block font1" style='border-bottom:1px solid #000'>
+                <span class="left" style='width: 60%'>Наименование</span>
+                <span class="left" style='width: 15%'>Кол-во</span>
+                <span class="right" style='width: 25%'> &nbsp; &nbsp; Сумма</span>
+            </p>
             <!-- product part -->
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
+            $txt
+            
 
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-
-            <p class="full-width inline-block">
-                <b class="left">Item c1 p2</b>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-
-            <p class="full-width inline-block">
-                <strong class="left">Item c1 p2</strong>
-                <b class="right">4.00</b>
-            </p>
-            <p><span>2 x 2.00</span></p>
-            <p><span>+egg (0.60)</span></p>
-            <p><span>+rice (3.00)</span></p>
-            <hr>
             <!-- end product part -->
 
             <!-- footer part -->
-            <p class="full-width inline-block">
-                <b class="left">Total</b>
-                <b class="right">4.00</b>
+            <p class="full-width inline-block font2">
+                <b class="left">Сумма заказа:</b>
+                <b class="right">$sum</b>
             </p>
-            <p class="full-width inline-block">
-                <b class="left">Cash</b>
-                <b class="right">4.00</b>
+            ${(globals.isKassa) ? "" : """<p class="full-width inline-block">
+                <b class="left">Облуживаниe ${globals.settings!.percent}%: </b>
+                <b class="right">${(sum / 100 * int.parse(globals.settings!.percent)).toInt()}</b>
+            </p>"""}
+            <b class="full-width inline-block text-center font5">
+                Итого: ${data.expense_sum}
+            </b>
+            <hr>
+            <b>
+            <p class="full-width inline-block text-center">
+                ${globals.settings!.text_footer}
             </p>
+        </b>
         </div>
-        <hr>
-        <!-- end footer part -->
-        <div class="container">
-            <p class="full-width inline-block">
-                <span class="left">01/09/2020 22:23</span>
-                <span class="right">No 3-10001</span>
-            </p>
-        </div>
-
     </div>
-    <div class="container text-center">
-        <br>
-        <p>@2020 <a href="https://mylekha.app">MYLEKHA</a>. All right reserved.</p>
-    </div>
-
-
+    
 </body>
 
 </html>  
+
+
+
   """;
   }
 

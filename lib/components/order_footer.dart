@@ -50,7 +50,7 @@ class _OrderFooterState extends State<OrderFooter> {
               orderBloc.fetchExpense(id: globals.currentExpenseId);
 
               if (globals.orderState != null) {
-                await print.checkPrinter(printData: globals.orderState);
+                await print.checkPrint(printData: globals.orderState);
                 globals.orderState = null;
               }
               expenseCardPageState.setState(() {});
@@ -139,6 +139,8 @@ class _OrderFooterState extends State<OrderFooter> {
                       children: [
                         InkWell(
                           onTap: () async {
+                            await print.recieptPrint(
+                                expense: globals.currentExpense);
                             // var res = await checkPrint();
                             // if (res == true) {
                             //   prints.testPrint(
