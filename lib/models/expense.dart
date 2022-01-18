@@ -1,3 +1,4 @@
+import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/employee.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/table.dart';
@@ -18,6 +19,8 @@ class Expense {
   Employee employee;
   Table? table;
   List<Order> order;
+  bool isChanged;
+  Delivery? delivery;
 
   Expense({
     required this.id,
@@ -35,6 +38,8 @@ class Expense {
     required this.employee,
     this.table = null,
     required this.order,
+    this.isChanged = false,
+    this.delivery,
   });
 
   factory Expense.fromJson(Map<String, dynamic> json) {
@@ -54,6 +59,8 @@ class Expense {
       employee: Employee.fromJson(json["employee"]),
       table: json["table"] != null ? Table.fromJson(json["table"]) : null,
       order: List<Order>.from(json["order"].map((x) => Order.fromJson(x))),
+      delivery:
+          json["delivery"] != null ? Delivery.fromJson(json["delivery"]) : null,
     );
   }
 
@@ -74,6 +81,7 @@ class Expense {
       'employee': employee.toJson(),
       'table': table != null ? table!.toJson() : 0,
       "order": order.map((e) => e.toJson()).toList(),
+      "delivery": delivery != null ? delivery!.toJson() : null,
     };
   }
 }

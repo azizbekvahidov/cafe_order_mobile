@@ -55,6 +55,7 @@ dependencies:
   flutter_login: ^3.0.0
   webcontent_converter: ^0.0.7
   pos_printer_manager: ^0.0.5
+  extended_masked_text: ^2.2.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -114,6 +115,7 @@ flutter:
     - assets/img/logo.jpg
     - assets/img/logo-transparent.png
     - assets/img/power.svg
+    - assets/img/delivery.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

@@ -10,11 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../config/globals.dart' as globals;
 
+_TabsState tabsState = _TabsState();
+
 class Tabs extends StatefulWidget {
   Tabs({Key? key}) : super(key: key);
 
   @override
-  _TabsState createState() => _TabsState();
+  _TabsState createState() {
+    tabsState = _TabsState();
+    return tabsState;
+  }
 }
 
 class _TabsState extends State<Tabs> {
@@ -95,9 +100,13 @@ class _TabsState extends State<Tabs> {
                                               color: Colors.black, width: 1),
                                           color: globals.currentExpenseId ==
                                                   _expense["id"]
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryVariant
+                                              ? ((globals.currentExpenseChange)
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .error
+                                                  : Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryVariant)
                                               : Theme.of(context).primaryColor,
                                         ),
                                         height: 30,

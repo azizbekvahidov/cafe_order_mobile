@@ -8,9 +8,12 @@ import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/button/main_button.dart';
 import 'package:cafe_mostbyte/components/custom_block/avans_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/debt_modal.dart';
+import 'package:cafe_mostbyte/components/custom_block/delivery_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/terminal_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/tabs.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/services/print_service.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +55,9 @@ class _OrderFooterState extends State<OrderFooter> {
               if (globals.orderState != null) {
                 await print.checkPrint(printData: globals.orderState);
                 globals.orderState = null;
+                tabsState.setState(() {
+                  globals.currentExpenseChange = false;
+                });
               }
               expenseCardPageState.setState(() {});
               orderFooterPageState.setState(() {});
@@ -114,23 +120,90 @@ class _OrderFooterState extends State<OrderFooter> {
                             );
                           },
                         ),
-                        Row(children: [
-                          AutoSizeText(
-                            "Итого: ",
-                            style: TextStyle(
-                              fontFamily: globals.font,
-                              fontSize: 20,
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.only(left: 5)),
-                          AutoSizeText(
-                            "${globals.currentExpenseSum}",
-                            style: TextStyle(
-                              fontFamily: globals.font,
-                              fontSize: 24,
-                            ),
-                          ),
-                        ]),
+                        StreamBuilder(
+                          stream: orderBloc.expense,
+                          builder: (context, AsyncSnapshot<Expense?> snapshot) {
+                            if (snapshot.hasData) {
+                              Expense data = snapshot.data!;
+                              return Row(
+                                children: [
+                                  BlocBuilder<ExpenseBloc, ExpenseState>(
+                                    builder: (context, state) {
+                                      return InkWell(
+                                        onTap: () async {
+                                          if (data != null) {
+                                            var modal = Modal(
+                                                ctx: context,
+                                                child: DeliveryModal(),
+                                                heightIndex: 0.3);
+                                            await modal.customDialog();
+                                            if (modal.res) {
+                                              context
+                                                  .read<ExpenseBloc>()
+                                                  .add(ExpensDelivery());
+                                              // }
+                                            }
+                                          } else {
+                                            helper.getToast(
+                                                "Выберите счет", context);
+                                          }
+                                        },
+                                        child: SvgPicture.asset(
+                                          "assets/img/delivery.svg",
+                                          color: (data.delivery == null)
+                                              ? Colors.black
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                          height: 30,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 300,
+                                    margin: const EdgeInsets.only(left: 20),
+                                    decoration: BoxDecoration(
+                                      border:
+                                          Border(bottom: BorderSide(width: 1)),
+                                    ),
+                                    child: Text(
+                                      "${data.delivery == null ? "" : data.delivery!.phone}",
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text(snapshot.error.toString());
+                            }
+                            return Container();
+                          },
+                        ),
+                        Container(
+                          width: 200,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                AutoSizeText(
+                                  "Итого: ",
+                                  style: TextStyle(
+                                    fontFamily: globals.font,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.only(left: 5)),
+                                AutoSizeText(
+                                  "${globals.currentExpenseSum}",
+                                  style: TextStyle(
+                                    fontFamily: globals.font,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                              ]),
+                        ),
                       ],
                     ),
                     Padding(padding: EdgeInsets.only(top: 10)),

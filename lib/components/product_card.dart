@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,9 @@ class ProductCard extends StatelessWidget {
             } else {
               order.amount += 1;
             }
+            tabsState.setState(() {
+              globals.currentExpenseChange = true;
+            });
             // var orderRow = globals.currentExpense!.order.where((element) {
             //   return element.product_id == data.product.id &&
             //       element.type == data.type;

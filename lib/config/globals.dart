@@ -1,5 +1,6 @@
 library cafe_order.globals;
 
+import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/print_data.dart';
@@ -17,7 +18,9 @@ List? categories;
 int filial = 1;
 int currentExpenseId = 0;
 int currentExpenseSum = 0;
+bool currentExpenseChange = false;
 Expense? currentExpense;
+Delivery? expenseDelivery;
 PrintData? orderState;
 User? userData;
 Settings? settings;

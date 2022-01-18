@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/services/api_provider/data_api_provider.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import '../../../config/globals.dart' as globals;
@@ -32,7 +33,6 @@ class ExpenseRepository {
       final response =
           await net.post('${globals.apiLink}expense/update', body: data);
       if (response.statusCode == 200) {
-        await sendCheck();
       } else {
         var res = json.decode(utf8.decode(response.bodyBytes));
         return res["message"];
@@ -135,17 +135,31 @@ class ExpenseRepository {
     }
   }
 
-  Future<String?> sendCheck() async {
+  Future<String?> deliveryExpense() async {
     try {
-      // var data = globals.orderState!.toJson();
-      // final response = await net.post('http://api/print', body: data);
-      // if (response.statusCode == 200) {
-      // } else {
-      //   var res = json.decode(utf8.decode(response.bodyBytes));
-      //   return res["message"];
-      // }
+      if (globals.currentExpense != null) {
+        if (globals.currentExpense!.delivery != null) {
+          var data = {
+            "expense_id": globals.currentExpenseId,
+            "delivery": globals.currentExpense!.delivery!.toJson()
+          };
+
+          final response =
+              await net.post('${globals.apiLink}expense/delivery', body: data);
+          if (response.statusCode == 200) {
+            var res = json.decode(utf8.decode(response.bodyBytes));
+            globals.currentExpense!.delivery = Delivery.fromJson(res);
+            globals.expenseDelivery = Delivery.fromJson(res);
+          } else {
+            var res = json.decode(utf8.decode(response.bodyBytes));
+            return res["message"];
+          }
+        } else {
+          throw Exception("");
+        }
+      }
     } catch (e) {
-      return e.toString();
+      throw Exception(e.toString());
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import '../../config/globals.dart' as globals;
@@ -46,6 +47,9 @@ class _AddingBtnState extends State<AddingBtn> {
                       orderRow.amount = temp;
                     });
                   }
+                  tabsState.setState(() {
+                    globals.currentExpenseChange = true;
+                  });
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,
@@ -90,6 +94,9 @@ class _AddingBtnState extends State<AddingBtn> {
                       orderRow.amount = temp;
                     });
                   }
+                  tabsState.setState(() {
+                    globals.currentExpenseChange = true;
+                  });
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,
@@ -134,6 +141,9 @@ class _AddingBtnState extends State<AddingBtn> {
                       orderRow.amount = temp;
                     });
                   }
+                  tabsState.setState(() {
+                    globals.currentExpenseChange = true;
+                  });
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,
@@ -178,6 +188,9 @@ class _AddingBtnState extends State<AddingBtn> {
                       orderRow.amount = temp;
                     });
                   }
+                  tabsState.setState(() {
+                    globals.currentExpenseChange = true;
+                  });
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,

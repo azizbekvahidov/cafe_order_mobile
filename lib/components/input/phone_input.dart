@@ -13,6 +13,7 @@ class PhoneInput extends StatefulWidget {
   final onSubmitted;
   final onEditingComplete;
   final bool nextAction;
+  final bool autofocus;
   const PhoneInput(
       {required this.controller,
       required this.name,
@@ -21,6 +22,7 @@ class PhoneInput extends StatefulWidget {
       this.onSubmitted,
       this.onEditingComplete,
       required this.nextAction,
+      this.autofocus = false,
       Key? key})
       : super(key: key);
 
@@ -49,6 +51,7 @@ class _PhoneInputState extends State<PhoneInput> {
         Expanded(
           flex: 9,
           child: FormBuilderTextField(
+            autofocus: widget.autofocus,
             textInputAction:
                 widget.nextAction ? TextInputAction.next : TextInputAction.done,
             onChanged: widget.onChanged,

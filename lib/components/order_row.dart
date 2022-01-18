@@ -2,6 +2,7 @@ import 'package:cafe_mostbyte/components/custom_block/adding_btn.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/order_comment_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
@@ -28,6 +29,11 @@ class OrderRow extends StatefulWidget {
 
 class _OrderRowState extends State<OrderRow> {
   TextEditingController cntController = new TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

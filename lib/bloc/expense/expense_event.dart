@@ -14,4 +14,6 @@ class ExpenseDebtClose extends ExpenseEvent {}
 
 class ExpensAvansClose extends ExpenseEvent {}
 
+class ExpensDelivery extends ExpenseEvent {}
+
 class LoginSubmitted extends ExpenseEvent {}
