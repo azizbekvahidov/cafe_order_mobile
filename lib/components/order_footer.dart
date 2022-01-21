@@ -9,7 +9,9 @@ import 'package:cafe_mostbyte/components/button/main_button.dart';
 import 'package:cafe_mostbyte/components/custom_block/avans_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/debt_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/delivery_modal.dart';
+import 'package:cafe_mostbyte/components/custom_block/discount_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
+import 'package:cafe_mostbyte/components/custom_block/takeaway_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/terminal_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/components/tabs.dart';
@@ -129,34 +131,73 @@ class _OrderFooterState extends State<OrderFooter> {
                                 children: [
                                   BlocBuilder<ExpenseBloc, ExpenseState>(
                                     builder: (context, state) {
-                                      return InkWell(
-                                        onTap: () async {
-                                          if (data != null) {
-                                            var modal = Modal(
-                                                ctx: context,
-                                                child: DeliveryModal(),
-                                                heightIndex: 0.3);
-                                            await modal.customDialog();
-                                            if (modal.res) {
-                                              context
-                                                  .read<ExpenseBloc>()
-                                                  .add(ExpensDelivery());
-                                              // }
-                                            }
-                                          } else {
-                                            helper.getToast(
-                                                "Выберите счет", context);
-                                          }
-                                        },
-                                        child: SvgPicture.asset(
-                                          "assets/img/delivery.svg",
-                                          color: (data.delivery == null)
-                                              ? Colors.black
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                          height: 30,
-                                        ),
+                                      return Row(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                if (data != null) {
+                                                  var modal = Modal(
+                                                      ctx: context,
+                                                      child: TakeawayModal(),
+                                                      heightIndex: 0.22);
+                                                  await modal.customDialog();
+                                                  if (modal.res) {
+                                                    context
+                                                        .read<ExpenseBloc>()
+                                                        .add(ExpenseTakeaway());
+                                                    // }
+                                                  }
+                                                } else {
+                                                  helper.getToast(
+                                                      "Выберите счет", context);
+                                                }
+                                              },
+                                              child: SvgPicture.asset(
+                                                "assets/img/take-away.svg",
+                                                color: (data.delivery != null)
+                                                    ? Colors.black
+                                                    : ((data.phone == null)
+                                                        ? Colors.black
+                                                        : Theme.of(context)
+                                                            .colorScheme
+                                                            .primary),
+                                                height: 30,
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                              if (data != null) {
+                                                var modal = Modal(
+                                                    ctx: context,
+                                                    child: DeliveryModal(),
+                                                    heightIndex: 0.3);
+                                                await modal.customDialog();
+                                                if (modal.res) {
+                                                  context
+                                                      .read<ExpenseBloc>()
+                                                      .add(ExpenseDelivery());
+                                                  // }
+                                                }
+                                              } else {
+                                                helper.getToast(
+                                                    "Выберите счет", context);
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              "assets/img/delivery.svg",
+                                              color: (data.delivery == null)
+                                                  ? Colors.black
+                                                  : Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                              height: 30,
+                                            ),
+                                          ),
+                                        ],
                                       );
                                     },
                                   ),
@@ -169,7 +210,7 @@ class _OrderFooterState extends State<OrderFooter> {
                                           Border(bottom: BorderSide(width: 1)),
                                     ),
                                     child: Text(
-                                      "${data.delivery == null ? "" : data.delivery!.phone}",
+                                      "${data.delivery == null ? (data.phone != null ? data.phone : "") : data.delivery!.phone}",
                                       style:
                                           Theme.of(context).textTheme.headline1,
                                     ),
@@ -182,27 +223,106 @@ class _OrderFooterState extends State<OrderFooter> {
                             return Container();
                           },
                         ),
-                        Container(
-                          width: 200,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                AutoSizeText(
-                                  "Итого: ",
-                                  style: TextStyle(
-                                    fontFamily: globals.font,
-                                    fontSize: 20,
+                        StreamBuilder(
+                          stream: orderBloc.expense,
+                          builder: (context, AsyncSnapshot<Expense?> snapshot) {
+                            if (snapshot.hasData) {
+                              Expense data = snapshot.data!;
+                              return Row(
+                                children: [
+                                  BlocBuilder<ExpenseBloc, ExpenseState>(
+                                    builder: (context, state) {
+                                      return Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              if (data != null) {
+                                                var modal = Modal(
+                                                    ctx: context,
+                                                    child: DiscountModal(),
+                                                    heightIndex: 0.2);
+                                                await modal.customDialog();
+                                                if (modal.res) {
+                                                  context
+                                                      .read<ExpenseBloc>()
+                                                      .add(ExpenseDiscount());
+                                                  // }
+                                                }
+                                              } else {
+                                                helper.getToast(
+                                                    "Выберите счет", context);
+                                              }
+                                            },
+                                            child: SvgPicture.asset(
+                                              "assets/img/discount.svg",
+                                              color: (data.discount == 0)
+                                                  ? Colors.black
+                                                  : Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                              height: 30,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
-                                ),
-                                Padding(padding: EdgeInsets.only(left: 5)),
-                                AutoSizeText(
-                                  "${globals.currentExpenseSum}",
-                                  style: TextStyle(
-                                    fontFamily: globals.font,
-                                    fontSize: 24,
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 100,
+                                    margin: const EdgeInsets.only(left: 20),
+                                    decoration: BoxDecoration(
+                                      border:
+                                          Border(bottom: BorderSide(width: 1)),
+                                    ),
+                                    child: Text(
+                                      "${data.discount == 0 ? "" : data.discount}",
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                    ),
                                   ),
-                                ),
-                              ]),
+                                ],
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text(snapshot.error.toString());
+                            }
+                            return Container();
+                          },
+                        ),
+                        StreamBuilder(
+                          stream: orderBloc.expense,
+                          builder: (context, AsyncSnapshot<Expense?> snapshot) {
+                            if (snapshot.hasData) {
+                              Expense data = snapshot.data!;
+                              return Container(
+                                width: 200,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      AutoSizeText(
+                                        "Итого: ",
+                                        style: TextStyle(
+                                          fontFamily: globals.font,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(left: 5)),
+                                      AutoSizeText(
+                                        "${globals.currentExpenseSum - (globals.settings!.discount == 'sum' ? data.discount : ((globals.currentExpenseSum * data.discount / 100) / 100).ceil() * 100)}",
+                                        style: TextStyle(
+                                          fontFamily: globals.font,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ]),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text(snapshot.error.toString());
+                            }
+                            return Container();
+                          },
                         ),
                       ],
                     ),
@@ -271,7 +391,7 @@ class _OrderFooterState extends State<OrderFooter> {
                                                         "Сохранить аванс"))) {
                                                   context
                                                       .read<ExpenseBloc>()
-                                                      .add(ExpensAvansClose());
+                                                      .add(ExpenseAvansClose());
                                                 }
                                               }
                                             } else {

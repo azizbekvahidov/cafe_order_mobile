@@ -162,4 +162,56 @@ class ExpenseRepository {
       throw Exception(e.toString());
     }
   }
+
+  Future<String?> takeawayExpense() async {
+    try {
+      if (globals.currentExpense != null) {
+        if (globals.currentExpense!.phone != null) {
+          var data = {
+            "id": globals.currentExpenseId,
+            "ready_time": globals.currentExpense!.ready_time,
+            "phone": globals.currentExpense!.phone,
+          };
+
+          final response =
+              await net.post('${globals.apiLink}expense/takeaway', body: data);
+          if (response.statusCode == 200) {
+          } else {
+            var res = json.decode(utf8.decode(response.bodyBytes));
+            return res["message"];
+          }
+        } else {
+          throw Exception("");
+        }
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<String?> discountExpense() async {
+    try {
+      if (globals.currentExpense != null) {
+        if (globals.currentExpense!.phone != null) {
+          var data = {
+            "id": globals.currentExpenseId,
+            "discount": globals.currentExpense!.discount,
+          };
+
+          final response =
+              await net.post('${globals.apiLink}expense/discount', body: data);
+          if (response.statusCode == 200) {
+          } else {
+            globals.currentExpense!.discount = 0;
+            var res = json.decode(utf8.decode(response.bodyBytes));
+            return res["message"];
+          }
+        } else {
+          throw Exception("");
+        }
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }
