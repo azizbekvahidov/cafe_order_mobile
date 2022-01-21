@@ -1392,6 +1392,7 @@ class Demo {
 
   static String getReceiptContent({required Expense data}) {
     String txt = "";
+    String img = "";
     int sum = 0;
     data.order.forEach((element) {
       double currentSum = element.amount * element.product!.price!;
@@ -1404,6 +1405,11 @@ class Demo {
             </p>
             """;
     });
+    if (globals.settings!.logo_image != null) {
+      img += """<div class="full-width inline-block text-center ">
+                <img src="${globals.settings!.logo_image}"/>
+            </div>""";
+    }
     return """
 
 <style>
@@ -1418,6 +1424,19 @@ class Demo {
         background: #eee;
         width: 576px;
         font-size: 1.8em;
+    }
+    
+    .logo {
+        width: 100%;
+        background-position: center;
+        /* Center the image */
+        background-repeat: no-repeat;
+        /* Do not repeat the image */
+        background-size: cover;
+    }
+    
+    .logo img {
+        width: 100%;
     }
     
     .receipt {
@@ -1499,6 +1518,7 @@ class Demo {
 </style>
 
 <body>
+$img
 
     <div class="receipt">
         <div class="container">
