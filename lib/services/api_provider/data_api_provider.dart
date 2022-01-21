@@ -1,6 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:cafe_mostbyte/models/category.dart';
+import 'package:cafe_mostbyte/models/department.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
+import 'package:cafe_mostbyte/models/menu_item.dart';
+import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../network_service.dart';
 import '../../config/globals.dart' as globals;
@@ -11,6 +18,7 @@ class DataApiProvider {
 
   Future<void> getSettings() async {
     try {
+      await getFileSettings();
       final response = await net.get('${globals.apiLink}get-settings');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
@@ -18,6 +26,100 @@ class DataApiProvider {
         globals.settings = Settings.fromJson(settings);
       } else {
         throw Exception("error fetching users");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> getFileSettings() async {
+    String text;
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/settings.json');
+      Map settings = json.decode(await file.readAsString());
+      globals.isKassa = settings["isKassa"];
+    } catch (e) {
+      Map settings = {
+        "isKassa": false,
+      };
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/settings.json');
+      await file.writeAsString(json.encode(settings));
+      globals.isKassa = settings["isKassa"];
+    }
+  }
+
+  Future<void> getDepartment() async {
+    try {
+      final response = await net.get('${globals.apiLink}departments');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        globals.department = List<Department>.from(
+            res["data"].map((x) => Department.fromJson(x)));
+      } else {
+        throw Exception("error fetching users");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<dynamic>> getCategory() async {
+    try {
+      final response = await net.get('${globals.apiLink}menu/category');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        globals.categories = res["data"];
+        return res["data"];
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<MenuItem>> getProducts({id}) async {
+    try {
+      final response =
+          await net.get('${globals.apiLink}menu/list?category_id=$id');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return List<MenuItem>.from(res["data"].map((x) {
+          return MenuItem.fromJson(x);
+        }));
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<dynamic>> getExpenses({id}) async {
+    try {
+      final response = await net.get('${globals.apiLink}expense/list/$id');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return res["data"];
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<Expense?> getExpense({id}) async {
+    try {
+      final response = await net.get('${globals.apiLink}expense/$id');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return Expense.fromJson(res["data"]);
+      } else {
+        return null;
+        // throw Exception("error fetching category");
       }
     } catch (e) {
       throw Exception(e.toString());

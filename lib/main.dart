@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
+import 'package:cafe_mostbyte/screen/mian_screen.dart';
+import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +15,6 @@ import '/services/api_provider/user/user_repository.dart';
 import './config/app_language.dart';
 import './config/theme.dart';
 import './generated/loc_delegate.dart';
-import './screen/home_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './config/globals.dart' as globals;
 import 'bloc/auth/authentificate.dart/authentificate_event.dart';
@@ -98,7 +99,7 @@ class _MyAppState extends State<MyApp> {
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                 ],
-                home: HomePage(),
+                home: MainPage(),
                 //globals.isAuth ? MainPage() : MainAuth(),
               );
             } else {
@@ -138,6 +139,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return OrderScreen();
   }
 }

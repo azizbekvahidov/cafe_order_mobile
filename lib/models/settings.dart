@@ -1,14 +1,14 @@
 class Settings {
   String cafe_name;
   String percent;
-  String logo_image;
+  String? logo_image;
   String printer;
   String text_footer;
 
   Settings({
     required this.cafe_name,
     required this.percent,
-    required this.logo_image,
+    this.logo_image = null,
     required this.printer,
     required this.text_footer,
   });
