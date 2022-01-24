@@ -4,6 +4,7 @@ class Settings {
   String? logo_image;
   String printer;
   String text_footer;
+  String discount;
 
   Settings({
     required this.cafe_name,
@@ -11,6 +12,7 @@ class Settings {
     this.logo_image = null,
     required this.printer,
     required this.text_footer,
+    required this.discount,
   });
 
   factory Settings.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Settings {
       logo_image: json["logo_image"],
       printer: json["printer"],
       text_footer: json["text_footer"],
+      discount: json["discount"],
     );
   }
 }

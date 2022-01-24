@@ -8,7 +8,7 @@ class Expense {
   String order_date;
   int print;
   int expense_sum;
-  int? discount;
+  int discount;
   int? terminal;
   int prepaid;
   int? debt_payed;
@@ -27,7 +27,7 @@ class Expense {
     required this.order_date,
     required this.print,
     required this.expense_sum,
-    this.discount = null,
+    this.discount = 0,
     this.terminal = null,
     this.debt_payed = null,
     required this.comment,

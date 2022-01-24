@@ -54,7 +54,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       } catch (e) {
         yield state.copyWith(formStatus: SubmissionFailed(e));
       }
-    } else if (event is ExpensAvansClose) {
+    } else if (event is ExpenseAvansClose) {
       yield state.copyWith(formStatus: FormSubmitting());
       try {
         await repo.avansCloseExpense();
@@ -62,10 +62,26 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       } catch (e) {
         yield state.copyWith(formStatus: SubmissionFailed(e));
       }
-    } else if (event is ExpensDelivery) {
+    } else if (event is ExpenseDelivery) {
       yield state.copyWith(formStatus: FormSubmitting());
       try {
         await repo.deliveryExpense();
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
+    } else if (event is ExpenseTakeaway) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        await repo.takeawayExpense();
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
+    } else if (event is ExpenseDiscount) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        await repo.discountExpense();
         yield state.copyWith(formStatus: SubmissionSuccess());
       } catch (e) {
         yield state.copyWith(formStatus: SubmissionFailed(e));
