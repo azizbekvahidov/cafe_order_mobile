@@ -2,9 +2,9 @@ import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/foundation.dart';
 
 class Department {
-  int department_id;
+  int? department_id;
   String? printer;
-  String name;
+  String? name;
   List<Order>? orders;
 
   Department({

@@ -106,13 +106,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
-  charset_converter:
-    dependency: transitive
-    description:
-      name: charset_converter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   clock:
     dependency: transitive
     description:
@@ -225,20 +218,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
-  esc_pos_printer:
-    dependency: "direct main"
-    description:
-      name: esc_pos_printer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.1.0"
-  esc_pos_utils:
-    dependency: transitive
-    description:
-      name: esc_pos_utils
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   esc_pos_utils_plus:
     dependency: transitive
     description:
@@ -406,13 +385,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "9.2.0"
-  gbk_codec:
-    dependency: transitive
-    description:
-      name: gbk_codec
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
   hex:
     dependency: transitive
     description:

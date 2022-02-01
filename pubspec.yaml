@@ -35,7 +35,7 @@ dependencies:
   flutter_form_builder: ^6.0.1
   device_info: ^2.0.2
   auto_size_text: ^3.0.0
-  esc_pos_printer: ^4.1.0
+  # esc_pos_printer: ^4.1.0
   # esc_pos_utils_plus: ^2.0.1+6
   windows1251: ^0.0.3
   confirm_dialog: ^1.0.0
@@ -118,6 +118,8 @@ flutter:
     - assets/img/delivery.svg
     - assets/img/take-away.svg
     - assets/img/discount.svg
+    - assets/img/chatbot.svg
+    - assets/img/cafe-hall.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

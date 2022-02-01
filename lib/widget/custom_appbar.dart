@@ -2,7 +2,9 @@ import 'package:cafe_mostbyte/bloc/app_status.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentificate_event.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_state.dart';
+import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
+import 'package:cafe_mostbyte/screen/bot_order_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../screen/mian_screen.dart';
@@ -36,7 +38,6 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppbarState extends State<CustomAppbar> {
   @override
   Widget build(BuildContext context) {
-    print(globals.isServerConnection);
     return AppBar(
       elevation: 1,
       iconTheme: IconThemeData(color: globals.mainColor),
@@ -56,17 +57,15 @@ class _CustomAppbarState extends State<CustomAppbar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              globals.isOrder
-                  ? InkWell(
-                      onTap: () => widget.searchFunc!(),
-                      child: Container(
-                        child: SvgPicture.asset(
-                          "assets/img/loupe.svg",
-                          color: globals.mainColor,
-                        ),
-                      ),
-                    )
-                  : Container(),
+              InkWell(
+                onTap: () => widget.searchFunc!(),
+                child: Container(
+                  child: SvgPicture.asset(
+                    "assets/img/loupe.svg",
+                    color: globals.mainColor,
+                  ),
+                ),
+              ),
               Container(
                 child: Text(
                   widget.title!,
@@ -74,6 +73,45 @@ class _CustomAppbarState extends State<CustomAppbar> {
                       fontFamily: globals.font,
                       fontSize: 18,
                       color: globals.mainColor),
+                ),
+              ),
+              Container(
+                child: Stack(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (BuildContext ctx) {
+                          return BotOrderScreen();
+                        }));
+                        // var modal = Modal(
+                        //     ctx: context,
+                        //     child: DeliveryBotModal(),
+                        //     heightIndex: 0.8);
+                        // await modal.customDialog();
+                        // if (modal.res) {
+                        //   // context
+                        //   //     .read<ExpenseBloc>()
+                        //   //     .add(ExpenseTakeaway());
+                        // }
+                      },
+                      child: SvgPicture.asset(
+                        "assets/img/chatbot.svg",
+                        height: 40,
+                      ),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          height: 10,
+                          width: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ))
+                  ],
                 ),
               ),
               Row(

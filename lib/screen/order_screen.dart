@@ -12,7 +12,6 @@ import 'package:cafe_mostbyte/services/network_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
-import '../print.dart';
 import './mian_screen.dart';
 import '../widget/custom_appbar.dart';
 import '../components/order_row.dart';
@@ -380,7 +379,6 @@ class _OrderScreenState extends State<OrderScreen> {
   //   }
   // }
 
-  final Print prints = new Print();
   addProduct() async {
     try {
       if (!sendRequest) {
