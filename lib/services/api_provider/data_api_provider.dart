@@ -127,9 +127,10 @@ class DataApiProvider {
     }
   }
 
-  Future<List<DeliveryBot>> getBotOrderList({id}) async {
+  Future<List<DeliveryBot>> getBotOrderApproveList({id}) async {
     try {
-      final response = await net.get('${globals.apiLink}delivery/bot-list/$id');
+      final response = await net
+          .get('${globals.apiLink}delivery/bot-list/$id?order_status=1');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
         return List<DeliveryBot>.from(

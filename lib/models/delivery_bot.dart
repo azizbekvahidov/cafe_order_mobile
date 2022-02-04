@@ -4,6 +4,8 @@ class DeliveryBot {
   int id;
   String name;
   String phone;
+  String? time;
+  String? price;
   String address;
   String order_type;
   List<DeliveryBotItem> listItem;
@@ -11,6 +13,8 @@ class DeliveryBot {
   DeliveryBot({
     required this.id,
     required this.phone,
+    this.time,
+    this.price,
     required this.name,
     required this.address,
     required this.order_type,
@@ -21,6 +25,8 @@ class DeliveryBot {
     return DeliveryBot(
         id: json["id"],
         phone: json["phone"],
+        time: json["time"],
+        price: json["price"],
         name: json["name"],
         address: json["address"],
         order_type: json["order_type"],
@@ -32,6 +38,8 @@ class DeliveryBot {
         "id": id,
         "phone": phone,
         "name": name,
+        'time': time,
+        'price': price,
         'address': address,
         'order_type': order_type,
         "deliveryItem": listItem.map((e) => e.toJson()).toList(),

@@ -6,17 +6,18 @@ import 'package:rxdart/rxdart.dart';
 
 class BotOrderBloc {
   BotOrderRepository repo = BotOrderRepository();
-  final _botOrderListFetcher = PublishSubject<List<DeliveryBot>>();
+  final _botOrderApproveListFetcher = PublishSubject<List<DeliveryBot>>();
 
-  Stream<List<DeliveryBot>> get botOrderList => _botOrderListFetcher.stream;
+  Stream<List<DeliveryBot>> get botOrderApproveList =>
+      _botOrderApproveListFetcher.stream;
 
-  fetchOrders({id}) async {
-    List<DeliveryBot> response = await repo.botOrderList(id: id);
-    _botOrderListFetcher.sink.add(response);
+  fetchApproveOrders({id}) async {
+    List<DeliveryBot> response = await repo.botOrderApproveList(id: id);
+    _botOrderApproveListFetcher.sink.add(response);
   }
 
   dispose() async {
-    await _botOrderListFetcher.close();
+    await _botOrderApproveListFetcher.close();
   }
 }
 

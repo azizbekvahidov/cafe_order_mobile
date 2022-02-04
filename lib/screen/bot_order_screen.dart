@@ -13,12 +13,16 @@ import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
+import 'package:cafe_mostbyte/models/print_data.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
+import 'package:cafe_mostbyte/services/print_service.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../config/globals.dart' as globals;
+import '../services/helper.dart' as helper;
 
 class BotOrderScreen extends StatefulWidget {
   BotOrderScreen({Key? key}) : super(key: key);
@@ -28,9 +32,10 @@ class BotOrderScreen extends StatefulWidget {
 }
 
 class _BotOrderScreenState extends State<BotOrderScreen> {
+  PrintService print = new PrintService();
   @override
   Widget build(BuildContext context) {
-    botOrderBloc.fetchOrders(id: globals.filial);
+    botOrderBloc.fetchApproveOrders(id: globals.filial);
     var dWidth = MediaQuery.of(context).size.width;
     var dHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -162,20 +167,28 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
           create: (context) =>
               BotExpenseBloc(repo: context.read<BotExpenseRepository>()),
           child: BlocListener<BotExpenseBloc, BotExpenseState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               var formStatus = state.formStatus;
               if (formStatus is SubmissionSuccess) {
-                botOrderBloc.fetchOrders(id: globals.filial);
-
-                // botOrderBloc.fetchExpense(id: globals.currentExpenseId);
-                expenseCardPageState.setState(() {});
-                orderFooterPageState.setState(() {});
+                botOrderBloc.fetchApproveOrders(id: globals.filial);
+                if (globals.currentExpense != null) {
+                  if (globals.orderState != null) {
+                    await print.checkPrint(printData: globals.orderState);
+                    globals.orderState = null;
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (BuildContext ctx) {
+                      return OrderScreen();
+                    }), (route) => false);
+                  }
+                }
                 context.read<BotExpenseBloc>().add(BotExpenseInitialized());
-              } else if (formStatus is SubmissionFailed) {}
+              } else if (formStatus is SubmissionFailed) {
+                helper.getToast("Что то пошло не так", context);
+              }
               // TODO: implement listener
             },
             child: StreamBuilder(
-              stream: botOrderBloc.botOrderList,
+              stream: botOrderBloc.botOrderApproveList,
               builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                 if (snapshot.hasData) {
                   List expenses = snapshot.data as List;
@@ -195,24 +208,26 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                               for (DeliveryBot _expense in expenses)
                                 InkWell(
                                   onTap: () async {
-                                    var modal = Modal(
-                                        heightIndex: 0.4,
-                                        ctx: context,
-                                        child: BotItemModal(
-                                          data: _expense,
-                                        ));
-                                    await modal.customDialog()(context);
-                                    //   await botOrderBloc.fetchExpense(
-                                    //       id: _expense["id"]);
-                                    //   setState(() {
-                                    //     globals.currentExpenseId =
-                                    //         _expense["id"];
-                                    //   });
-                                    //   orderFooterPageState.setState(() {
-                                    //     globals.currentExpenseSum =
-                                    //         _expense["expense_sum"];
-                                    //   });
-                                    //   globals.orderState = null;
+                                    if (await confirm(context,
+                                        content: Text("Добавить заказ?"),
+                                        textCancel: Text("Нет"),
+                                        textOK: Text("Да"),
+                                        title: Text("Сохранить аванс"))) {
+                                      // PrintData printData = new PrintData();
+                                      context
+                                          .read<BotExpenseBloc>()
+                                          .add(AddData(data: _expense));
+                                      context
+                                          .read<BotExpenseBloc>()
+                                          .add(AddToExpense());
+                                    }
+                                    // var modal = Modal(
+                                    //     heightIndex: 0.4,
+                                    //     ctx: context,
+                                    //     child: BotItemModal(
+                                    //       data: _expense,
+                                    //     ));
+                                    // await modal.customDialog()(context);
                                   },
                                   child: Container(
                                       margin: const EdgeInsets.symmetric(
