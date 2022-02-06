@@ -179,9 +179,12 @@ generateCheck(
             : "С собой",
         departments: [
           Department(
-              department_id: data.department.department_id,
-              printer: data.department.printer,
-              name: data.department.name,
+              department_id: data.department == null
+                  ? null
+                  : data.department!.department_id,
+              printer:
+                  data.department == null ? null : data.department!.printer,
+              name: data.department == null ? null : data.department!.name,
               orders: [
                 Order(
                     product_id: data.id,
@@ -194,12 +197,13 @@ generateCheck(
     globals.orderState = orderState;
   } else {
     Department? s = globals.orderState!.departments!.firstWhere((e) {
-      return e.department_id == data.department.department_id;
+      return e.department_id == data.department!.department_id;
     }, orElse: () {
       return Department(
-        department_id: data.department.department_id,
-        printer: data.department.printer,
-        name: data.department.name,
+        department_id:
+            data.department == null ? null : data.department!.department_id,
+        printer: data.department == null ? null : data.department!.printer,
+        name: data.department == null ? null : data.department!.name,
         orders: null,
       );
     });

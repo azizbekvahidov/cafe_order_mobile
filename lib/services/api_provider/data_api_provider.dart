@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cafe_mostbyte/models/category.dart';
+import 'package:cafe_mostbyte/models/delivery_bot.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/menu_item.dart';
@@ -120,6 +121,22 @@ class DataApiProvider {
       } else {
         return null;
         // throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<DeliveryBot>> getBotOrderApproveList({id}) async {
+    try {
+      final response = await net
+          .get('${globals.apiLink}delivery/bot-list/$id?order_status=1');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return List<DeliveryBot>.from(
+            res["data"].map((model) => DeliveryBot.fromJson(model)));
+      } else {
+        throw Exception("error fetching category");
       }
     } catch (e) {
       throw Exception(e.toString());

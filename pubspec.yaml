@@ -35,9 +35,8 @@ dependencies:
   flutter_form_builder: ^6.0.1
   device_info: ^2.0.2
   auto_size_text: ^3.0.0
-  esc_pos_printer: ^4.1.0
+  # esc_pos_printer: ^4.1.0
   # esc_pos_utils_plus: ^2.0.1+6
-  windows1251: ^0.0.3
   confirm_dialog: ^1.0.0
   path_provider: ^2.0.8
   
@@ -49,14 +48,19 @@ dependencies:
   html: ^0.15.0
   url_launcher: ^6.0.10
   image: ^3.0.8
-  window_manager: ^0.1.1
 
+  window_manager: ^0.1.1
+  fluent_ui: ^3.8.0
+  system_theme: ^1.0.1
+  flutter_acrylic: ^1.0.0+1
+  
+  bitsdojo_window: ^0.1.1+1
   flutter_typeahead: ^3.2.1
   flutter_login: ^3.0.0
   webcontent_converter: ^0.0.7
   pos_printer_manager: ^0.0.5
   extended_masked_text: ^2.2.1
-
+  platform: ^3.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -118,6 +122,8 @@ flutter:
     - assets/img/delivery.svg
     - assets/img/take-away.svg
     - assets/img/discount.svg
+    - assets/img/chatbot.svg
+    - assets/img/cafe-hall.svg
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

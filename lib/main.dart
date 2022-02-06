@@ -3,13 +3,18 @@ import 'dart:io';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/mian_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import '/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import '/bloc/auth/authentificate.dart/authentification_state.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import '/screen/splash_screen.dart';
 import '/services/api_provider/user/user_repository.dart';
 import './config/app_language.dart';
@@ -28,10 +33,35 @@ class MyHttpOerrides extends HttpOverrides {
   }
 }
 
+late bool darkMode;
+
+/// Checks if the current environment is a desktop environment.
+bool get isDesktop {
+  if (kIsWeb) return false;
+  return [
+    TargetPlatform.windows,
+    TargetPlatform.linux,
+    TargetPlatform.macOS,
+  ].contains(defaultTargetPlatform);
+}
+
 void main() async {
   HttpOverrides.global = MyHttpOerrides();
   AppLanguage appLanguage = AppLanguage();
   WidgetsFlutterBinding.ensureInitialized();
+  if (defaultTargetPlatform == TargetPlatform.windows ||
+      defaultTargetPlatform == TargetPlatform.android ||
+      kIsWeb) {
+    darkMode = await SystemTheme.darkMode;
+    await SystemTheme.accentInstance.load();
+  } else {
+    darkMode = true;
+  }
+  if (!kIsWeb &&
+      [TargetPlatform.windows, TargetPlatform.linux]
+          .contains(defaultTargetPlatform)) {
+    await flutter_acrylic.Window.initialize();
+  }
   // Must add this line.
   await windowManager.ensureInitialized();
 
@@ -47,6 +77,12 @@ void main() async {
       create: (context) => UserRepository(),
       child:
           MyApp(appLanguage: appLanguage, userRepository: UserRepository())));
+  if (isDesktop) {
+    doWhenWindowReady(() {
+      final win = appWindow;
+      win.show();
+    });
+  }
 }
 
 class MyApp extends StatefulWidget {
