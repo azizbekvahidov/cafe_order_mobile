@@ -3,8 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  bitsdojo_window_windows
+  flutter_acrylic
   network_info_plus_windows
   printing
+  system_theme
   url_launcher_windows
   window_manager
 )
