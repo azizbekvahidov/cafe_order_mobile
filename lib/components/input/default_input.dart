@@ -19,7 +19,7 @@ class _DefaultInputState extends State<DefaultInput> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
-        color: const Color(0xffF2F4F7),
+        color: Color.fromARGB(255, 230, 231, 233),
         borderRadius: BorderRadius.circular(8),
       ),
       child: widget.child,

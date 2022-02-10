@@ -2,6 +2,7 @@ library yoshlar_portali.helper;
 
 import 'dart:convert';
 
+import 'package:cafe_mostbyte/components/moderator/moderator_footer.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/order.dart';
@@ -41,7 +42,9 @@ void calculateTotalSum() {
     globals.currentExpense!.expense_sum = sum;
   }
   globals.currentExpenseSum = sum;
-  orderFooterPageState.setState(() {});
+  if (orderFooterPageState.mounted) orderFooterPageState.setState(() {});
+  if (moderatorFooterPageState.mounted)
+    moderatorFooterPageState.setState(() {});
 }
 
 void getToast(msg, BuildContext context) {

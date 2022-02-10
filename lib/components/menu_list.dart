@@ -41,7 +41,11 @@ class _MenuListState extends State<MenuList> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               }
-              return Center(child: Text("Get Category"));
+              return Center(
+                  child: Text(
+                "Выберите категорию!!!",
+                style: Theme.of(context).textTheme.headline1,
+              ));
             },
           ),
         ),

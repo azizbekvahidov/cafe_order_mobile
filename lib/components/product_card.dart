@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
@@ -20,60 +21,59 @@ class ProductCard extends StatelessWidget {
       margin: const EdgeInsets.only(left: 10, bottom: 10),
       child: InkWell(
         onTap: () {
-          expenseCardPageState.setState(() {
-            Order order = globals.currentExpense!.order.firstWhere((element) {
-              return element.product_id == data.product.id &&
-                  element.type == data.type;
-            }, orElse: () {
-              return Order(
-                amount: 0,
-                product_id: data.product.id,
-                type: data.type,
-                product: data.product,
-              );
-            });
-            if (order.amount == 0) {
-              order.amount += 1;
-              globals.currentExpense!.order.add(order);
-            } else {
-              order.amount += 1;
-            }
-            tabsState.setState(() {
-              globals.currentExpenseChange = true;
-            });
-            // var orderRow = globals.currentExpense!.order.where((element) {
-            //   return element.product_id == data.product.id &&
-            //       element.type == data.type;
-            // });
-            // if (orderRow.length != 0) {
-            //   orderRow.first.amount += 1;
-            // } else {
-            //   Order newOrderRow = Order(
-            //     amount: 1,
-            //     product_id: data.product.id,
-            //     type: data.type,
-            //     product: data.product,
-            //   );
-            //   globals.currentExpense!.order.add(newOrderRow);
-            // }
-          });
-          helper.generateCheck(data: data.product, type: data.type, amount: 1);
-          // var orderState = globals.orderState.where((element) {
-          //   return element.product_id == data.product.id &&
-          //       element.type == data.type;
-          // });
-          // if (orderState.length != 0) {
-          //   orderState.first.amount += 1;
-          // } else {
-          //   Order newOrder = Order(
-          //     amount: 1,
-          //     product_id: data.product.id,
-          //     type: data.type,
-          //     product: data.product,
-          //   );
-          //   globals.orderState.add(newOrder);
-          // }
-          helper.calculateTotalSum();
+          if (globals.currentExpense != null) {
+            if (expenseCardPageState.mounted)
+              expenseCardPageState.setState(() {
+                Order order =
+                    globals.currentExpense!.order.firstWhere((element) {
+                  return element.product_id == data.product.id &&
+                      element.type == data.type;
+                }, orElse: () {
+                  return Order(
+                    amount: 0,
+                    product_id: data.product.id,
+                    type: data.type,
+                    product: data.product,
+                  );
+                });
+                if (order.amount == 0) {
+                  order.amount += 1;
+                  globals.currentExpense!.order.add(order);
+                } else {
+                  order.amount += 1;
+                }
+                tabsState.setState(() {
+                  globals.currentExpenseChange = true;
+                });
+              });
+            if (moderatorExpenseCardPageState.mounted)
+              moderatorExpenseCardPageState.setState(() {
+                Order order =
+                    globals.currentExpense!.order.firstWhere((element) {
+                  return element.product_id == data.product.id &&
+                      element.type == data.type;
+                }, orElse: () {
+                  return Order(
+                    amount: 0,
+                    product_id: data.product.id,
+                    type: data.type,
+                    product: data.product,
+                  );
+                });
+                if (order.amount == 0) {
+                  order.amount += 1;
+                  globals.currentExpense!.order.add(order);
+                } else {
+                  order.amount += 1;
+                }
+              });
+            helper.generateCheck(
+                data: data.product, type: data.type, amount: 1);
+
+            helper.calculateTotalSum();
+          } else {
+            helper.getToast("Выберите или создайте счет", context);
+          }
         },
         child: Container(
           width: dWidth * 0.13,
