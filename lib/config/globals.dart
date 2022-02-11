@@ -15,7 +15,7 @@ String lang = "ru";
 var loc;
 bool isAuth = false;
 List? categories;
-int filial = 1;
+int filial = 0;
 int currentExpenseId = 0;
 int currentExpenseSum = 0;
 bool currentExpenseChange = false;

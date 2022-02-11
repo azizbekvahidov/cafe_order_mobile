@@ -5,6 +5,7 @@ import 'package:cafe_mostbyte/models/category.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
+import 'package:cafe_mostbyte/models/filial.dart';
 import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
@@ -39,14 +40,17 @@ class DataApiProvider {
       final Directory directory = await getApplicationDocumentsDirectory();
       final File file = File('${directory.path}/settings.json');
       Map settings = json.decode(await file.readAsString());
+      globals.filial = settings["filial_id"];
       globals.isKassa = settings["isKassa"];
     } catch (e) {
       Map settings = {
+        "filial_id": 0,
         "isKassa": false,
       };
       final Directory directory = await getApplicationDocumentsDirectory();
       final File file = File('${directory.path}/settings.json');
       await file.writeAsString(json.encode(settings));
+      globals.filial = settings["filial_id"];
       globals.isKassa = settings["isKassa"];
     }
   }
@@ -137,6 +141,21 @@ class DataApiProvider {
             res["data"].map((model) => DeliveryBot.fromJson(model)));
       } else {
         throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<Filial>> getFilials() async {
+    try {
+      final response = await net.get('${globals.apiLink}filial');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return List<Filial>.from(
+            res["data"].map((model) => Filial.fromJson(model)));
+      } else {
+        throw Exception("error fetching filial list");
       }
     } catch (e) {
       throw Exception(e.toString());

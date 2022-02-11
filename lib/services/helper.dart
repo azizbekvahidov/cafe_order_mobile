@@ -177,9 +177,11 @@ generateCheck(
     PrintData orderState = new PrintData(
         expense_id: globals.currentExpense!.id,
         employee: globals.currentExpense!.employee.name,
-        table: globals.currentExpense!.table != null
-            ? globals.currentExpense!.table!.name
-            : "С собой",
+        table: globals.currentExpense!.order_type == "book_table"
+            ? "Зал ${globals.currentExpense!.table!.name}"
+            : (globals.currentExpense!.order_type == "delivery"
+                ? "Доставка"
+                : "С собой"),
         departments: [
           Department(
               department_id: data.department == null
