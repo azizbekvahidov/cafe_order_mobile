@@ -12,10 +12,7 @@ _ModeratorExpenseCardState moderatorExpenseCardPageState =
 
 class ModeratorExpenseCard extends StatefulWidget {
   var appbarSize;
-  List order;
-  ModeratorExpenseCard(
-      {required this.order, required this.appbarSize, Key? key})
-      : super(key: key);
+  ModeratorExpenseCard({required this.appbarSize, Key? key}) : super(key: key);
 
   @override
   _ModeratorExpenseCardState createState() {

@@ -47,7 +47,6 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                 return Auth();
               }), (route) => true);
             }
-            // TODO: implement listener
           },
           child: SizedBox(
             child: Row(
@@ -180,7 +179,6 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
               } else if (formStatus is SubmissionFailed) {
                 helper.getToast("Что то пошло не так", context);
               }
-              // TODO: implement listener
             },
             child: StreamBuilder(
               stream: botOrderBloc.botOrderApproveList,

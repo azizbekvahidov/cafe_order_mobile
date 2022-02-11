@@ -3,6 +3,7 @@ import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import '../../services/helper.dart' as helper;
 
+// ignore: must_be_immutable
 class OrderCommentModal extends StatefulWidget {
   Order data;
   OrderCommentModal({required this.data, Key? key}) : super(key: key);

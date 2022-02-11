@@ -2,7 +2,6 @@ import 'package:cafe_mostbyte/components/input/number_input.dart';
 import 'package:cafe_mostbyte/components/input/text_input.dart';
 import 'package:flutter/material.dart';
 import '../../config/globals.dart' as globals;
-import '../../services/helper.dart' as helper;
 
 class AvansModal extends StatefulWidget {
   AvansModal({Key? key}) : super(key: key);

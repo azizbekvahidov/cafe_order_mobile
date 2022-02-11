@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
-import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/components/order_row.dart';
@@ -9,11 +8,10 @@ import '../config/globals.dart' as globals;
 
 _ExpenseCardState expenseCardPageState = _ExpenseCardState();
 
+// ignore: must_be_immutable
 class ExpenseCard extends StatefulWidget {
   var appbarSize;
-  List order;
-  ExpenseCard({required this.order, required this.appbarSize, Key? key})
-      : super(key: key);
+  ExpenseCard({required this.appbarSize, Key? key}) : super(key: key);
 
   @override
   _ExpenseCardState createState() {

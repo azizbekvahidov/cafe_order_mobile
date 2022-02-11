@@ -1,13 +1,10 @@
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/custom_block/custom_drawer.dart';
-import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/components/menu_list.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_footer.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_head.dart';
-import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/components/search.dart';
-import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/widget/custom_appbar.dart';
 import "package:flutter/material.dart";
 import '../config/globals.dart' as globals;
@@ -29,7 +26,6 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadData();
   }
@@ -39,7 +35,6 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
     await orderBloc.fetchExpenses(id: globals.filial);
   }
 
-  List<dynamic> _order = [];
   @override
   Widget build(BuildContext context) {
     var appbar = CustomAppbar(
@@ -54,8 +49,7 @@ class _ModeratorScreenState extends State<ModeratorScreen> {
           children: [
             ModeratorHead(),
             MenuList(appbarSize: appbar.preferredSize.height),
-            ModeratorExpenseCard(
-                order: _order, appbarSize: appbar.preferredSize.height),
+            ModeratorExpenseCard(appbarSize: appbar.preferredSize.height),
             _isSearch
                 ? Search(
                     isSearch: _isSearch,

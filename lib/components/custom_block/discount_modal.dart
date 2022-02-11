@@ -13,7 +13,6 @@ class _DiscountModalState extends State<DiscountModal> {
   TextEditingController inputController = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     inputController.text = globals.currentExpense!.discount.toString();
   }

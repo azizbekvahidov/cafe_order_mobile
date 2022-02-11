@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Employee {
   int employee_id;
   String login;

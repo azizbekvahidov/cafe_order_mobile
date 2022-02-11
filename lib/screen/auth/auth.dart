@@ -7,7 +7,6 @@ import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:window_manager/window_manager.dart';
 import '../../config/globals.dart' as globals;
 
 class Auth extends StatefulWidget {
@@ -85,9 +84,6 @@ class _AuthState extends State<Auth> {
           ));
         },
         hideForgotPasswordButton: true,
-        userValidator: (value) {
-          print("goo");
-        },
         onRecoverPassword: _recoverPassword,
         messages: LoginMessages(
           userHint: loc.auth.login,

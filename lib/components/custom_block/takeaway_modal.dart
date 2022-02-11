@@ -27,7 +27,6 @@ class _TakeawayModalState extends State<TakeawayModal> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (globals.currentExpense!.phone != null) {
       phoneController!.text = globals.currentExpense!.phone!.substring(4);

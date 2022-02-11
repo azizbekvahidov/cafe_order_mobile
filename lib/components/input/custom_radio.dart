@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomRadio extends StatefulWidget {
   final List<Map> data;
   String result;
@@ -18,8 +19,6 @@ class CustomRadio extends StatefulWidget {
 }
 
 class _CustomRadioState extends State<CustomRadio> {
-  bool _isClicked = false;
-
   void radioAction(index) {
     setState(() {
       widget.result = index;

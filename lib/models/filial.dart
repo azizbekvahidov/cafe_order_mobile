@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Filial {
   int id;
   String name;

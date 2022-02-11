@@ -1,4 +1,3 @@
-import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
 
 abstract class BotExpenseEvent {}
