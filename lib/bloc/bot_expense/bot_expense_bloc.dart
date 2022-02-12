@@ -40,6 +40,13 @@ class BotExpenseBloc extends Bloc<BotExpenseEvent, BotExpenseState> {
       } catch (e) {
         yield state.copyWith(formStatus: SubmissionFailed(e));
       }
+    } else if (event is CancelBotOrder) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
     } else {
       yield state.copyWith(formStatus: FormSubmitting());
       try {

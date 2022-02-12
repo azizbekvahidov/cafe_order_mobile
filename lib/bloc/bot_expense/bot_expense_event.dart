@@ -12,3 +12,5 @@ class AddData extends BotExpenseEvent {
 }
 
 class AddBotOrder extends BotExpenseEvent {}
+
+class CancelBotOrder extends BotExpenseEvent {}

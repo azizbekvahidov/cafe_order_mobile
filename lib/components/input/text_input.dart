@@ -63,6 +63,7 @@ class _TextInputState extends State<TextInput> {
   @override
   Widget build(BuildContext context) {
     return DefaultInput(
+      isRequired: widget.isRequired,
       child: FormBuilderTextField(
         autofocus: widget.autofocus,
         enabled: widget.enabled,

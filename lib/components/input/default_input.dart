@@ -19,8 +19,11 @@ class _DefaultInputState extends State<DefaultInput> {
       height: 48,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      margin: const EdgeInsets.only(bottom: 24),
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
+        border: (widget.isRequired)
+            ? Border.all(color: Theme.of(context).colorScheme.error)
+            : Border.all(color: Theme.of(context).hintColor),
         color: Color.fromARGB(255, 230, 231, 233),
         borderRadius: BorderRadius.circular(8),
       ),

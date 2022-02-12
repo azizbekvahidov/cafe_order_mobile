@@ -34,6 +34,7 @@ class _DropdownInputState extends State<DropdownInput> {
   @override
   Widget build(BuildContext context) {
     return DefaultInput(
+      isRequired: widget.isRequired,
       child: FormBuilderDropdown(
         validator: widget.validator,
         initialValue: widget.result == "" ? null : widget.result,

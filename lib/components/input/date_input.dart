@@ -42,6 +42,7 @@ class _DateInputState extends State<DateInput> {
     print(DateTime.parse(widget.initialValue));
     DateTime.parse(widget.initialValue);
     return DefaultInput(
+      isRequired: widget.isRequired,
       child: FormBuilderDateTimePicker(
         cursorColor: Theme.of(context).indicatorColor,
         initialValue: widget.initialValue != ""

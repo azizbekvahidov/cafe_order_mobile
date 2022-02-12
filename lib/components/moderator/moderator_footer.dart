@@ -6,6 +6,7 @@ import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_state.dart';
 import 'package:cafe_mostbyte/bloc/filial/filial_bloc.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
 import 'package:cafe_mostbyte/components/button/main_button.dart';
+import 'package:cafe_mostbyte/components/button/secondary_button.dart';
 import 'package:cafe_mostbyte/components/input/custom_radio.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/models/delivery.dart';
@@ -40,8 +41,6 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
   TextEditingController? phoneController =
       MaskedTextController(mask: '00 000 00 00');
   Delivery delivery = Delivery();
-  String address = "";
-  String comment = "";
   bool isSelectOrderType = false;
   @override
   Widget build(BuildContext context) {
@@ -58,11 +57,17 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
             var formStatus = state.formStatus;
             if (formStatus is SubmissionSuccess) {
               delivery = Delivery();
+              globals.filial = 0;
               globals.currentExpense = null;
               globals.currentExpenseSum = 0;
               moderatorExpenseCardPageState.setState(() {});
               moderatorFooterPageState.setState(() {});
+              isSelectOrderType = false;
+              inputController.text = "";
+              phoneController!.text = "";
               context.read<BotExpenseBloc>().add(BotExpenseInitialized());
+              helper.getToast("Успешно отправлено", context,
+                  bgColor: Theme.of(context).colorScheme.primary);
             } else if (formStatus is SubmissionFailed) {
               helper.getToast("Что то пошло не так", context);
             }
@@ -88,7 +93,8 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                         Expanded(
                           flex: 6,
                           child: Container(
-                            height: 150,
+                            margin: const EdgeInsets.only(top: 10),
+                            height: 140,
                             child: (globals.currentExpense != null)
                                 ? Column(
                                     mainAxisAlignment:
@@ -99,6 +105,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                           Expanded(
                                               flex: 4,
                                               child: PhoneInput(
+                                                  isRequired: true,
                                                   controller: phoneController,
                                                   name: "phone",
                                                   autofocus: true,
@@ -165,9 +172,9 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                           Expanded(
                                             flex: 5,
                                             child: TextInput(
+                                              isRequired: true,
                                               hint: "Введите адрес",
                                               name: "address",
-                                              initialValue: address,
                                               nextAction: true,
                                               onChanged: (val) {
                                                 delivery.address = val;
@@ -183,7 +190,6 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                               child: TextInput(
                                                 hint: "Введите комменитарий",
                                                 name: "comment",
-                                                initialValue: comment,
                                                 nextAction: false,
                                                 onChanged: (val) {
                                                   delivery.comment = val;
@@ -224,50 +230,12 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                                     "value": e.name,
                                                   })
                                               .toList(),
-                                          result: "0",
+                                          result: globals.filial.toString(),
                                           onClick: (value) {
                                             globals.filial =
                                                 int.parse(value.toString());
                                           },
                                         );
-                                        // FormBuilderRadioGroup(
-                                        //   decoration: InputDecoration(
-                                        //     labelStyle: Theme.of(context)
-                                        //         .textTheme
-                                        //         .bodyText1,
-                                        //     label: Text(
-                                        //       "Филиал",
-                                        //       style: Theme.of(context)
-                                        //           .textTheme
-                                        //           .headline1,
-                                        //     ),
-                                        //     floatingLabelStyle:
-                                        //         Theme.of(context)
-                                        //             .textTheme
-                                        //             .headline4,
-                                        //   ),
-                                        //   wrapSpacing: 5.0,
-                                        //   activeColor: Theme.of(context)
-                                        //       .colorScheme
-                                        //       .primary,
-                                        //   onChanged: ((value) {
-                                        //     globals.filial =
-                                        //         int.parse(value.toString());
-                                        //   }),
-                                        //   name: 'filial',
-                                        //   options: data
-                                        //       .map((item) =>
-                                        //           FormBuilderFieldOption(
-                                        //             value: item.id,
-                                        //             child: Text(
-                                        //               "${item.name}",
-                                        //               style: Theme.of(context)
-                                        //                   .textTheme
-                                        //                   .headline2,
-                                        //             ),
-                                        //           ))
-                                        //       .toList(growable: false),
-                                        // );
                                       } else if (snapshot.hasError) {
                                         return Text(snapshot.error.toString());
                                       }
@@ -275,29 +243,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                           child: CircularProgressIndicator());
                                     }),
                                 Container(
-                                  child:
-                                      // CustomRadio(
-                                      //   data: [
-                                      //     {"index": "book_table", "value": "Зал"},
-                                      //     {"index": "take", "value": "С собой"},
-                                      //     {
-                                      //       "index": "delivery",
-                                      //       "value": "Доставка"
-                                      //     },
-                                      //   ],
-                                      //   result: "0",
-                                      //   onClick: (value) {
-                                      //     if (globals.currentExpense != null) {
-                                      //       globals.currentExpense!.order_type =
-                                      //           value.toString();
-                                      //     } else {
-                                      //       helper.getToast(
-                                      //           "Выберите или откройте счет",
-                                      //           context);
-                                      //     }
-                                      //   },
-                                      // ),
-                                      FormBuilderRadioGroup(
+                                  child: FormBuilderRadioGroup(
                                     initialValue: (globals.currentExpense ==
                                             null)
                                         ? null
@@ -322,6 +268,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                         Theme.of(context).colorScheme.primary,
                                     onChanged: (value) {
                                       if (globals.currentExpense != null) {
+                                        isSelectOrderType = true;
                                         globals.currentExpense!.order_type =
                                             value.toString();
                                       } else {
@@ -357,7 +304,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                           child: Container(
                             height: 150,
                             width: dWidth * 0.17,
-                            padding: const EdgeInsets.only(bottom: 25),
+                            padding: const EdgeInsets.only(bottom: 10),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -424,11 +371,39 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                                 context);
                                           }
                                         },
-                                        colour:
-                                            Theme.of(context).colorScheme.error,
+                                        colour: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         text: "Отправить",
                                         textColor:
                                             Theme.of(context).primaryColor,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: BlocBuilder<BotExpenseBloc,
+                                      BotExpenseState>(
+                                    builder: (context, state) {
+                                      return SecondaryButton(
+                                        action: () async {
+                                          if (await confirm(context,
+                                              content: Text("Вы уверены?"),
+                                              textCancel: Text("Нет"),
+                                              textOK: Text("Да"),
+                                              title: Text("Отменить?"))) {
+                                            context
+                                                .read<BotExpenseBloc>()
+                                                .add(CancelBotOrder());
+                                          }
+                                        },
+                                        colour:
+                                            Theme.of(context).colorScheme.error,
+                                        text: "Отмена",
+                                        // textColor:
+                                        //     Theme.of(context).primaryColor,
                                       );
                                     },
                                   ),

@@ -47,7 +47,7 @@ void calculateTotalSum() {
     moderatorFooterPageState.setState(() {});
 }
 
-void getToast(msg, BuildContext context) {
+void getToast(msg, BuildContext context, {Color? bgColor}) {
   showToast(msg,
       context: context,
       animation: StyledToastAnimation.slideFromTopFade,
@@ -59,7 +59,7 @@ void getToast(msg, BuildContext context) {
       //Animation duration   animDuration * 2 <= duration
       animDuration: Duration(seconds: 1),
       curve: Curves.fastLinearToSlowEaseIn,
-      backgroundColor: Theme.of(context).colorScheme.error,
+      backgroundColor: bgColor ?? Theme.of(context).colorScheme.error,
       textStyle: TextStyle(
         color: Theme.of(context).primaryColor,
         fontSize: 20,

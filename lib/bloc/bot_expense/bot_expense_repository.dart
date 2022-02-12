@@ -38,6 +38,8 @@ class BotExpenseRepository {
         'filial_id': globals.filial,
         'phone': globals.currentExpense!.delivery!.phone,
         'name': globals.currentExpense!.delivery!.comment,
+        'price': globals.currentExpense!.delivery!.price,
+        'time': globals.currentExpense!.delivery!.delivery_time,
         'order_type': globals.currentExpense!.order_type,
         'status': 1,
         'products': globals.currentExpense!.order
@@ -49,14 +51,15 @@ class BotExpenseRepository {
                 })
             .toList(),
       };
+      print(json.encode(body));
       final response =
           await net.post('${globals.apiLink}delivery/store', body: body);
-      if (response.statusCode == 200) {
-        var res = json.decode(utf8.decode(response.bodyBytes));
+      if (response.statusCode == 201) {
+        print("ok");
       } else {
         globals.currentExpense!.discount = 0;
         var res = json.decode(utf8.decode(response.bodyBytes));
-        return res["message"];
+        return res["data"];
       }
     } catch (e) {
       throw Exception(e.toString());

@@ -39,6 +39,7 @@ class _NumberInputState extends State<NumberInput> {
   @override
   Widget build(BuildContext context) {
     return DefaultInput(
+      isRequired: widget.isRequired,
       child: Container(
         child: FormBuilderTextField(
           textInputAction:

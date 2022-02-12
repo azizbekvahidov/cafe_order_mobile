@@ -42,6 +42,7 @@ class _PhoneInputState extends State<PhoneInput> {
   @override
   Widget build(BuildContext context) {
     return DefaultInput(
+      isRequired: widget.isRequired,
       child: Row(children: [
         Expanded(
           flex: 2,
