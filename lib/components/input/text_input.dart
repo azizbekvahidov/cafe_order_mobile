@@ -20,6 +20,7 @@ class TextInput extends StatefulWidget {
   final String initialValue;
   final bool nextAction;
   final bool autofocus;
+  final bool isRequired;
   final List<TextInputFormatter>? inputFormatter;
   const TextInput(
       {this.controller,
@@ -35,6 +36,7 @@ class TextInput extends StatefulWidget {
       this.inputFormatter,
       required this.nextAction,
       this.autofocus = false,
+      this.isRequired = false,
       Key? key})
       : super(key: key);
 

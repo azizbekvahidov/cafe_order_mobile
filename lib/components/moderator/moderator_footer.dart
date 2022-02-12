@@ -1,12 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cafe_mostbyte/bloc/expense/expense_bloc.dart';
-import 'package:cafe_mostbyte/bloc/expense/expense_event.dart';
-import 'package:cafe_mostbyte/bloc/expense/expense_repository.dart';
-import 'package:cafe_mostbyte/bloc/expense/expense_state.dart';
+import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_bloc.dart';
+import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_event.dart';
+import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_repository.dart';
+import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_state.dart';
 import 'package:cafe_mostbyte/bloc/filial/filial_bloc.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
-import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/button/main_button.dart';
+import 'package:cafe_mostbyte/components/input/custom_radio.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/filial.dart';
@@ -15,8 +15,6 @@ import 'package:cafe_mostbyte/components/input/default_input.dart';
 import 'package:cafe_mostbyte/components/input/number_input.dart';
 import 'package:cafe_mostbyte/components/input/phone_input.dart';
 import 'package:cafe_mostbyte/components/input/text_input.dart';
-import 'package:cafe_mostbyte/components/tabs.dart';
-import 'package:cafe_mostbyte/services/print_service.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
@@ -44,36 +42,30 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
   Delivery delivery = Delivery();
   String address = "";
   String comment = "";
+  bool isSelectOrderType = false;
   @override
   Widget build(BuildContext context) {
     filialBloc.fetchFilial();
     var dHeight = MediaQuery.of(context).size.height;
     var dWidth = MediaQuery.of(context).size.width;
     return RepositoryProvider(
-      create: (context) => ExpenseRepository(),
+      create: (context) => BotExpenseRepository(),
       child: BlocProvider(
         create: (context) =>
-            ExpenseBloc(repo: context.read<ExpenseRepository>()),
-        child: BlocListener<ExpenseBloc, ExpenseState>(
+            BotExpenseBloc(repo: context.read<BotExpenseRepository>()),
+        child: BlocListener<BotExpenseBloc, BotExpenseState>(
           listener: (context, state) async {
             var formStatus = state.formStatus;
             if (formStatus is SubmissionSuccess) {
-              orderBloc.fetchExpenses(id: globals.filial);
-              orderBloc.fetchExpense(id: globals.currentExpenseId);
-
-              if (globals.orderState != null) {
-                globals.orderState = null;
-                tabsState.setState(() {
-                  globals.currentExpenseChange = false;
-                });
-              }
+              delivery = Delivery();
+              globals.currentExpense = null;
+              globals.currentExpenseSum = 0;
               moderatorExpenseCardPageState.setState(() {});
               moderatorFooterPageState.setState(() {});
-              context.read<ExpenseBloc>().add(ExpenseInitialized());
+              context.read<BotExpenseBloc>().add(BotExpenseInitialized());
             } else if (formStatus is SubmissionFailed) {
               helper.getToast("Что то пошло не так", context);
             }
-            // TODO: implement listener
           },
           child: Positioned(
               bottom: 0,
@@ -215,50 +207,67 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                             width: dWidth * 0.3,
                             child: Column(
                               children: [
+                                Text(
+                                  "Филиал",
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
                                 StreamBuilder<List<Filial>>(
                                     stream: filialBloc.filialList,
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         List<Filial> data =
                                             snapshot.data as List<Filial>;
-                                        return FormBuilderRadioGroup(
-                                          decoration: InputDecoration(
-                                            labelStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                            label: Text(
-                                              "Филиал",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline1,
-                                            ),
-                                            floatingLabelStyle:
-                                                Theme.of(context)
-                                                    .textTheme
-                                                    .headline4,
-                                          ),
-                                          wrapSpacing: 5.0,
-                                          activeColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          onChanged: ((value) {
+                                        return CustomRadio(
+                                          data: data
+                                              .map((e) => {
+                                                    "index": e.id,
+                                                    "value": e.name,
+                                                  })
+                                              .toList(),
+                                          result: "0",
+                                          onClick: (value) {
                                             globals.filial =
                                                 int.parse(value.toString());
-                                          }),
-                                          name: 'filial',
-                                          options: data
-                                              .map((item) =>
-                                                  FormBuilderFieldOption(
-                                                    value: item.id,
-                                                    child: Text(
-                                                      "${item.name}",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline2,
-                                                    ),
-                                                  ))
-                                              .toList(growable: false),
+                                          },
                                         );
+                                        // FormBuilderRadioGroup(
+                                        //   decoration: InputDecoration(
+                                        //     labelStyle: Theme.of(context)
+                                        //         .textTheme
+                                        //         .bodyText1,
+                                        //     label: Text(
+                                        //       "Филиал",
+                                        //       style: Theme.of(context)
+                                        //           .textTheme
+                                        //           .headline1,
+                                        //     ),
+                                        //     floatingLabelStyle:
+                                        //         Theme.of(context)
+                                        //             .textTheme
+                                        //             .headline4,
+                                        //   ),
+                                        //   wrapSpacing: 5.0,
+                                        //   activeColor: Theme.of(context)
+                                        //       .colorScheme
+                                        //       .primary,
+                                        //   onChanged: ((value) {
+                                        //     globals.filial =
+                                        //         int.parse(value.toString());
+                                        //   }),
+                                        //   name: 'filial',
+                                        //   options: data
+                                        //       .map((item) =>
+                                        //           FormBuilderFieldOption(
+                                        //             value: item.id,
+                                        //             child: Text(
+                                        //               "${item.name}",
+                                        //               style: Theme.of(context)
+                                        //                   .textTheme
+                                        //                   .headline2,
+                                        //             ),
+                                        //           ))
+                                        //       .toList(growable: false),
+                                        // );
                                       } else if (snapshot.hasError) {
                                         return Text(snapshot.error.toString());
                                       }
@@ -266,7 +275,29 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                           child: CircularProgressIndicator());
                                     }),
                                 Container(
-                                  child: FormBuilderRadioGroup(
+                                  child:
+                                      // CustomRadio(
+                                      //   data: [
+                                      //     {"index": "book_table", "value": "Зал"},
+                                      //     {"index": "take", "value": "С собой"},
+                                      //     {
+                                      //       "index": "delivery",
+                                      //       "value": "Доставка"
+                                      //     },
+                                      //   ],
+                                      //   result: "0",
+                                      //   onClick: (value) {
+                                      //     if (globals.currentExpense != null) {
+                                      //       globals.currentExpense!.order_type =
+                                      //           value.toString();
+                                      //     } else {
+                                      //       helper.getToast(
+                                      //           "Выберите или откройте счет",
+                                      //           context);
+                                      //     }
+                                      //   },
+                                      // ),
+                                      FormBuilderRadioGroup(
                                     initialValue: (globals.currentExpense ==
                                             null)
                                         ? null
@@ -357,23 +388,31 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16),
-                                  child: BlocBuilder<ExpenseBloc, ExpenseState>(
+                                  child: BlocBuilder<BotExpenseBloc,
+                                      BotExpenseState>(
                                     builder: (context, state) {
                                       return MainButton(
                                         action: () async {
                                           if (globals.currentExpense != null) {
                                             if (globals.filial != 0) {
-                                              if (await confirm(context,
-                                                  content: Text("Вы уверены?"),
-                                                  textCancel: Text("Нет"),
-                                                  textOK: Text("Да"),
-                                                  title:
-                                                      Text("Закрытие счета"))) {
-                                                globals.currentExpense!
-                                                    .delivery = delivery;
-                                                context
-                                                    .read<ExpenseBloc>()
-                                                    .add(ExpenseClose());
+                                              if (isSelectOrderType) {
+                                                if (await confirm(context,
+                                                    content:
+                                                        Text("Вы уверены?"),
+                                                    textCancel: Text("Нет"),
+                                                    textOK: Text("Да"),
+                                                    title: Text(
+                                                        "Закрытие счета"))) {
+                                                  globals.currentExpense!
+                                                      .delivery = delivery;
+                                                  context
+                                                      .read<BotExpenseBloc>()
+                                                      .add(AddBotOrder());
+                                                }
+                                              } else {
+                                                helper.getToast(
+                                                    "Выберите тип заказа",
+                                                    context);
                                               }
                                             } else {
                                               helper.getToast(

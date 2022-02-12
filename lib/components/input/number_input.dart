@@ -16,6 +16,7 @@ class NumberInput extends StatefulWidget {
   final onEditingComplete;
   final bool autofocus;
   final bool nextAction;
+  final bool isRequired;
   const NumberInput(
       {required this.controller,
       required this.name,
@@ -26,6 +27,7 @@ class NumberInput extends StatefulWidget {
       this.onSubmitted,
       this.onEditingComplete,
       required this.nextAction,
+      this.isRequired = false,
       Key? key})
       : super(key: key);
 

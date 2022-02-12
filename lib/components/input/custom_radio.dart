@@ -21,7 +21,7 @@ class CustomRadio extends StatefulWidget {
 class _CustomRadioState extends State<CustomRadio> {
   void radioAction(index) {
     setState(() {
-      widget.result = index;
+      widget.result = index.toString();
     });
   }
 
@@ -29,7 +29,7 @@ class _CustomRadioState extends State<CustomRadio> {
   Widget build(BuildContext context) {
     return Container(
       height: 55,
-      margin: const EdgeInsets.only(bottom: 24),
+      margin: const EdgeInsets.only(bottom: 5),
       child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -52,7 +52,8 @@ class _CustomRadioState extends State<CustomRadio> {
                     Positioned.fill(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: widget.result == widget.data[index]["index"]
+                          color: widget.result ==
+                                  widget.data[index]["index"].toString()
                               ? Theme.of(context).bottomAppBarColor
                               : Theme.of(context).scaffoldBackgroundColor,
                         ),
@@ -60,7 +61,8 @@ class _CustomRadioState extends State<CustomRadio> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        primary: widget.result == widget.data[index]["index"]
+                        primary: widget.result ==
+                                widget.data[index]["index"].toString()
                             ? Colors.white
                             : Theme.of(context).buttonColor,
                         textStyle: const TextStyle(

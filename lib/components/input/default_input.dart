@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class DefaultInput extends StatefulWidget {
   Widget child;
-  DefaultInput({required this.child, Key? key}) : super(key: key);
+  bool isRequired;
+  DefaultInput({this.isRequired = false, required this.child, Key? key})
+      : super(key: key);
 
   @override
   _DefaultInputState createState() => _DefaultInputState();

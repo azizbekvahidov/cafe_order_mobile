@@ -14,6 +14,7 @@ class PhoneInput extends StatefulWidget {
   final onEditingComplete;
   final bool nextAction;
   final bool autofocus;
+  final bool isRequired;
   const PhoneInput(
       {required this.controller,
       required this.name,
@@ -23,6 +24,7 @@ class PhoneInput extends StatefulWidget {
       this.onEditingComplete,
       required this.nextAction,
       this.autofocus = false,
+      this.isRequired = false,
       Key? key})
       : super(key: key);
 

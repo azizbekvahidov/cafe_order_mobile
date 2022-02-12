@@ -10,3 +10,5 @@ class AddData extends BotExpenseEvent {
   final DeliveryBot data;
   AddData({required this.data});
 }
+
+class AddBotOrder extends BotExpenseEvent {}

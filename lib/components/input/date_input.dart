@@ -17,6 +17,7 @@ class DateInput extends StatefulWidget {
   final onEditingComplete;
   final String initialValue;
   final bool nextAction;
+  final bool isRequired;
   const DateInput(
       {this.controller,
       required this.name,
@@ -27,6 +28,7 @@ class DateInput extends StatefulWidget {
       this.onEditingComplete,
       this.initialValue = "",
       required this.nextAction,
+      this.isRequired = false,
       Key? key})
       : super(key: key);
 
