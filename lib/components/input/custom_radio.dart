@@ -28,7 +28,7 @@ class _CustomRadioState extends State<CustomRadio> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 55,
+      height: 50,
       margin: const EdgeInsets.only(bottom: 5),
       child: GridView.builder(
           physics: const NeverScrollableScrollPhysics(),

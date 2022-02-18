@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_event.dart';
+import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
+import 'package:cafe_mostbyte/models/employee.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
+import 'package:cafe_mostbyte/models/order.dart';
+import 'package:cafe_mostbyte/models/table.dart';
 import 'package:cafe_mostbyte/services/api_provider/data_api_provider.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import '../../../config/globals.dart' as globals;
@@ -31,9 +35,50 @@ class BotExpenseRepository {
     }
   }
 
+  Future<Expense> addExpense({DeliveryBot? data}) async {
+    try {
+      globals.filial = data!.filial.id;
+      globals.isBotOrder = data.id;
+      var expense = Expense(
+          id: 0,
+          order_date: "",
+          print: 0,
+          expense_sum: 0,
+          comment: "",
+          prepaid: 0,
+          prepaidSum: 0,
+          ready_time: "",
+          phone: "",
+          delivery: Delivery(
+            phone: data.phone,
+            address: data.address,
+            comment: data.name,
+            delivery_time: data.time,
+          ),
+          order_type: data.order_type,
+          employee: Employee(
+              employee_id: globals.userData!.id,
+              check_percent: globals.userData!.check_percent,
+              login: globals.userData!.login,
+              name: globals.userData!.name),
+          order: data.listItem
+              .map((e) => Order(
+                  amount: e.amount,
+                  product: e.product,
+                  product_id: e.product_id,
+                  type: e.type))
+              .toList(),
+          table: Table(id: 0, name: ""));
+      return expense;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<void> AddBotOrder() async {
     try {
       Map body = {
+        'bot_order': globals.isBotOrder,
         'address': globals.currentExpense!.delivery!.address,
         'filial_id': globals.filial,
         'phone': globals.currentExpense!.delivery!.phone,

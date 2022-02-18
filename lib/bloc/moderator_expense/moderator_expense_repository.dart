@@ -11,6 +11,8 @@ class ModeratorExpenseRepository {
 
   Future<Expense> createExpense() async {
     try {
+      globals.filial = 0;
+      globals.isBotOrder = null;
       var expense = Expense(
           id: 0,
           order_date: "",

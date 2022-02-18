@@ -23,6 +23,7 @@ Expense? currentExpense;
 Delivery? expenseDelivery;
 PrintData? orderState;
 User? userData;
+int? isBotOrder;
 Settings? settings;
 List<Department>? department;
 bool isKassa = true;

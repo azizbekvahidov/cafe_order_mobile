@@ -42,6 +42,29 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
       MaskedTextController(mask: '00 000 00 00');
   Delivery delivery = Delivery();
   bool isSelectOrderType = false;
+  // Delivery? delivery;
+  String address = "";
+  String phone = "";
+  String comment = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (globals.currentExpense != null) {
+      if (globals.currentExpense!.delivery != null) {
+        isSelectOrderType = true;
+        delivery = globals.currentExpense!.delivery!;
+        address = globals.currentExpense!.delivery!.address!;
+        comment = globals.currentExpense!.delivery!.comment != null
+            ? globals.currentExpense!.delivery!.comment!
+            : "";
+        phoneController!.text =
+            globals.currentExpense!.delivery!.phone!.substring(4);
+        helper.calculateTotalSum();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     filialBloc.fetchFilial();
@@ -58,6 +81,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
             if (formStatus is SubmissionSuccess) {
               delivery = Delivery();
               globals.filial = 0;
+              globals.isBotOrder = null;
               globals.currentExpense = null;
               globals.currentExpenseSum = 0;
               moderatorExpenseCardPageState.setState(() {});
@@ -65,6 +89,9 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
               isSelectOrderType = false;
               inputController.text = "";
               phoneController!.text = "";
+              address = "";
+              phone = "";
+              comment = "";
               context.read<BotExpenseBloc>().add(BotExpenseInitialized());
               helper.getToast("Успешно отправлено", context,
                   bgColor: Theme.of(context).colorScheme.primary);
@@ -140,6 +167,20 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                               child: DefaultInput(
                                                 child:
                                                     FormBuilderDateTimePicker(
+                                                  initialValue: (globals
+                                                                  .currentExpense!
+                                                                  .delivery !=
+                                                              null &&
+                                                          globals
+                                                                  .currentExpense!
+                                                                  .delivery
+                                                                  ?.delivery_time !=
+                                                              null)
+                                                      ? DateTime.parse(globals
+                                                          .currentExpense!
+                                                          .delivery!
+                                                          .delivery_time!)
+                                                      : null,
                                                   name: "time",
                                                   textInputAction:
                                                       TextInputAction.next,
@@ -173,6 +214,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                             flex: 5,
                                             child: TextInput(
                                               isRequired: true,
+                                              initialValue: address,
                                               hint: "Введите адрес",
                                               name: "address",
                                               nextAction: true,
@@ -188,6 +230,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                               padding: const EdgeInsets.only(
                                                   left: 16),
                                               child: TextInput(
+                                                initialValue: comment,
                                                 hint: "Введите комменитарий",
                                                 name: "comment",
                                                 nextAction: false,

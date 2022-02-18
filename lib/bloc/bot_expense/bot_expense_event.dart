@@ -6,6 +6,8 @@ class BotExpenseInitialized extends BotExpenseEvent {}
 
 class AddToExpense extends BotExpenseEvent {}
 
+class AddExpense extends BotExpenseEvent {}
+
 class AddData extends BotExpenseEvent {
   final DeliveryBot data;
   AddData({required this.data});

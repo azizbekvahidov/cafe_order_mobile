@@ -72,6 +72,7 @@ class _AuthState extends State<Auth> {
         ),
       ),
       body: FlutterLogin(
+        userValidator: (value) {},
         title: '',
         logo: AssetImage('assets/img/logo.png'),
         onLogin: _authUser,
@@ -90,7 +91,7 @@ class _AuthState extends State<Auth> {
           passwordHint: loc.auth.password,
           // confirmPasswordHint: 'Confirm',
           loginButton: loc.auth.log_in,
-          // signupButton: 'REGISTER',
+          signupButton: '',
           // forgotPasswordButton: 'Forgot huh?',
           // recoverPasswordButton: 'HELP ME',
           goBackButton: loc.auth.go_back,
