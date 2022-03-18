@@ -1,11 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import '../../config/globals.dart' as globals;
 import '../../services/helper.dart' as helper;
 
+// ignore: must_be_immutable
 class AddingBtn extends StatefulWidget {
   Order data;
   AddingBtn({required this.data, Key? key}) : super(key: key);
@@ -15,6 +17,47 @@ class AddingBtn extends StatefulWidget {
 }
 
 class _AddingBtnState extends State<AddingBtn> {
+  changeState(temp) {
+    temp = double.parse(temp.toStringAsFixed(1));
+    if (temp <= 0) {
+      if (expenseCardPageState.mounted)
+        expenseCardPageState.setState(() {
+          globals.currentExpense!.order.removeWhere((element) {
+            return element.product_id == widget.data.product_id &&
+                element.type == widget.data.type;
+          });
+        });
+      if (moderatorExpenseCardPageState.mounted)
+        moderatorExpenseCardPageState.setState(() {
+          globals.currentExpense!.order.removeWhere((element) {
+            return element.product_id == widget.data.product_id &&
+                element.type == widget.data.type;
+          });
+        });
+    } else {
+      if (expenseCardPageState.mounted)
+        expenseCardPageState.setState(() {
+          var orderRow = globals.currentExpense!.order.firstWhere((element) {
+            return element.product_id == widget.data.product_id &&
+                element.type == widget.data.type;
+          });
+          orderRow.amount = temp;
+        });
+      if (moderatorExpenseCardPageState.mounted)
+        moderatorExpenseCardPageState.setState(() {
+          var orderRow = globals.currentExpense!.order.firstWhere((element) {
+            return element.product_id == widget.data.product_id &&
+                element.type == widget.data.type;
+          });
+          orderRow.amount = temp;
+        });
+    }
+    if (tabsState.mounted)
+      tabsState.setState(() {
+        globals.currentExpenseChange = true;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,27 +72,8 @@ class _AddingBtnState extends State<AddingBtn> {
               child: InkWell(
                 onTap: () {
                   double temp = (widget.data.amount - 0.1).toDouble();
-                  temp = double.parse(temp.toStringAsFixed(1));
-                  if (temp <= 0) {
-                    expenseCardPageState.setState(() {
-                      globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                    });
-                  } else {
-                    expenseCardPageState.setState(() {
-                      var orderRow =
-                          globals.currentExpense!.order.firstWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                      orderRow.amount = temp;
-                    });
-                  }
-                  tabsState.setState(() {
-                    globals.currentExpenseChange = true;
-                  });
+
+                  changeState(temp);
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,
@@ -76,27 +100,8 @@ class _AddingBtnState extends State<AddingBtn> {
               child: InkWell(
                 onTap: () {
                   double temp = (widget.data.amount - 0.5).toDouble();
-                  temp = double.parse(temp.toStringAsFixed(1));
-                  if (temp <= 0) {
-                    expenseCardPageState.setState(() {
-                      globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                    });
-                  } else {
-                    expenseCardPageState.setState(() {
-                      var orderRow =
-                          globals.currentExpense!.order.firstWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                      orderRow.amount = temp;
-                    });
-                  }
-                  tabsState.setState(() {
-                    globals.currentExpenseChange = true;
-                  });
+
+                  changeState(temp);
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,
@@ -123,27 +128,8 @@ class _AddingBtnState extends State<AddingBtn> {
               child: InkWell(
                 onTap: () {
                   double temp = (widget.data.amount + 0.5).toDouble();
-                  temp = double.parse(temp.toStringAsFixed(1));
-                  if (temp <= 0) {
-                    expenseCardPageState.setState(() {
-                      globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                    });
-                  } else {
-                    expenseCardPageState.setState(() {
-                      var orderRow =
-                          globals.currentExpense!.order.firstWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                      orderRow.amount = temp;
-                    });
-                  }
-                  tabsState.setState(() {
-                    globals.currentExpenseChange = true;
-                  });
+
+                  changeState(temp);
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,
@@ -170,27 +156,8 @@ class _AddingBtnState extends State<AddingBtn> {
               child: InkWell(
                 onTap: () {
                   double temp = (widget.data.amount + 0.1).toDouble();
-                  temp = double.parse(temp.toStringAsFixed(1));
-                  if (temp <= 0) {
-                    expenseCardPageState.setState(() {
-                      globals.currentExpense!.order.removeWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                    });
-                  } else {
-                    expenseCardPageState.setState(() {
-                      var orderRow =
-                          globals.currentExpense!.order.firstWhere((element) {
-                        return element.product_id == widget.data.product_id &&
-                            element.type == widget.data.type;
-                      });
-                      orderRow.amount = temp;
-                    });
-                  }
-                  tabsState.setState(() {
-                    globals.currentExpenseChange = true;
-                  });
+
+                  changeState(temp);
                   helper.generateCheck(
                       data: widget.data.product!,
                       type: widget.data.type,

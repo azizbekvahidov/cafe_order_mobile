@@ -2,6 +2,7 @@ import 'package:cafe_mostbyte/components/custom_block/adding_btn.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/order_comment_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
+import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +49,22 @@ class _OrderRowState extends State<OrderRow> {
                   children: [
                     InkWell(
                       onTap: () {
-                        expenseCardPageState.setState(() {
-                          globals.currentExpense!.order.removeWhere((element) =>
-                              element.product_id ==
-                                  widget.orderRow!.product_id &&
-                              element.type == widget.orderRow!.type);
-                        });
+                        if (expenseCardPageState.mounted)
+                          expenseCardPageState.setState(() {
+                            globals.currentExpense!.order.removeWhere(
+                                (element) =>
+                                    element.product_id ==
+                                        widget.orderRow!.product_id &&
+                                    element.type == widget.orderRow!.type);
+                          });
+                        if (moderatorExpenseCardPageState.mounted)
+                          moderatorExpenseCardPageState.setState(() {
+                            globals.currentExpense!.order.removeWhere(
+                                (element) =>
+                                    element.product_id ==
+                                        widget.orderRow!.product_id &&
+                                    element.type == widget.orderRow!.type);
+                          });
 
                         helper.calculateTotalSum();
                       },

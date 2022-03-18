@@ -50,6 +50,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
                 MaterialPageRoute(builder: (BuildContext ctx) {
               return Auth();
             }), (route) => true);
+            globals.currentExpenseSum = 0;
+            globals.currentExpense = null;
           }
           // TODO: implement listener
         },

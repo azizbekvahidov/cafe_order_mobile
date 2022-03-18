@@ -1,26 +1,24 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
-import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/components/order_row.dart';
 import 'package:flutter/material.dart';
-import '../config/globals.dart' as globals;
+import '../../config/globals.dart' as globals;
 
-_ExpenseCardState expenseCardPageState = _ExpenseCardState();
+_ModeratorExpenseCardState moderatorExpenseCardPageState =
+    _ModeratorExpenseCardState();
 
-// ignore: must_be_immutable
-class ExpenseCard extends StatefulWidget {
+class ModeratorExpenseCard extends StatefulWidget {
   var appbarSize;
-  ExpenseCard({required this.appbarSize, Key? key}) : super(key: key);
+  ModeratorExpenseCard({required this.appbarSize, Key? key}) : super(key: key);
 
   @override
-  _ExpenseCardState createState() {
-    expenseCardPageState = _ExpenseCardState();
-    return expenseCardPageState;
+  _ModeratorExpenseCardState createState() {
+    moderatorExpenseCardPageState = _ModeratorExpenseCardState();
+    return moderatorExpenseCardPageState;
   }
 }
 
-class _ExpenseCardState extends State<ExpenseCard> {
+class _ModeratorExpenseCardState extends State<ModeratorExpenseCard> {
   ScrollController _checkController = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -97,31 +95,17 @@ class _ExpenseCardState extends State<ExpenseCard> {
                     thickness: 1,
                   ),
                   Container(
-                    child: StreamBuilder(
-                      stream: orderBloc.expense,
-                      builder: (context, AsyncSnapshot<Expense?> snapshot) {
-                        if (snapshot.hasData) {
-                          globals.currentExpense = snapshot.data;
-                          globals.expenseDelivery =
-                              globals.currentExpense!.delivery;
-                          return Column(
-                            children: [
-                              if (globals.currentExpense != null)
-                                for (Order item
-                                    in globals.currentExpense!.order)
-                                  OrderRow(
-                                    orderRow: item,
-                                    plus: () {}, //plusCnt,
-                                    minus: () {}, //minusCnt,
-                                    customVal: () {}, //setDefaultVal,
-                                  )
-                            ],
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text(snapshot.error.toString());
-                        }
-                        return Center(child: CircularProgressIndicator());
-                      },
+                    child: Column(
+                      children: [
+                        if (globals.currentExpense != null)
+                          for (Order item in globals.currentExpense!.order)
+                            OrderRow(
+                              orderRow: item,
+                              plus: () {}, //plusCnt,
+                              minus: () {}, //minusCnt,
+                              customVal: () {}, //setDefaultVal,
+                            )
+                      ],
                     ),
                   )
                 ],

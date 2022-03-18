@@ -50,11 +50,8 @@ dependencies:
   image: ^3.0.8
 
   window_manager: ^0.1.1
-  fluent_ui: ^3.8.0
+
   system_theme: ^1.0.1
-  flutter_acrylic: ^1.0.0+1
-  
-  bitsdojo_window: ^0.1.1+1
   flutter_typeahead: ^3.2.1
   flutter_login: ^3.0.0
   webcontent_converter: ^0.0.7

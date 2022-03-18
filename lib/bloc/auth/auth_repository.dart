@@ -1,7 +1,5 @@
 import 'dart:convert';
-import '../../models/user.dart';
 import '../../services/api_provider/data_api_provider.dart';
-import '../../services/http_exception.dart';
 import '../../services/network_service.dart';
 import '../../services/api_provider/user/user_api_provider.dart';
 import '../../config/globals.dart' as globals;

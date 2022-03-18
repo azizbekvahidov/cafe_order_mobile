@@ -20,6 +20,7 @@ class TextInput extends StatefulWidget {
   final String initialValue;
   final bool nextAction;
   final bool autofocus;
+  final bool isRequired;
   final List<TextInputFormatter>? inputFormatter;
   const TextInput(
       {this.controller,
@@ -35,6 +36,7 @@ class TextInput extends StatefulWidget {
       this.inputFormatter,
       required this.nextAction,
       this.autofocus = false,
+      this.isRequired = false,
       Key? key})
       : super(key: key);
 
@@ -61,6 +63,7 @@ class _TextInputState extends State<TextInput> {
   @override
   Widget build(BuildContext context) {
     return DefaultInput(
+      isRequired: widget.isRequired,
       child: FormBuilderTextField(
         autofocus: widget.autofocus,
         enabled: widget.enabled,

@@ -13,6 +13,7 @@ class DropdownInput extends StatefulWidget {
   final onTap;
   final List options;
   final result;
+  final bool isRequired;
   const DropdownInput(
       {required this.name,
       required this.hint,
@@ -21,6 +22,7 @@ class DropdownInput extends StatefulWidget {
       this.onTap,
       required this.options,
       this.result = "",
+      this.isRequired = false,
       Key? key})
       : super(key: key);
 
@@ -32,6 +34,7 @@ class _DropdownInputState extends State<DropdownInput> {
   @override
   Widget build(BuildContext context) {
     return DefaultInput(
+      isRequired: widget.isRequired,
       child: FormBuilderDropdown(
         validator: widget.validator,
         initialValue: widget.result == "" ? null : widget.result,

@@ -2,6 +2,7 @@ library yoshlar_portali.helper;
 
 import 'dart:convert';
 
+import 'package:cafe_mostbyte/components/moderator/moderator_footer.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/order.dart';
@@ -41,10 +42,12 @@ void calculateTotalSum() {
     globals.currentExpense!.expense_sum = sum;
   }
   globals.currentExpenseSum = sum;
-  orderFooterPageState.setState(() {});
+  if (orderFooterPageState.mounted) orderFooterPageState.setState(() {});
+  if (moderatorFooterPageState.mounted)
+    moderatorFooterPageState.setState(() {});
 }
 
-void getToast(msg, BuildContext context) {
+void getToast(msg, BuildContext context, {Color? bgColor}) {
   showToast(msg,
       context: context,
       animation: StyledToastAnimation.slideFromTopFade,
@@ -56,7 +59,7 @@ void getToast(msg, BuildContext context) {
       //Animation duration   animDuration * 2 <= duration
       animDuration: Duration(seconds: 1),
       curve: Curves.fastLinearToSlowEaseIn,
-      backgroundColor: Theme.of(context).colorScheme.error,
+      backgroundColor: bgColor ?? Theme.of(context).colorScheme.error,
       textStyle: TextStyle(
         color: Theme.of(context).primaryColor,
         fontSize: 20,
@@ -174,9 +177,11 @@ generateCheck(
     PrintData orderState = new PrintData(
         expense_id: globals.currentExpense!.id,
         employee: globals.currentExpense!.employee.name,
-        table: globals.currentExpense!.table != null
-            ? globals.currentExpense!.table!.name
-            : "С собой",
+        table: globals.currentExpense!.order_type == "book_table"
+            ? "Зал ${globals.currentExpense!.table!.name}"
+            : (globals.currentExpense!.order_type == "delivery"
+                ? "Доставка"
+                : "С собой"),
         departments: [
           Department(
               department_id: data.department == null

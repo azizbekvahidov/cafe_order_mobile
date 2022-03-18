@@ -21,6 +21,7 @@ class Expense {
   List<Order> order;
   bool isChanged;
   Delivery? delivery;
+  String order_type;
 
   Expense({
     required this.id,
@@ -40,6 +41,7 @@ class Expense {
     required this.order,
     this.isChanged = false,
     this.delivery,
+    this.order_type = "book_table",
   });
 
   factory Expense.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,7 @@ class Expense {
       order: List<Order>.from(json["order"].map((x) => Order.fromJson(x))),
       delivery:
           json["delivery"] != null ? Delivery.fromJson(json["delivery"]) : null,
+      order_type: json["order_type"],
     );
   }
 
@@ -82,6 +85,7 @@ class Expense {
       'table': table != null ? table!.toJson() : 0,
       "order": order.map((e) => e.toJson()).toList(),
       "delivery": delivery != null ? delivery!.toJson() : null,
+      "order_type": order_type,
     };
   }
 }

@@ -1,17 +1,14 @@
-import 'package:cafe_mostbyte/components/button/main_button.dart';
 import 'package:cafe_mostbyte/components/button/secondary_button.dart';
 import 'package:cafe_mostbyte/components/input/default_input.dart';
 import 'package:cafe_mostbyte/components/input/number_input.dart';
 import 'package:cafe_mostbyte/components/input/phone_input.dart';
 import 'package:cafe_mostbyte/models/delivery.dart';
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:cafe_mostbyte/components/input/text_input.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../../config/globals.dart' as globals;
-import '../../services/helper.dart' as helper;
 
 class DeliveryModal extends StatefulWidget {
   DeliveryModal({Key? key}) : super(key: key);
@@ -32,7 +29,7 @@ class _DeliveryModalState extends State<DeliveryModal> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    //
     super.initState();
     if (globals.currentExpense!.delivery != null) {
       delivery = globals.currentExpense!.delivery;
@@ -92,12 +89,14 @@ class _DeliveryModalState extends State<DeliveryModal> {
                     child: DefaultInput(
                       child: FormBuilderDateTimePicker(
                         name: "time",
-                        initialValue:
-                            (globals.currentExpense!.delivery!.delivery_time !=
+                        initialValue: (globals.currentExpense!.delivery != null)
+                            ? (globals.currentExpense!.delivery!
+                                        .delivery_time !=
                                     null)
                                 ? DateTime.parse(globals
                                     .currentExpense!.delivery!.delivery_time!)
-                                : null,
+                                : null
+                            : null,
                         textInputAction: TextInputAction.next,
                         format: DateFormat('HH:mm'),
                         inputType: InputType.time,

@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:cafe_mostbyte/bloc/auth/auth_repository.dart';
 import 'package:cafe_mostbyte/generated/locale_base.dart';
+import 'package:cafe_mostbyte/screen/moderator_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:window_manager/window_manager.dart';
 import '../../config/globals.dart' as globals;
 
 class Auth extends StatefulWidget {
@@ -72,26 +72,26 @@ class _AuthState extends State<Auth> {
         ),
       ),
       body: FlutterLogin(
+        userValidator: (value) {},
         title: '',
         logo: AssetImage('assets/img/logo.png'),
         onLogin: _authUser,
         onSignup: _signupUser,
         onSubmitAnimationCompleted: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => OrderScreen(),
+            builder: (context) => (globals.userData!.role.role == "moderator")
+                ? ModeratorScreen()
+                : OrderScreen(),
           ));
         },
         hideForgotPasswordButton: true,
-        userValidator: (value) {
-          print("goo");
-        },
         onRecoverPassword: _recoverPassword,
         messages: LoginMessages(
           userHint: loc.auth.login,
           passwordHint: loc.auth.password,
           // confirmPasswordHint: 'Confirm',
           loginButton: loc.auth.log_in,
-          // signupButton: 'REGISTER',
+          signupButton: '',
           // forgotPasswordButton: 'Forgot huh?',
           // recoverPasswordButton: 'HELP ME',
           goBackButton: loc.auth.go_back,

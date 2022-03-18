@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/mian_screen.dart';
+import 'package:cafe_mostbyte/screen/moderator_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,8 +13,6 @@ import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import '/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import '/bloc/auth/authentificate.dart/authentification_state.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import '/screen/splash_screen.dart';
 import '/services/api_provider/user/user_repository.dart';
 import './config/app_language.dart';
@@ -57,32 +55,25 @@ void main() async {
   } else {
     darkMode = true;
   }
-  if (!kIsWeb &&
-      [TargetPlatform.windows, TargetPlatform.linux]
-          .contains(defaultTargetPlatform)) {
-    await flutter_acrylic.Window.initialize();
-  }
+
   // Must add this line.
   await windowManager.ensureInitialized();
 
   // Use it only after calling `hiddenWindowAtLaunch`
-  windowManager.waitUntilReadyToShow().then((_) async {
-    windowManager.setFullScreen(true);
-    windowManager.setClosable(true);
-    windowManager.show();
-  });
+
+  if (isDesktop) {
+    windowManager.waitUntilReadyToShow().then((_) async {
+      windowManager.setFullScreen(true);
+      windowManager.setClosable(true);
+      windowManager.show();
+    });
+  }
   final prefs = await SharedPreferences.getInstance();
   await appLanguage.fetchLocale(prefs);
   runApp(RepositoryProvider(
       create: (context) => UserRepository(),
       child:
           MyApp(appLanguage: appLanguage, userRepository: UserRepository())));
-  if (isDesktop) {
-    doWhenWindowReady(() {
-      final win = appWindow;
-      win.show();
-    });
-  }
 }
 
 class MyApp extends StatefulWidget {
@@ -175,6 +166,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return OrderScreen();
+    return (globals.userData!.role.role == "moderator")
+        ? ModeratorScreen()
+        : OrderScreen();
   }
 }

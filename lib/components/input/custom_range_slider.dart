@@ -14,6 +14,7 @@ class CustomRangeSlider extends StatefulWidget {
   final double max;
   final int division;
   final RangeValues range;
+  final isRequired;
   const CustomRangeSlider({
     required this.name,
     required this.hint,
@@ -24,6 +25,7 @@ class CustomRangeSlider extends StatefulWidget {
     required this.max,
     required this.division,
     this.range = const RangeValues(0.0, 0.0),
+    this.isRequired = false,
     Key? key,
   }) : super(key: key);
 
@@ -64,25 +66,26 @@ class _CustomRangeSliderState extends State<CustomRangeSlider> {
       child: Stack(
         children: [
           DefaultInput(
+              isRequired: widget.isRequired,
               child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.hint,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(fontSize: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.hint,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(fontSize: 12),
+                    ),
+                    Text(
+                      "${_min!.toInt()} - ${_max!.toInt()}",
+                      style: Theme.of(context).textTheme.headline4!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
+                    )
+                  ],
                 ),
-                Text(
-                  "${_min!.toInt()} - ${_max!.toInt()}",
-                  style: Theme.of(context).textTheme.headline4!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
-                )
-              ],
-            ),
-          )),
+              )),
           FormBuilderRangeSlider(
             initialValue: RangeValues(_min!, _max!),
             name: widget.name,

@@ -1,5 +1,4 @@
 import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_repository.dart';
-import 'package:cafe_mostbyte/bloc/expense/expense_repository.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../form_submission_status.dart';
@@ -29,6 +28,28 @@ class BotExpenseBloc extends Bloc<BotExpenseEvent, BotExpenseState> {
               type: element.type,
               amount: element.amount);
         });
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
+    } else if (event is AddExpense) {
+      try {
+        globals.currentExpense = await repo.addExpense(data: state.data);
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
+    } else if (event is AddBotOrder) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        await repo.AddBotOrder();
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
+    } else if (event is CancelBotOrder) {
+      yield state.copyWith(formStatus: FormSubmitting());
+      try {
         yield state.copyWith(formStatus: SubmissionSuccess());
       } catch (e) {
         yield state.copyWith(formStatus: SubmissionFailed(e));

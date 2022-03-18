@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 // ignore: must_be_immutable
 class MainButton extends StatefulWidget {
@@ -24,7 +23,6 @@ class MainButton extends StatefulWidget {
 class _MainButtonState extends State<MainButton> {
   @override
   Widget build(BuildContext context) {
-    var dWidth = MediaQuery.of(context).size.width;
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Stack(

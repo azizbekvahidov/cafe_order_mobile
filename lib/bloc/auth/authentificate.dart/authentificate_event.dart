@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import './authentification_state.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
@@ -10,7 +9,6 @@ class AppStarted extends AuthenticationEvent {
   String toString() => 'AppStarted';
 
   @override
-  // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
 
@@ -23,7 +21,6 @@ class LoggedIn extends AuthenticationEvent {
   String toString() => 'LoggedIn { token: $token }';
 
   @override
-  // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
 
@@ -32,6 +29,5 @@ class LoggedOut extends AuthenticationEvent {
   String toString() => 'LoggedOut';
 
   @override
-  // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }

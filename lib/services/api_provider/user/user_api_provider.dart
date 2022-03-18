@@ -10,8 +10,7 @@ import '../../../services/helper.dart' as helper;
 class UserProvider {
   NetworkService net = NetworkService();
   Future<User> getUser() async {
-    final response =
-        await net.get('${globals.apiLink}users/user-data?id=${globals.id}');
+    final response = await net.get('${globals.apiLink}users/${globals.id}');
 
     if (response.statusCode == 200) {
       var result = json.decode(response.body);

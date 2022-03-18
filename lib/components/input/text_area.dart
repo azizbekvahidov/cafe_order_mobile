@@ -14,6 +14,7 @@ class TextArea extends StatefulWidget {
   final onSubmitted;
   final onEditingComplete;
   final bool nextAction;
+  final bool isRequired;
   const TextArea(
       {required this.controller,
       required this.name,
@@ -22,6 +23,7 @@ class TextArea extends StatefulWidget {
       this.onSubmitted,
       this.onEditingComplete,
       required this.nextAction,
+      this.isRequired = false,
       Key? key})
       : super(key: key);
 

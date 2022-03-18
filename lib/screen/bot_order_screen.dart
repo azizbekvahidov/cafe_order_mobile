@@ -10,11 +10,9 @@ import 'package:cafe_mostbyte/bloc/bot_order.dart/bot_order_bloc.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
 import 'package:cafe_mostbyte/components/custom_block/bot_item_modal.dart';
 import 'package:cafe_mostbyte/components/custom_block/modal.dart';
-import 'package:cafe_mostbyte/components/expense_card.dart';
-import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
-import 'package:cafe_mostbyte/models/print_data.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
+import 'package:cafe_mostbyte/screen/moderator_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:cafe_mostbyte/services/print_service.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
@@ -32,6 +30,16 @@ class BotOrderScreen extends StatefulWidget {
 }
 
 class _BotOrderScreenState extends State<BotOrderScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (globals.userData!.role.role == 'moderator') {
+      globals.filial = 0;
+      globals.currentExpense = null;
+      globals.currentExpenseSum = 0;
+    }
+  }
+
   PrintService print = new PrintService();
   @override
   Widget build(BuildContext context) {
@@ -52,7 +60,6 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                 return Auth();
               }), (route) => true);
             }
-            // TODO: implement listener
           },
           child: SizedBox(
             child: Row(
@@ -74,7 +81,9 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                         onTap: () {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (BuildContext ctx) {
-                            return OrderScreen();
+                            return globals.userData!.role.role == 'moderator'
+                                ? ModeratorScreen()
+                                : OrderScreen();
                           }), (route) => false);
                         },
                         child: SvgPicture.asset(
@@ -179,13 +188,19 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                         MaterialPageRoute(builder: (BuildContext ctx) {
                       return OrderScreen();
                     }), (route) => false);
+                  } else {
+                    if (globals.userData!.role.role == 'moderator') {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (BuildContext ctx) {
+                        return ModeratorScreen();
+                      }), (route) => false);
+                    }
                   }
                 }
                 context.read<BotExpenseBloc>().add(BotExpenseInitialized());
               } else if (formStatus is SubmissionFailed) {
                 helper.getToast("Что то пошло не так", context);
               }
-              // TODO: implement listener
             },
             child: StreamBuilder(
               stream: botOrderBloc.botOrderApproveList,
@@ -208,26 +223,29 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                               for (DeliveryBot _expense in expenses)
                                 InkWell(
                                   onTap: () async {
-                                    if (await confirm(context,
-                                        content: Text("Добавить заказ?"),
-                                        textCancel: Text("Нет"),
-                                        textOK: Text("Да"),
-                                        title: Text("Сохранить аванс"))) {
-                                      // PrintData printData = new PrintData();
+                                    if (globals.userData!.role.role ==
+                                        'moderator') {
                                       context
                                           .read<BotExpenseBloc>()
                                           .add(AddData(data: _expense));
                                       context
                                           .read<BotExpenseBloc>()
-                                          .add(AddToExpense());
+                                          .add(AddExpense());
+                                    } else {
+                                      if (await confirm(context,
+                                          content: Text("Добавить заказ?"),
+                                          textCancel: Text("Нет"),
+                                          textOK: Text("Да"),
+                                          title: Text(""))) {
+                                        // PrintData printData = new PrintData();
+                                        context
+                                            .read<BotExpenseBloc>()
+                                            .add(AddData(data: _expense));
+                                        context
+                                            .read<BotExpenseBloc>()
+                                            .add(AddToExpense());
+                                      }
                                     }
-                                    // var modal = Modal(
-                                    //     heightIndex: 0.4,
-                                    //     ctx: context,
-                                    //     child: BotItemModal(
-                                    //       data: _expense,
-                                    //     ));
-                                    // await modal.customDialog()(context);
                                   },
                                   child: Container(
                                       margin: const EdgeInsets.symmetric(

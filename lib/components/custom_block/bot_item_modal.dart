@@ -1,20 +1,16 @@
-import 'package:cafe_mostbyte/components/button/main_button.dart';
 import 'package:cafe_mostbyte/components/button/secondary_button.dart';
 import 'package:cafe_mostbyte/components/input/default_input.dart';
 import 'package:cafe_mostbyte/components/input/number_input.dart';
 import 'package:cafe_mostbyte/components/input/phone_input.dart';
-import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:cafe_mostbyte/components/input/text_input.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import '../../config/globals.dart' as globals;
-import '../../services/helper.dart' as helper;
 
+// ignore: must_be_immutable
 class BotItemModal extends StatefulWidget {
   DeliveryBot data;
   BotItemModal({required this.data, Key? key}) : super(key: key);
@@ -34,10 +30,10 @@ class _BotItemModalState extends State<BotItemModal> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    //
     super.initState();
     inputController.text = "";
-    address = widget.data.address;
+    address = widget.data.address ?? "";
     comment = widget.data.name;
     phoneController!.text = widget.data.phone.substring(4);
   }

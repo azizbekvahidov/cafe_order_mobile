@@ -1,14 +1,14 @@
-class Category {
+class Filial {
   int id;
   String name;
 
-  Category({
+  Filial({
     required this.id,
     required this.name,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
+  factory Filial.fromJson(Map<String, dynamic> json) {
+    return Filial(
       id: json["id"],
       name: json["name_uz"],
     );
