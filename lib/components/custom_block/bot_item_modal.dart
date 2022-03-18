@@ -33,7 +33,7 @@ class _BotItemModalState extends State<BotItemModal> {
     //
     super.initState();
     inputController.text = "";
-    address = widget.data.address;
+    address = widget.data.address ?? "";
     comment = widget.data.name;
     phoneController!.text = widget.data.phone.substring(4);
   }

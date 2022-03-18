@@ -89,12 +89,14 @@ class _DeliveryModalState extends State<DeliveryModal> {
                     child: DefaultInput(
                       child: FormBuilderDateTimePicker(
                         name: "time",
-                        initialValue:
-                            (globals.currentExpense!.delivery!.delivery_time !=
+                        initialValue: (globals.currentExpense!.delivery != null)
+                            ? (globals.currentExpense!.delivery!
+                                        .delivery_time !=
                                     null)
                                 ? DateTime.parse(globals
                                     .currentExpense!.delivery!.delivery_time!)
-                                : null,
+                                : null
+                            : null,
                         textInputAction: TextInputAction.next,
                         format: DateFormat('HH:mm'),
                         inputType: InputType.time,

@@ -10,7 +10,7 @@ class Filial {
   factory Filial.fromJson(Map<String, dynamic> json) {
     return Filial(
       id: json["id"],
-      name: json["name"],
+      name: json["name_uz"],
     );
   }
 }

@@ -7,7 +7,7 @@ class DeliveryBot {
   String phone;
   String? time;
   String? price;
-  String address;
+  String? address;
   String order_type;
   Filial filial;
   List<DeliveryBotItem> listItem;

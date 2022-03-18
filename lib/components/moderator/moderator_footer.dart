@@ -54,7 +54,7 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
       if (globals.currentExpense!.delivery != null) {
         isSelectOrderType = true;
         delivery = globals.currentExpense!.delivery!;
-        address = globals.currentExpense!.delivery!.address!;
+        address = globals.currentExpense!.delivery!.address ?? "";
         comment = globals.currentExpense!.delivery!.comment != null
             ? globals.currentExpense!.delivery!.comment!
             : "";

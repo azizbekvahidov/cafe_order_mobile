@@ -236,7 +236,7 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                           content: Text("Добавить заказ?"),
                                           textCancel: Text("Нет"),
                                           textOK: Text("Да"),
-                                          title: Text("Сохранить аванс"))) {
+                                          title: Text(""))) {
                                         // PrintData printData = new PrintData();
                                         context
                                             .read<BotExpenseBloc>()

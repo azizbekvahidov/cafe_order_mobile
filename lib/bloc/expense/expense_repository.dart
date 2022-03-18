@@ -143,6 +143,7 @@ class ExpenseRepository {
             "delivery": globals.currentExpense!.delivery!.toJson()
           };
 
+          print(json.encode(data));
           final response =
               await net.post('${globals.apiLink}delivery', body: data);
           if (response.statusCode == 200) {
