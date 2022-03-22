@@ -19,6 +19,7 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../config/globals.dart' as globals;
 import '../services/helper.dart' as helper;
 
@@ -86,9 +87,9 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                 : OrderScreen();
                           }), (route) => false);
                         },
-                        child: SvgPicture.asset(
-                          "assets/img/take-away.svg",
-                          height: 40,
+                        child: Icon(
+                          MaterialIcons.food_bank,
+                          size: 40,
                         ),
                       ),
                     ],
@@ -116,10 +117,11 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                   Padding(
                                     padding: EdgeInsets.only(left: 5),
                                   ),
-                                  SvgPicture.asset(
-                                    "assets/img/lock.svg",
-                                    color: globals.mainColor,
-                                  )
+                                  Icon(MaterialCommunityIcons.lock_outline,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer,
+                                      size: 35)
                                 ],
                               ),
                             );
@@ -268,9 +270,18 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                           Container(
                                             padding: const EdgeInsets.only(
                                                 right: 10),
-                                            child: SvgPicture.asset(
-                                              "assets/img/${(_expense.order_type == "book_table") ? "cafe-hall" : ((_expense.order_type == 'take') ? "take-away" : "delivery")}.svg",
-                                              width: 20,
+                                            child: Icon(
+                                              (_expense.order_type == "booking")
+                                                  ? Fontisto.shopping_store
+                                                  : ((_expense.order_type ==
+                                                          'take')
+                                                      ? MaterialIcons.food_bank
+                                                      : MaterialCommunityIcons
+                                                          .truck_delivery),
+                                              size: 20,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondaryContainer,
                                             ),
                                           ),
                                           Container(

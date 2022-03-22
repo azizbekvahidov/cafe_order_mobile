@@ -107,6 +107,8 @@ ThemeData basicTheme() {
     colorScheme: ColorScheme.fromSwatch().copyWith(
       primaryVariant: Color(0xff4829b2),
       secondaryVariant: Color(0xff00264D),
+      primaryContainer: Color(0xff4829b2),
+      secondaryContainer: Color(0xff00264D),
       onBackground: Colors.black,
       //info
       surface: Color(0xff0B4789),

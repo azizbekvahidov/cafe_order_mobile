@@ -2,17 +2,17 @@ import 'package:cafe_mostbyte/bloc/app_status.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentificate_event.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_state.dart';
-import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/bot_order_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-import '../screen/mian_screen.dart';
 // import './network_status.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
 
+// ignore: must_be_immutable
 class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
   final bool? centerTitle;
@@ -53,7 +53,6 @@ class _CustomAppbarState extends State<CustomAppbar> {
             globals.currentExpenseSum = 0;
             globals.currentExpense = null;
           }
-          // TODO: implement listener
         },
         child: SizedBox(
           child: Row(
@@ -62,10 +61,15 @@ class _CustomAppbarState extends State<CustomAppbar> {
               InkWell(
                 onTap: () => widget.searchFunc!(),
                 child: Container(
-                  child: SvgPicture.asset(
-                    "assets/img/loupe.svg",
-                    color: globals.mainColor,
+                  child: new Icon(
+                    MaterialCommunityIcons.text_box_search_outline,
+                    // FontAwesomeIcons.search,
+                    size: 35,
                   ),
+                  // SvgPicture.asset(
+                  //   "assets/img/loupe.svg",
+                  //   color: globals.mainColor,
+                  // ),
                 ),
               ),
               Container(
@@ -97,10 +101,11 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         //   //     .add(ExpenseTakeaway());
                         // }
                       },
-                      child: SvgPicture.asset(
-                        "assets/img/chatbot.svg",
-                        height: 40,
-                      ),
+                      child: Icon(MaterialCommunityIcons.robot, size: 35),
+                      //     SvgPicture.asset(
+                      //   "assets/img/chatbot.svg",
+                      //   height: 40,
+                      // ),
                     ),
                     Positioned(
                         bottom: 0,
@@ -137,9 +142,9 @@ class _CustomAppbarState extends State<CustomAppbar> {
                                 Padding(
                                   padding: EdgeInsets.only(left: 5),
                                 ),
-                                SvgPicture.asset(
-                                  "assets/img/lock.svg",
-                                  color: globals.mainColor,
+                                Icon(
+                                  MaterialCommunityIcons.lock_outline,
+                                  size: 35,
                                 )
                               ],
                             ),

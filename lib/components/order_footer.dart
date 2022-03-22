@@ -21,6 +21,7 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../config/globals.dart' as globals;
 import '../services/helper.dart' as helper;
 
@@ -115,7 +116,13 @@ class _OrderFooterState extends State<OrderFooter> {
                                           fontSize: 16),
                                     ),
                                     Padding(padding: EdgeInsets.only(left: 10)),
-                                    SvgPicture.asset("assets/img/receipt.svg")
+                                    Icon(
+                                      MaterialCommunityIcons.printer_check,
+                                      size: 30,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer,
+                                    ) //SvgPicture.asset("assets/img/receipt.svg")
                                   ],
                                 ),
                               ),
@@ -155,8 +162,9 @@ class _OrderFooterState extends State<OrderFooter> {
                                                       "Выберите счет", context);
                                                 }
                                               },
-                                              child: SvgPicture.asset(
-                                                "assets/img/take-away.svg",
+                                              child: Icon(
+                                                MaterialIcons.food_bank,
+                                                // "assets/img/take-away.svg",
                                                 color: (data.delivery != null)
                                                     ? Colors.black
                                                     : ((data.phone == null)
@@ -164,9 +172,16 @@ class _OrderFooterState extends State<OrderFooter> {
                                                         : Theme.of(context)
                                                             .colorScheme
                                                             .primary),
-                                                height: 30,
+                                                size: 30,
                                               ),
                                             ),
+                                          ),
+                                          VerticalDivider(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondaryContainer,
+                                            thickness: 2,
+                                            width: 2,
                                           ),
                                           InkWell(
                                             onTap: () async {
@@ -187,14 +202,15 @@ class _OrderFooterState extends State<OrderFooter> {
                                                     "Выберите счет", context);
                                               }
                                             },
-                                            child: SvgPicture.asset(
-                                              "assets/img/delivery.svg",
+                                            child: Icon(
+                                              MaterialCommunityIcons
+                                                  .truck_delivery,
                                               color: (data.delivery == null)
                                                   ? Colors.black
                                                   : Theme.of(context)
                                                       .colorScheme
                                                       .primary,
-                                              height: 30,
+                                              size: 30,
                                             ),
                                           ),
                                         ],
@@ -253,14 +269,14 @@ class _OrderFooterState extends State<OrderFooter> {
                                                     "Выберите счет", context);
                                               }
                                             },
-                                            child: SvgPicture.asset(
-                                              "assets/img/discount.svg",
+                                            child: Icon(
+                                              MaterialCommunityIcons.sale,
                                               color: (data.discount == 0)
                                                   ? Colors.black
                                                   : Theme.of(context)
                                                       .colorScheme
                                                       .primary,
-                                              height: 30,
+                                              size: 30,
                                             ),
                                           ),
                                         ],
@@ -358,7 +374,14 @@ class _OrderFooterState extends State<OrderFooter> {
                             ),
                             child: Row(
                               children: [
-                                SvgPicture.asset("assets/img/print.svg")
+                                Icon(
+                                  MaterialCommunityIcons.printer_pos,
+                                  size: 30,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
+                                )
+                                //SvgPicture.asset("assets/img/print.svg")
                               ],
                             ),
                           ),

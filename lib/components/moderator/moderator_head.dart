@@ -7,6 +7,7 @@ import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../../config/globals.dart' as globals;
 
 _ModeratorHeadState moderatorHeaderState = _ModeratorHeadState();
@@ -72,7 +73,7 @@ class _ModeratorHeadState extends State<ModeratorHead> {
                               borderRadius: BorderRadius.circular(5)),
                           child: Center(
                               child: Icon(
-                            Icons.add,
+                            MaterialCommunityIcons.plus,
                             color: Theme.of(context).primaryColor,
                           )),
                         ),

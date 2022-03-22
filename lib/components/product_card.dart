@@ -6,6 +6,7 @@ import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../config/globals.dart' as globals;
 import '../services/helper.dart' as helper;
 
@@ -109,9 +110,9 @@ class ProductCard extends StatelessWidget {
                           : BoxFit.contain,
                       child: data.product.image != null
                           ? Image.network(data.product.image!)
-                          : SvgPicture.asset(
-                              "assets/img/no-photo.svg",
-                              height: 40,
+                          : Icon(
+                              MaterialCommunityIcons.image_off_outline,
+                              size: 40,
                               color: globals.thirdColor,
                             )),
                 ),
