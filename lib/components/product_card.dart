@@ -19,7 +19,7 @@ class ProductCard extends StatelessWidget {
     var dHeight = MediaQuery.of(context).size.height;
     var dWidth = MediaQuery.of(context).size.width;
     return Container(
-      margin: const EdgeInsets.only(left: 10, bottom: 10),
+      margin: const EdgeInsets.only(right: 10, bottom: 10),
       child: InkWell(
         onTap: () {
           if (globals.currentExpense != null) {
@@ -76,90 +76,89 @@ class ProductCard extends StatelessWidget {
             helper.getToast("Выберите или создайте счет", context);
           }
         },
-        child: Container(
-          width: dWidth * 0.13,
-          decoration: BoxDecoration(
-              border:
-                  Border(bottom: BorderSide(width: 1, color: globals.mainColor))
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            width: dWidth * 0.13,
+            decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(width: 1, color: globals.mainColor)),
               // border: Border.all(width: 1, color: Colors.black),
-              ),
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: globals.fourthColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      ),
-                      border: Border.all(
+            ),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
                         color: globals.fourthColor,
-                        width: 1,
-                      )),
-                  height: 100,
-                  width: dWidth * 0.185,
-                  // color: Colors.grey,
-                  child: FittedBox(
-                      alignment: Alignment(10, 0),
-                      fit: data.product.image != null
-                          ? BoxFit.cover
-                          : BoxFit.contain,
-                      child: data.product.image != null
-                          ? Image.network(data.product.image!)
-                          : Icon(
-                              MaterialCommunityIcons.image_off_outline,
-                              size: 40,
-                              color: globals.thirdColor,
-                            )),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                        ),
+                        border: Border.all(
+                          color: globals.fourthColor,
+                          width: 1,
+                        )),
+                    height: dHeight * 0.2,
+                    width: dWidth * 0.185,
+                    // color: Colors.grey,
+                    child: FittedBox(
+                        alignment: Alignment(10, 0),
+                        fit: data.product.image != null
+                            ? BoxFit.fitWidth
+                            : BoxFit.contain,
+                        child: data.product.image != null
+                            ? Image.network(data.product.image!)
+                            : Icon(
+                                MaterialCommunityIcons.image_off_outline,
+                                size: 40,
+                                color: globals.thirdColor,
+                              )),
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 9,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      height: dWidth / 2 / 1.6 - (dWidth / 2 / 1.6 - 40),
-                      width: dWidth / 2 - 20,
-                      child: AutoSizeText(
-                        data.product.name,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: globals.font,
-                          fontSize: 7,
-                          fontWeight: FontWeight.w500,
+                Container(
+                  alignment: Alignment.centerLeft,
+                  height: dWidth / 2 / 1.6 - (dWidth / 2 / 1.6 - 40),
+                  width: dWidth / 2 - 20,
+                  child: AutoSizeText(
+                    data.product.name,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontFamily: globals.font,
+                      fontSize: 7,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: globals.mainColor,
+                      ),
+                      child: Center(
+                        child: AutoSizeText(
+                          "${data.product.price}",
+                          style: TextStyle(
+                            fontFamily: globals.font,
+                            color: globals.fourthColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                      flex: 4,
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: globals.mainColor,
-                        ),
-                        child: Center(
-                          child: AutoSizeText(
-                            "${data.product.price}",
-                            style: TextStyle(
-                              fontFamily: globals.font,
-                              color: globals.fourthColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      )),
-                ],
-              ),
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

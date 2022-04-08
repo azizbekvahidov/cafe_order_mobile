@@ -61,12 +61,12 @@ class _TabsState extends State<Tabs> {
                   List expenses = snapshot.data as List;
 
                   return Container(
-                    width: dWidth * 0.97,
+                    width: dWidth * 0.96,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          width: dWidth * 0.93,
+                          width: dWidth * 0.92,
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             controller: tabScroll,
