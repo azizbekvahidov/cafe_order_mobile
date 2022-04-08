@@ -113,7 +113,7 @@ class _TabsState extends State<Tabs> {
                                         height: 30,
                                         child: Center(
                                           child: Text(
-                                            "${_expense["id"]}",
+                                            "${_expense["num"]}",
                                             style: TextStyle(
                                               color: globals.currentExpenseId ==
                                                       _expense["id"]

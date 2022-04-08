@@ -105,6 +105,7 @@ class ProductCard extends StatelessWidget {
                   width: dWidth * 0.185,
                   // color: Colors.grey,
                   child: FittedBox(
+                      alignment: Alignment(10, 0),
                       fit: data.product.image != null
                           ? BoxFit.cover
                           : BoxFit.contain,
