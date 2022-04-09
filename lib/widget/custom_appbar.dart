@@ -1,18 +1,21 @@
+import 'dart:async';
+
 import 'package:cafe_mostbyte/bloc/app_status.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentificate_event.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_state.dart';
-import 'package:cafe_mostbyte/components/custom_block/modal.dart';
+import 'package:cafe_mostbyte/bloc/bot_order.dart/bot_order_bloc.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/bot_order_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
-import '../screen/mian_screen.dart';
 // import './network_status.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:flutter_svg/svg.dart';
 
+// ignore: must_be_immutable
 class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
   final bool? centerTitle;
@@ -36,8 +39,20 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppbarState extends State<CustomAppbar> {
+  Timer? _timer;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      // do something or call a function
+      botOrderBloc.fetchApproveOrders(id: globals.filial);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    botOrderBloc.fetchApproveOrders(id: globals.filial);
     return AppBar(
       elevation: 1,
       iconTheme: IconThemeData(color: globals.mainColor),
@@ -53,7 +68,6 @@ class _CustomAppbarState extends State<CustomAppbar> {
             globals.currentExpenseSum = 0;
             globals.currentExpense = null;
           }
-          // TODO: implement listener
         },
         child: SizedBox(
           child: Row(
@@ -62,10 +76,15 @@ class _CustomAppbarState extends State<CustomAppbar> {
               InkWell(
                 onTap: () => widget.searchFunc!(),
                 child: Container(
-                  child: SvgPicture.asset(
-                    "assets/img/loupe.svg",
-                    color: globals.mainColor,
+                  child: new Icon(
+                    MaterialCommunityIcons.text_box_search_outline,
+                    // FontAwesomeIcons.search,
+                    size: 35,
                   ),
+                  // SvgPicture.asset(
+                  //   "assets/img/loupe.svg",
+                  //   color: globals.mainColor,
+                  // ),
                 ),
               ),
               Container(
@@ -86,33 +105,39 @@ class _CustomAppbarState extends State<CustomAppbar> {
                             MaterialPageRoute(builder: (BuildContext ctx) {
                           return BotOrderScreen();
                         }));
-                        // var modal = Modal(
-                        //     ctx: context,
-                        //     child: DeliveryBotModal(),
-                        //     heightIndex: 0.8);
-                        // await modal.customDialog();
-                        // if (modal.res) {
-                        //   // context
-                        //   //     .read<ExpenseBloc>()
-                        //   //     .add(ExpenseTakeaway());
-                        // }
                       },
-                      child: SvgPicture.asset(
-                        "assets/img/chatbot.svg",
-                        height: 40,
-                      ),
+                      child: Icon(MaterialCommunityIcons.robot, size: 35),
+                      //     SvgPicture.asset(
+                      //   "assets/img/chatbot.svg",
+                      //   height: 40,
+                      // ),
                     ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ))
+                    StreamBuilder(
+                      stream: botOrderBloc.botOrderApproveList,
+                      builder:
+                          (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                        if (snapshot.hasData) {
+                          List botOrder = snapshot.data as List;
+
+                          return (botOrder.length != 0)
+                              ? Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ))
+                              : Container();
+                        } else if (snapshot.hasError) {
+                          return Text(snapshot.error.toString());
+                        }
+                        return Container();
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -137,9 +162,9 @@ class _CustomAppbarState extends State<CustomAppbar> {
                                 Padding(
                                   padding: EdgeInsets.only(left: 5),
                                 ),
-                                SvgPicture.asset(
-                                  "assets/img/lock.svg",
-                                  color: globals.mainColor,
+                                Icon(
+                                  MaterialCommunityIcons.lock_outline,
+                                  size: 35,
                                 )
                               ],
                             ),

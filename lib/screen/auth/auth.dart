@@ -7,6 +7,7 @@ import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../../config/globals.dart' as globals;
 
 class Auth extends StatefulWidget {
@@ -65,9 +66,10 @@ class _AuthState extends State<Auth> {
           child: Container(
               color: Colors.red,
               padding: const EdgeInsets.all(8),
-              child: SvgPicture.asset(
-                "assets/img/power.svg",
+              child: Icon(
+                SimpleLineIcons.power,
                 color: Theme.of(context).primaryColor,
+                size: 30,
               )),
         ),
       ),

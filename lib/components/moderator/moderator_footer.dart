@@ -376,8 +376,8 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                       ]),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 7),
                                   child: BlocBuilder<BotExpenseBloc,
                                       BotExpenseState>(
                                     builder: (context, state) {
@@ -425,8 +425,8 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 7),
                                   child: BlocBuilder<BotExpenseBloc,
                                       BotExpenseState>(
                                     builder: (context, state) {
