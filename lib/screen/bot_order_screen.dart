@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cafe_mostbyte/bloc/app_status.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentificate_event.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_bloc.dart';
@@ -31,6 +33,7 @@ class BotOrderScreen extends StatefulWidget {
 }
 
 class _BotOrderScreenState extends State<BotOrderScreen> {
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
@@ -39,6 +42,10 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
       globals.currentExpense = null;
       globals.currentExpenseSum = 0;
     }
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      // do something or call a function
+      botOrderBloc.fetchApproveOrders(id: globals.filial);
+    });
   }
 
   PrintService print = new PrintService();
@@ -251,7 +258,7 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                   },
                                   child: Container(
                                       margin: const EdgeInsets.symmetric(
-                                          horizontal: 2),
+                                          horizontal: 2, vertical: 2),
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 10),
                                       decoration: BoxDecoration(
@@ -260,7 +267,7 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                             color: Colors.black, width: 1),
                                         color: Theme.of(context).primaryColor,
                                       ),
-                                      width: dWidth * 0.19,
+                                      width: dWidth * 0.21,
                                       height: 100,
                                       child: Center(
                                           child: Row(
@@ -298,14 +305,16 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "Телефон: ${_expense.name}",
+                                                  "Телефон: ${_expense.phone}",
                                                   style: TextStyle(
                                                     color: Theme.of(context)
                                                         .indicatorColor,
                                                   ),
                                                 ),
                                                 Text(
-                                                  "Адрес: ${_expense.address}",
+                                                  _expense.address != null
+                                                      ? "Адрес: ${_expense.address}"
+                                                      : "",
                                                   style: TextStyle(
                                                     color: Theme.of(context)
                                                         .indicatorColor,

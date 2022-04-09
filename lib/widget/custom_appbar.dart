@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:cafe_mostbyte/bloc/app_status.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentificate_event.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_state.dart';
+import 'package:cafe_mostbyte/bloc/bot_order.dart/bot_order_bloc.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/bot_order_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,8 +39,20 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppbarState extends State<CustomAppbar> {
+  Timer? _timer;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      // do something or call a function
+      botOrderBloc.fetchApproveOrders(id: globals.filial);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    botOrderBloc.fetchApproveOrders(id: globals.filial);
     return AppBar(
       elevation: 1,
       iconTheme: IconThemeData(color: globals.mainColor),
@@ -90,16 +105,6 @@ class _CustomAppbarState extends State<CustomAppbar> {
                             MaterialPageRoute(builder: (BuildContext ctx) {
                           return BotOrderScreen();
                         }));
-                        // var modal = Modal(
-                        //     ctx: context,
-                        //     child: DeliveryBotModal(),
-                        //     heightIndex: 0.8);
-                        // await modal.customDialog();
-                        // if (modal.res) {
-                        //   // context
-                        //   //     .read<ExpenseBloc>()
-                        //   //     .add(ExpenseTakeaway());
-                        // }
                       },
                       child: Icon(MaterialCommunityIcons.robot, size: 35),
                       //     SvgPicture.asset(
@@ -107,17 +112,32 @@ class _CustomAppbarState extends State<CustomAppbar> {
                       //   height: 40,
                       // ),
                     ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ))
+                    StreamBuilder(
+                      stream: botOrderBloc.botOrderApproveList,
+                      builder:
+                          (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                        if (snapshot.hasData) {
+                          List botOrder = snapshot.data as List;
+
+                          return (botOrder.length != 0)
+                              ? Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: 10,
+                                    width: 10,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ))
+                              : Container();
+                        } else if (snapshot.hasError) {
+                          return Text(snapshot.error.toString());
+                        }
+                        return Container();
+                      },
+                    ),
                   ],
                 ),
               ),

@@ -45,7 +45,7 @@ class _PhoneInputState extends State<PhoneInput> {
       isRequired: widget.isRequired,
       child: Row(children: [
         Expanded(
-          flex: 2,
+          flex: 3,
           child: Text(
             "+998 ",
             style: Theme.of(context).textTheme.headline4,
