@@ -14,6 +14,7 @@ class DeliveryBotItem {
   });
 
   factory DeliveryBotItem.fromJson(Map<String, dynamic> json) {
+    print("delivery bot item");
     return DeliveryBotItem(
       product_id: json["product_id"],
       amount: double.parse(json["amount"].toString()),

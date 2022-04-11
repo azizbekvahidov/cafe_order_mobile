@@ -178,7 +178,7 @@ generateCheck(
         expense_id: globals.currentExpense!.id,
         employee: globals.currentExpense!.employee.name,
         table: globals.currentExpense!.order_type == "book_table"
-            ? "Зал ${globals.currentExpense!.table!.name}"
+            ? "Зал ${globals.currentExpense!.table ?? ""}"
             : (globals.currentExpense!.order_type == "delivery"
                 ? "Доставка"
                 : "С собой"),

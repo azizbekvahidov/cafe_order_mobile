@@ -366,6 +366,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
+  flutter_vector_icons:
+    dependency: "direct main"
+    description:
+      name: flutter_vector_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter

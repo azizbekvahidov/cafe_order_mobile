@@ -14,6 +14,7 @@ class Department {
   });
 
   factory Department.fromJson(Map<String, dynamic> json) {
+    print("department");
     return Department(
       department_id: json["department_id"],
       printer: json["printer"],

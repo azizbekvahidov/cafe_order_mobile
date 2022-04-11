@@ -9,7 +9,11 @@ class ExpenseRepository {
   DataApiProvider dataApiProvider = DataApiProvider();
   Future<String?> createExpense() async {
     try {
-      var data = {"user_id": globals.userData!.id, "filial_id": globals.filial};
+      var data = {
+        "user_id": globals.userData!.id,
+        "filial_id": globals.filial,
+        "order_type": "book_table"
+      };
       final response =
           await net.post('${globals.apiLink}expense/create', body: data);
       if (response.statusCode == 200) {
@@ -29,6 +33,7 @@ class ExpenseRepository {
   Future<String?> updateExpense() async {
     try {
       var data = globals.currentExpense!.toJson();
+      print(json.encode(data));
       final response =
           await net.post('${globals.apiLink}expense/update', body: data);
       if (response.statusCode == 200) {

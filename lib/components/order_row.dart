@@ -38,6 +38,7 @@ class _OrderRowState extends State<OrderRow> {
 
   @override
   Widget build(BuildContext context) {
+    var dWidth = MediaQuery.of(context).size.width;
     return Container(
       child: Column(
         children: [
@@ -85,13 +86,18 @@ class _OrderRowState extends State<OrderRow> {
                             heightIndex: 0.15);
                         modal.customDialog();
                       },
-                      child: AutoSizeText(
-                        "${widget.orderRow!.product!.name}",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: globals.font,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 10,
+                      child: SizedBox(
+                        width: dWidth * 0.11,
+                        child: AutoSizeText(
+                          "${widget.orderRow!.product!.name}",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontFamily: globals.font,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 10,
+                          ),
                         ),
                       ),
                     ),

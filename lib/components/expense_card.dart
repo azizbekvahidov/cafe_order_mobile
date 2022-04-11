@@ -120,7 +120,11 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         } else if (snapshot.hasError) {
                           return Text(snapshot.error.toString());
                         }
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                            child: Text(
+                          "Счет не выбран!!!",
+                          style: Theme.of(context).textTheme.headline1,
+                        ));
                       },
                     ),
                   )
