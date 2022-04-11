@@ -73,20 +73,20 @@ class _CustomAppbarState extends State<CustomAppbar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              InkWell(
-                onTap: () => widget.searchFunc!(),
-                child: Container(
-                  child: new Icon(
-                    MaterialCommunityIcons.text_box_search_outline,
-                    // FontAwesomeIcons.search,
-                    size: 35,
-                  ),
-                  // SvgPicture.asset(
-                  //   "assets/img/loupe.svg",
-                  //   color: globals.mainColor,
-                  // ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () => widget.searchFunc!(),
+              //   child: Container(
+              //     child: new Icon(
+              //       MaterialCommunityIcons.text_box_search_outline,
+              //       // FontAwesomeIcons.search,
+              //       size: 35,
+              //     ),
+              //     // SvgPicture.asset(
+              //     //   "assets/img/loupe.svg",
+              //     //   color: globals.mainColor,
+              //     // ),
+              //   ),
+              // ),
               Container(
                 child: Text(
                   widget.title!,

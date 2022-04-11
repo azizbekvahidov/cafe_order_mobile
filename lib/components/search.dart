@@ -1,3 +1,6 @@
+import 'package:cafe_mostbyte/bloc/search/search_bloc.dart';
+import 'package:cafe_mostbyte/components/product_card.dart';
+import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../config/globals.dart' as globals;
@@ -64,31 +67,38 @@ class _SearchState extends State<Search> {
                 ),
 
                 suggestionsCallback: (pattern) async {
-                  if (pattern.length >= 3) {
-                    return await searchProducts(pattern);
-                  } else
-                    return {};
+                  // if (pattern.length >= 3) {
+                  searchBloc.fetchProducts(query: pattern);
+                  return [];
+                  // } else
+                  //   return {};
                 },
 
                 hideOnEmpty: true,
                 // suggestionsBoxController:
                 //     suggestionsBoxController,
                 itemBuilder: (context, suggestion) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  print(suggestion);
+                  return StreamBuilder(
+                    stream: searchBloc.productList,
+                    builder: (context, AsyncSnapshot<List<MenuItem>> snapshot) {
+                      if (snapshot.hasData) {
+                        List _products = snapshot.data as List;
+                        return Wrap(
                           children: [
-                            // Text("${suggestion!['name']}"),
-                            // Text("${suggestion['price']}"),
+                            for (MenuItem _product in _products)
+                              ProductCard(data: _product)
                           ],
-                        ),
-                      ),
-                      Divider(
-                        height: 0,
-                      ),
-                    ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text(snapshot.error.toString());
+                      }
+                      return Center(
+                          child: Text(
+                        "Введите запрос",
+                        style: Theme.of(context).textTheme.headline1,
+                      ));
+                    },
                   );
                 },
                 suggestionsBoxDecoration:

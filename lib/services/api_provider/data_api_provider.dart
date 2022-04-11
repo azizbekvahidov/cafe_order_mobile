@@ -161,4 +161,20 @@ class DataApiProvider {
       throw Exception(e.toString());
     }
   }
+
+  Future<List<MenuItem>> searchProducts({query}) async {
+    try {
+      final response = await net.get('${globals.apiLink}menu/search/$query');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return List<MenuItem>.from(res["data"].map((x) {
+          return MenuItem.fromJson(x);
+        }));
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }
