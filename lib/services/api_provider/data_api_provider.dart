@@ -20,7 +20,7 @@ class DataApiProvider {
 
   Future<void> getSettings() async {
     try {
-      await getFileSettings();
+      // await getFileSettings();
       final response = await net.get('${globals.apiLink}get-settings');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
@@ -38,7 +38,7 @@ class DataApiProvider {
     String text;
     try {
       final Directory directory = await getApplicationDocumentsDirectory();
-      final File file = File('${directory.path}/settings.json');
+      final File file = File('${directory.path}/cafe-settings.json');
       Map settings = json.decode(await file.readAsString());
       globals.filial = settings["filial_id"];
       globals.isKassa = settings["isKassa"];
@@ -47,12 +47,16 @@ class DataApiProvider {
         "filial_id": 0,
         "isKassa": false,
       };
-      final Directory directory = await getApplicationDocumentsDirectory();
-      final File file = File('${directory.path}/settings.json');
-      await file.writeAsString(json.encode(settings));
-      globals.filial = settings["filial_id"];
-      globals.isKassa = settings["isKassa"];
+      await setFileSettings(settings);
     }
+  }
+
+  Future<void> setFileSettings(Map settings) async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final File file = File('${directory.path}/cafe-settings.json');
+    await file.writeAsString(json.encode(settings));
+    globals.filial = settings["filial_id"];
+    globals.isKassa = settings["isKassa"];
   }
 
   Future<void> getDepartment() async {
