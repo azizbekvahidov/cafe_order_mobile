@@ -7,8 +7,8 @@ import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_sta
 import 'package:cafe_mostbyte/bloc/bot_order.dart/bot_order_bloc.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/bot_order_screen.dart';
-import 'package:cafe_mostbyte/widget/restart_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 // import './network_status.dart';
@@ -152,7 +152,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                         size: 40,
                       ),
                       onTap: () {
-                        RestartWidget.restartApp(context);
+                        Phoenix.rebirth(context);
                       },
                     ),
                   ),

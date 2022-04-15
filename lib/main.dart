@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
-import 'package:cafe_mostbyte/screen/mian_screen.dart';
 import 'package:cafe_mostbyte/screen/moderator_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
-import 'package:cafe_mostbyte/widget/restart_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:system_theme/system_theme.dart';
@@ -71,10 +70,15 @@ void main() async {
   }
   final prefs = await SharedPreferences.getInstance();
   await appLanguage.fetchLocale(prefs);
-  runApp(RepositoryProvider(
+  runApp(
+    RepositoryProvider(
       create: (context) => UserRepository(),
-      child:
-          MyApp(appLanguage: appLanguage, userRepository: UserRepository())));
+      child: MyApp(
+        appLanguage: appLanguage,
+        userRepository: UserRepository(),
+      ),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -105,7 +109,8 @@ class _MyAppState extends State<MyApp> {
     return ChangeNotifierProvider<AppLanguage>(
       create: (_) => widget.appLanguage,
       child: Consumer<AppLanguage>(builder: (context, model, child) {
-        return BlocProvider<AuthenticationBloc>(
+        return Phoenix(
+            child: BlocProvider<AuthenticationBloc>(
           create: (context) => AuthenticationBloc(
             userRepository: context.read<UserRepository>(),
           ),
@@ -147,12 +152,11 @@ class _MyAppState extends State<MyApp> {
               );
             }
             return AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: RestartWidget(
-                  child: _page,
-                ));
+              duration: Duration(milliseconds: 300),
+              child: _page,
+            );
           }),
-        );
+        ));
       }),
     );
   }
