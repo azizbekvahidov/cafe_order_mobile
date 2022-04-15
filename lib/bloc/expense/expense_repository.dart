@@ -33,7 +33,6 @@ class ExpenseRepository {
   Future<String?> updateExpense() async {
     try {
       var data = globals.currentExpense!.toJson();
-      print(json.encode(data));
       final response =
           await net.post('${globals.apiLink}expense/update', body: data);
       if (response.statusCode == 200) {
@@ -119,7 +118,6 @@ class ExpenseRepository {
     try {
       if (globals.currentExpense != null) {
         var data = globals.currentExpense!.toJson();
-        print(json.encode(data));
         final response =
             await net.post('${globals.apiLink}expense/avansClose', body: data);
         if (response.statusCode == 200) {
@@ -148,7 +146,6 @@ class ExpenseRepository {
             "delivery": globals.currentExpense!.delivery!.toJson()
           };
 
-          print(json.encode(data));
           final response =
               await net.post('${globals.apiLink}delivery', body: data);
           if (response.statusCode == 200) {

@@ -78,7 +78,6 @@ class _SearchState extends State<Search> {
                 // suggestionsBoxController:
                 //     suggestionsBoxController,
                 itemBuilder: (context, suggestion) {
-                  print(suggestion);
                   return StreamBuilder(
                     stream: searchBloc.productList,
                     builder: (context, AsyncSnapshot<List<MenuItem>> snapshot) {

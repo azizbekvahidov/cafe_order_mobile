@@ -25,7 +25,6 @@ class DeliveryBot {
   });
 
   factory DeliveryBot.fromJson(Map<String, dynamic> json) {
-    print("delivery bot");
     return DeliveryBot(
       id: json["id"],
       phone: json["phone"],

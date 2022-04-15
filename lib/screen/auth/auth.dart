@@ -22,7 +22,6 @@ class _AuthState extends State<Auth> {
   AuthRepository authRepo = AuthRepository();
 
   Future<String?> _authUser(LoginData data) {
-    // debugPrint('Name: ${data.name}, Password: ${data.password}');
     authRepo.login(login: data.name, pass: data.password);
     return Future.delayed(loginTime).then((_) {
       if (globals.userData == null) {

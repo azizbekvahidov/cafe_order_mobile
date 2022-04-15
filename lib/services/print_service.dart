@@ -53,7 +53,7 @@ class PrintService {
     var data = await service.getBytes();
 
     if (manager != null) {
-      print("isConnected ${e.printer} ${_manager!.isConnected}");
+      // print("isConnected ${e.printer} ${_manager!.isConnected}");
       manager.writeBytes(data, isDisconnect: false);
     }
   }
@@ -78,7 +78,7 @@ class PrintService {
     var data = await service.getBytes();
 
     if (manager != null) {
-      print("isConnected ${_manager!.isConnected}");
+      // print("isConnected ${_manager!.isConnected}");
       manager.writeBytes(data, isDisconnect: false);
     }
   }
