@@ -20,6 +20,7 @@ import 'package:cafe_mostbyte/services/print_service.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../config/globals.dart' as globals;
@@ -33,7 +34,6 @@ class BotOrderScreen extends StatefulWidget {
 }
 
 class _BotOrderScreenState extends State<BotOrderScreen> {
-  Timer? _timer;
   @override
   void initState() {
     super.initState();
@@ -42,10 +42,11 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
       globals.currentExpense = null;
       globals.currentExpenseSum = 0;
     }
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      // do something or call a function
-      botOrderBloc.fetchApproveOrders(id: globals.filial);
-    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   PrintService print = new PrintService();
@@ -104,6 +105,18 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                 ),
                 Row(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 50),
+                      child: InkWell(
+                        child: Icon(
+                          MaterialCommunityIcons.restart,
+                          size: 40,
+                        ),
+                        onTap: () {
+                          Phoenix.rebirth(context);
+                        },
+                      ),
+                    ),
                     globals.isAuth
                         ? BlocBuilder<AuthenticationBloc, AuthentifacionState>(
                             builder: (context, state) {
@@ -246,7 +259,6 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                           textCancel: Text("Нет"),
                                           textOK: Text("Да"),
                                           title: Text(""))) {
-                                        // PrintData printData = new PrintData();
                                         context
                                             .read<BotExpenseBloc>()
                                             .add(AddData(data: _expense));

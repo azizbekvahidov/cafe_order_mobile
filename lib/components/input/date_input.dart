@@ -39,7 +39,6 @@ class DateInput extends StatefulWidget {
 class _DateInputState extends State<DateInput> {
   @override
   Widget build(BuildContext context) {
-    print(DateTime.parse(widget.initialValue));
     DateTime.parse(widget.initialValue);
     return DefaultInput(
       isRequired: widget.isRequired,

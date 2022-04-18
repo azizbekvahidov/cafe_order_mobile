@@ -15,6 +15,12 @@ class UserProvider {
     if (response.statusCode == 200) {
       var result = json.decode(response.body);
       final User userJson = User.fromJson(result["data"]);
+
+      globals.filial = userJson.filial != null ? userJson.filial!.id : 0;
+      globals.isKassa = false;
+      if (userJson.role.role == "cashier") {
+        globals.isKassa = true;
+      }
       return userJson;
     } else {
       throw Exception("error fetching users");

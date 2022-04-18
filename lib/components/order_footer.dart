@@ -350,16 +350,6 @@ class _OrderFooterState extends State<OrderFooter> {
                           onTap: () async {
                             await print.recieptPrint(
                                 expense: globals.currentExpense);
-                            // var res = await checkPrint();
-                            // if (res == true) {
-                            //   prints.testPrint(
-                            //       globals.settings!.printer,
-                            //       context,
-                            //       "reciept",
-                            //       {"expense": expense_data, "order": _order});
-                            // } else {
-                            //   print("no print enymore");
-                            // }
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(

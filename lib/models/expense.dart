@@ -1,10 +1,11 @@
 import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/employee.dart';
 import 'package:cafe_mostbyte/models/order.dart';
-import 'package:cafe_mostbyte/models/table.dart';
+import 'package:cafe_mostbyte/models/tables.dart';
 
 class Expense {
   int id;
+  int num;
   String order_date;
   int print;
   int expense_sum;
@@ -17,7 +18,7 @@ class Expense {
   String? ready_time;
   String? phone;
   Employee employee;
-  Table? table;
+  Tables? table;
   List<Order> order;
   bool isChanged;
   Delivery? delivery;
@@ -25,6 +26,7 @@ class Expense {
 
   Expense({
     required this.id,
+    required this.num,
     required this.order_date,
     required this.print,
     required this.expense_sum,
@@ -47,6 +49,7 @@ class Expense {
   factory Expense.fromJson(Map<String, dynamic> json) {
     return Expense(
       id: json["id"],
+      num: json["num"],
       order_date: json["order_date"],
       print: json["print"],
       expense_sum: json["expense_sum"],
@@ -59,7 +62,7 @@ class Expense {
       ready_time: json["ready_time"],
       phone: json["phone"],
       employee: Employee.fromJson(json["employee"]),
-      table: json["table"] != null ? Table.fromJson(json["table"]) : null,
+      table: json["table"] != null ? Tables.fromJson(json["table"]) : null,
       order: List<Order>.from(json["order"].map((x) => Order.fromJson(x))),
       delivery:
           json["delivery"] != null ? Delivery.fromJson(json["delivery"]) : null,
@@ -70,6 +73,7 @@ class Expense {
   Map<String, dynamic> toJson() {
     return {
       "id": id,
+      "num": num,
       "order_date": order_date,
       'print': print,
       "expense_sum": expense_sum,

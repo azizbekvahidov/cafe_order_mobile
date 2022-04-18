@@ -1,4 +1,4 @@
-import 'dart:io' as  io;
+import 'dart:io' as io;
 
 class WebViewHelper {
   static String? executablePath() {
@@ -24,14 +24,14 @@ class WebViewHelper {
     if (paths.isNotEmpty) {
       for (var path in paths) {
         if (io.File(path).existsSync()) {
-          print("====== exist ====== $path");
+          // print("====== exist ====== $path");
           result = path;
           return result;
         }
       }
     }
 
-    print("====== not exist ====== ");
+    // print("====== not exist ====== ");
     return result;
   }
 }

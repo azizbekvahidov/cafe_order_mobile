@@ -1,14 +1,14 @@
-class Table {
+class Tables {
   int id;
   String name;
 
-  Table({
+  Tables({
     required this.id,
     required this.name,
   });
 
-  factory Table.fromJson(Map<String, dynamic> json) {
-    return Table(
+  factory Tables.fromJson(Map<String, dynamic> json) {
+    return Tables(
       id: json["table_id"],
       name: json["name"],
     );

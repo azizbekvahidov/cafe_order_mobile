@@ -1,6 +1,6 @@
 import 'package:cafe_mostbyte/models/employee.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
-import 'package:cafe_mostbyte/models/table.dart';
+import 'package:cafe_mostbyte/models/tables.dart';
 import 'package:cafe_mostbyte/services/api_provider/data_api_provider.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
 import '../../../config/globals.dart' as globals;
@@ -15,6 +15,7 @@ class ModeratorExpenseRepository {
       globals.isBotOrder = null;
       var expense = Expense(
           id: 0,
+          num: 0,
           order_date: "",
           print: 0,
           expense_sum: 0,
@@ -29,7 +30,7 @@ class ModeratorExpenseRepository {
               login: globals.userData!.login,
               name: globals.userData!.name),
           order: [],
-          table: Table(id: 0, name: ""));
+          table: Tables(id: 0, name: ""));
       return expense;
     } catch (e) {
       throw Exception(e.toString());

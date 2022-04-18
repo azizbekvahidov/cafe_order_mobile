@@ -1,7 +1,7 @@
 import 'package:cafe_mostbyte/models/delivery_bot_item.dart';
 import 'package:cafe_mostbyte/models/filial.dart';
 
-class DeliveryBot {
+class DeliveryBotOrder {
   int id;
   String name;
   String phone;
@@ -9,10 +9,8 @@ class DeliveryBot {
   String? price;
   String? address;
   String order_type;
-  Filial filial;
-  List<DeliveryBotItem> listItem;
 
-  DeliveryBot({
+  DeliveryBotOrder({
     required this.id,
     required this.phone,
     this.time,
@@ -20,12 +18,10 @@ class DeliveryBot {
     required this.name,
     required this.address,
     required this.order_type,
-    required this.listItem,
-    required this.filial,
   });
 
-  factory DeliveryBot.fromJson(Map<String, dynamic> json) {
-    return DeliveryBot(
+  factory DeliveryBotOrder.fromJson(Map<String, dynamic> json) {
+    return DeliveryBotOrder(
       id: json["id"],
       phone: json["phone"],
       time: json["time"],
@@ -33,9 +29,6 @@ class DeliveryBot {
       name: json["name"],
       address: json["address"],
       order_type: json["order_type"],
-      listItem: List<DeliveryBotItem>.from(
-          json["deliveryItem"].map((x) => DeliveryBotItem.fromJson(x))),
-      filial: Filial.fromJson(json["filial"]),
     );
   }
 
@@ -47,6 +40,5 @@ class DeliveryBot {
         'price': price,
         'address': address,
         'order_type': order_type,
-        "deliveryItem": listItem.map((e) => e.toJson()).toList(),
       };
 }

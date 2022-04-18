@@ -1,4 +1,6 @@
 import 'dart:convert';
+import '../../models/user.dart';
+
 import '../../services/api_provider/data_api_provider.dart';
 import '../../services/network_service.dart';
 import '../../services/api_provider/user/user_api_provider.dart';
@@ -20,7 +22,8 @@ class AuthRepository {
           UserProvider _userProvider = UserProvider();
           globals.isAuth = true;
           globals.id = result["data"]["id"];
-          var userData = await _userProvider.getUser();
+          User userData = await _userProvider.getUser();
+
           globals.userData = userData;
         } else {
           return ("error fetching users");
