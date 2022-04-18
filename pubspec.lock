@@ -44,7 +44,7 @@ packages:
     source: hosted
     version: "3.0.0"
   barcode:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: barcode
       url: "https://pub.dartlang.org"

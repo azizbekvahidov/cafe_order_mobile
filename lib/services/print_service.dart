@@ -4,9 +4,9 @@ import 'package:cafe_mostbyte/models/print_data.dart';
 import 'package:cafe_mostbyte/utils/demo.dart';
 import 'package:cafe_mostbyte/utils/service.dart';
 import 'package:cafe_mostbyte/utils/webview_helper.dart';
-import 'package:pos_printer_manager/models/usb_printer.dart';
 import 'package:pos_printer_manager/pos_printer_manager.dart';
 import 'package:webcontent_converter/webcontent_converter.dart';
+
 import '../config/globals.dart' as globals;
 
 class PrintService {

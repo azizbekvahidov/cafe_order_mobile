@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:barcode/barcode.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/print_data.dart';
+import 'package:cafe_mostbyte/services/helper.dart';
 import 'package:intl/intl.dart';
 import '../config/globals.dart' as globals;
 
@@ -1407,6 +1411,10 @@ class Demo {
         break;
     }
     int sum = 0;
+    var barcode = buildBarcode(
+      Barcode.code128(useCode128B: false, useCode128C: false),
+      data.id.toString(),
+    );
     data.order.forEach((element) {
       double currentSum = element.amount * element.product!.price!;
       sum += (currentSum / 100).ceil() * 100;
@@ -1542,7 +1550,10 @@ $img
             </div>
             <hr>
             <!-- end header part -->
-
+            <div class="text-center" style='width: 60%; margin: 0 auto;'>
+               
+            ${barcode}
+            </div>
             <p class="full-width inline-block font1">
                 <span class=" ">Тип заказа: <b>$expType</b></span> <br>
                 ${data.table != null ? """<span class=" ">Cтол №: <b>${data.table!.name}</b></span> <br>""" : ""}
