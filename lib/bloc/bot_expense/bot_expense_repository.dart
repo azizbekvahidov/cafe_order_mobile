@@ -17,8 +17,15 @@ class BotExpenseRepository {
   Future<Expense> addToExpense({DeliveryBot? data}) async {
     try {
       var body = data!.toJson();
+      int sum = 0;
+      data.listItem.every((element) {
+        double currentSum = element.amount * element.product.price!;
+        sum += (currentSum / 100).ceil() * 100;
+        return true;
+      });
       body.addAll({"user_id": globals.userData!.id});
       body.addAll({"filial_id": globals.filial});
+      body.addAll({"expense_sum": sum});
       final response =
           await net.post('${globals.apiLink}expense/add-bot-order', body: body);
       if (response.statusCode == 200) {
@@ -40,6 +47,7 @@ class BotExpenseRepository {
       globals.isBotOrder = data.id;
       var expense = Expense(
         id: 0,
+        num: 0,
         order_date: "",
         print: 0,
         expense_sum: 0,

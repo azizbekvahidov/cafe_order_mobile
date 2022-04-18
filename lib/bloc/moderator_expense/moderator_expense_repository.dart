@@ -15,6 +15,7 @@ class ModeratorExpenseRepository {
       globals.isBotOrder = null;
       var expense = Expense(
           id: 0,
+          num: 0,
           order_date: "",
           print: 0,
           expense_sum: 0,

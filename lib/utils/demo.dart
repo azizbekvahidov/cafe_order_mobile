@@ -1393,6 +1393,19 @@ class Demo {
   static String getReceiptContent({required Expense data}) {
     String txt = "";
     String img = "";
+    String expType = "Зал";
+    String footer = globals.settings!.text_footer.replaceAll("\n", "<br>");
+    switch (data.order_type) {
+      case "delivery":
+        expType = "Доставка";
+        break;
+      case "take":
+        expType = "Собой";
+        break;
+      case "book_table":
+        expType = "Зал";
+        break;
+    }
     int sum = 0;
     data.order.forEach((element) {
       double currentSum = element.amount * element.product!.price!;
@@ -1525,20 +1538,20 @@ $img
             <!-- header part -->
             <div class="text-center">
                 <h2>${globals.settings!.cafe_name}</h2>
-                <p>Счет № <b style='font-size: 50px'>${data.id}</b></p>
+                <p>Счет № <b style='font-size: 50px'>${data.num}</b></p>
             </div>
             <hr>
             <!-- end header part -->
 
             <p class="full-width inline-block font1">
-                <span class=" ">Тип заказа: <b>Зал, С собой, Доставка</b></span> <br>
-                <span class=" ">Cтол №: <b>6</b></span> <br>
-                <span class=" ">Телефон: <b class='font5'>+998935193171</b></span> <br>
-                <span class=" ">Время доставки: <b>18:23</b></span> <br>
-                <span class=" ">Адрес: <b class='font5'>G'alaba 25a</b></span> <br>
+                <span class=" ">Тип заказа: <b>$expType</b></span> <br>
+                ${data.table != null ? """<span class=" ">Cтол №: <b>${data.table!.name}</b></span> <br>""" : ""}
+                ${data.delivery != null ? """<span class=" ">Телефон: <b>${data.delivery!.phone}</b></span> <br>
+                <span class=" ">Время доставки: <b>${data.delivery!.delivery_time}</b></span> <br>
+                <span class=" ">Адрес: <b>${data.delivery!.address}</b></span> <br>""" : ""}
                 <span class=" ">Открыт: <b>${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.parse(data.order_date))}</b></span> <br>
                 <span class=' '>Распечатано: <b>${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now())}</b></span><br>
-                <span class=" ">Официант: <b>${data.employee.name}</b></sp>
+                <span class=" ">Ответственный: <b>${data.employee.name}</b></sp>
             </p>
             <hr>
             
@@ -1568,7 +1581,7 @@ $img
             <hr>
             <b>
             <p class="full-width inline-block text-center">
-                ${globals.settings!.text_footer}
+                $footer
             </p>
         </b>
         </div>
@@ -1846,7 +1859,7 @@ $img
     <div class="receipt">
         <div class="container">
             <div class="text-center">
-                <p>Счет №: ${data.expense_id}</p>
+                <p>Счет №: ${data.expense_num}</p>
             </div>
             <!-- header part -->
             <div class="text-left">

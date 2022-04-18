@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cafe_mostbyte/models/category.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
+import 'package:cafe_mostbyte/models/delivery_bot_order.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/filial.dart';
@@ -143,6 +144,22 @@ class DataApiProvider {
         var res = json.decode(utf8.decode(response.bodyBytes));
         return List<DeliveryBot>.from(
             res["data"].map((model) => DeliveryBot.fromJson(model)));
+      } else {
+        throw Exception("error fetching category");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<DeliveryBotOrder>> getBotOrderList({id}) async {
+    try {
+      final response = await net.get(
+          '${globals.apiLink}delivery/orders/$id?order_status=${globals.userData!.role.role == 'moderator' ? 2 : 1}');
+      if (response.statusCode == 200) {
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return List<DeliveryBotOrder>.from(
+            res["data"].map((model) => DeliveryBotOrder.fromJson(model)));
       } else {
         throw Exception("error fetching category");
       }

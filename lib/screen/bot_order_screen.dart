@@ -34,7 +34,6 @@ class BotOrderScreen extends StatefulWidget {
 }
 
 class _BotOrderScreenState extends State<BotOrderScreen> {
-  Timer? _timer;
   @override
   void initState() {
     super.initState();
@@ -43,10 +42,11 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
       globals.currentExpense = null;
       globals.currentExpenseSum = 0;
     }
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      // do something or call a function
-      botOrderBloc.fetchApproveOrders(id: globals.filial);
-    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   PrintService print = new PrintService();

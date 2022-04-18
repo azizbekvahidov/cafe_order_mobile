@@ -45,15 +45,21 @@ class _CustomAppbarState extends State<CustomAppbar> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
       // do something or call a function
-      botOrderBloc.fetchApproveOrders(id: globals.filial);
+      botOrderBloc.fetchBotOrders(id: globals.filial);
     });
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _timer!.cancel();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    botOrderBloc.fetchApproveOrders(id: globals.filial);
+    botOrderBloc.fetchBotOrders(id: globals.filial);
     return AppBar(
       elevation: 1,
       iconTheme: IconThemeData(color: globals.mainColor),
@@ -106,6 +112,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                             MaterialPageRoute(builder: (BuildContext ctx) {
                           return BotOrderScreen();
                         }));
+                        _timer!.cancel();
                       },
                       child: Icon(MaterialCommunityIcons.robot, size: 35),
                       //     SvgPicture.asset(
@@ -114,7 +121,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                       // ),
                     ),
                     StreamBuilder(
-                      stream: botOrderBloc.botOrderApproveList,
+                      stream: botOrderBloc.botOrderList,
                       builder:
                           (context, AsyncSnapshot<List<dynamic>> snapshot) {
                         if (snapshot.hasData) {

@@ -36,9 +36,9 @@ void calculateTotalSum() {
       return true;
     });
     sum = sum +
-        (globals.isKassa
-            ? 0
-            : ((sum / 100).toInt() * int.parse(globals.settings!.percent)));
+        (globals.userData!.role.role == 'waiter'
+            ? ((sum / 100).toInt() * int.parse(globals.settings!.percent))
+            : 0);
     globals.currentExpense!.expense_sum = sum;
   }
   globals.currentExpenseSum = sum;
@@ -176,6 +176,7 @@ generateCheck(
   if (globals.orderState == null) {
     PrintData orderState = new PrintData(
         expense_id: globals.currentExpense!.id,
+        expense_num: globals.currentExpense!.num,
         employee: globals.currentExpense!.employee.name,
         table: globals.currentExpense!.order_type == "book_table"
             ? "Зал ${globals.currentExpense!.table ?? ""}"

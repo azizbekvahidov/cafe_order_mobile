@@ -24,11 +24,6 @@ class AuthRepository {
           globals.id = result["data"]["id"];
           User userData = await _userProvider.getUser();
 
-          globals.filial = userData.filial != null ? userData.filial!.id : 0;
-          globals.isKassa = false;
-          if (userData.role.role == "cashier") {
-            globals.isKassa = true;
-          }
           globals.userData = userData;
         } else {
           return ("error fetching users");
