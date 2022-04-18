@@ -1,7 +1,9 @@
 library yoshlar_portali.helper;
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:barcode/barcode.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_footer.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/department.dart';
@@ -15,6 +17,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import '../config/globals.dart' as globals;
+
+buildBarcode(
+  Barcode bc,
+  String data, {
+  String? filename,
+  double? width,
+  double? height,
+  double? fontHeight,
+}) {
+  /// Create the Barcode
+  final svg = bc.toSvg(
+    data,
+    width: width ?? 200,
+    height: height ?? 80,
+    fontHeight: fontHeight,
+  );
+  return svg;
+
+  // Save the image
+  // filename ??= bc.name.replaceAll(RegExp(r'\s'), '-').toLowerCase();
+  // return File('$filename.svg').writeAsStringSync(svg);
+}
 
 String removeTag({required htmlString, strLength}) {
   var document = parse(htmlString);
