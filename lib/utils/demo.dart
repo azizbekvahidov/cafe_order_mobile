@@ -1422,14 +1422,14 @@ class Demo {
             <p class="full-width inline-block font1" style='border-bottom:1px solid #000'>
                 <span class="left" style='width: 60%'>${element.product!.name}</span>
                 <span class="left" style='width: 15%'>${element.amount}</span>
-                <span class="right" style='width: 25%'> &nbsp; &nbsp; ${(element.amount * element.product!.price!.toDouble()).toInt()}</span>
+                <span class="right" style='wid th: 25%'> &nbsp; &nbsp; ${(element.amount * element.product!.price!.toDouble()).toInt()}</span>
             </p>
             """;
     });
     if (globals.settings!.logo_image != null) {
-      img += """<div class="full-width inline-block text-center ">
-                <img src="${globals.settings!.logo_image}"/>
-            </div>""";
+      img +=
+          """<div class="logo" style="width: 100%; height: 200px; background-image: url(${globals.settings!.logo_image}); background-position:center;background-size:contain; background-repeat: no-repeat;">
+                </div>""";
     }
     return """
 
