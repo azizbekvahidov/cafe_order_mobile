@@ -1870,7 +1870,7 @@ $img
     <div class="receipt">
         <div class="container">
             <div class="text-center">
-                <p>Счет №: ${data.expense_num}</p>
+                <p>Счет №: ${data.expense_num} <b>(${data.table})<b/></p>
             </div>
             <!-- header part -->
             <div class="text-left">
