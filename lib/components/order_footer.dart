@@ -152,9 +152,13 @@ class _OrderFooterState extends State<OrderFooter> {
                                                       heightIndex: 0.22);
                                                   await modal.customDialog();
                                                   if (modal.res) {
-                                                    context
-                                                        .read<ExpenseBloc>()
-                                                        .add(ExpenseTakeaway());
+                                                    setState(() {
+                                                      globals.currentExpense!
+                                                          .order_type = "take";
+                                                    });
+                                                    // context
+                                                    //     .read<ExpenseBloc>()
+                                                    //     .add(ExpenseTakeaway());
                                                     // }
                                                   }
                                                 } else {

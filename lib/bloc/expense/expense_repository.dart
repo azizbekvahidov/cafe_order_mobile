@@ -164,8 +164,10 @@ class ExpenseRepository {
         if (globals.currentExpense!.phone != null) {
           var data = {
             "id": globals.currentExpenseId,
-            "ready_time": globals.currentExpense!.ready_time,
-            "phone": globals.currentExpense!.phone,
+            "take": {
+              "ready_time": globals.currentExpense!.ready_time,
+              "phone": globals.currentExpense!.phone,
+            }
           };
 
           final response =
