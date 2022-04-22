@@ -22,8 +22,7 @@ class ExpenseRepository {
         globals.currentExpenseSum = result["data"]['expense_sum'];
         return result["data"];
       } else {
-        var res = json.decode(utf8.decode(response.bodyBytes));
-        return res["message"];
+        throw Exception("");
       }
     } catch (e) {
       return e.toString();
@@ -37,11 +36,10 @@ class ExpenseRepository {
           await net.post('${globals.apiLink}expense/update', body: data);
       if (response.statusCode == 200) {
       } else {
-        var res = json.decode(utf8.decode(response.bodyBytes));
-        return res["message"];
+        throw Exception("");
       }
     } catch (e) {
-      return e.toString();
+      throw Exception(e.toString());
     }
   }
 
@@ -57,8 +55,7 @@ class ExpenseRepository {
           globals.currentExpenseId = 0;
           globals.currentExpenseSum = 0;
         } else {
-          var res = json.decode(utf8.decode(response.bodyBytes));
-          return res["message"];
+          throw Exception("");
         }
       } else {
         throw Exception("");
@@ -80,8 +77,7 @@ class ExpenseRepository {
           globals.currentExpenseId = 0;
           globals.currentExpenseSum = 0;
         } else {
-          var res = json.decode(utf8.decode(response.bodyBytes));
-          return res["message"];
+          throw Exception("");
         }
       } else {
         throw Exception("");
@@ -103,8 +99,7 @@ class ExpenseRepository {
           globals.currentExpenseId = 0;
           globals.currentExpenseSum = 0;
         } else {
-          var res = json.decode(utf8.decode(response.bodyBytes));
-          return res["message"];
+          throw Exception("");
         }
       } else {
         throw Exception("");
@@ -126,8 +121,7 @@ class ExpenseRepository {
           globals.currentExpenseId = 0;
           globals.currentExpenseSum = 0;
         } else {
-          var res = json.decode(utf8.decode(response.bodyBytes));
-          return res["message"];
+          throw Exception("");
         }
       } else {
         throw Exception("");
@@ -142,7 +136,7 @@ class ExpenseRepository {
       if (globals.currentExpense != null) {
         if (globals.currentExpense!.delivery != null) {
           var data = {
-            "expense_id": globals.currentExpenseId,
+            "id": globals.currentExpenseId,
             "delivery": globals.currentExpense!.delivery!.toJson()
           };
 
@@ -153,8 +147,7 @@ class ExpenseRepository {
             globals.currentExpense!.delivery = Delivery.fromJson(res);
             globals.expenseDelivery = Delivery.fromJson(res);
           } else {
-            var res = json.decode(utf8.decode(response.bodyBytes));
-            return res["message"];
+            throw Exception("");
           }
         } else {
           throw Exception("");
@@ -179,8 +172,7 @@ class ExpenseRepository {
               await net.post('${globals.apiLink}expense/takeaway', body: data);
           if (response.statusCode == 200) {
           } else {
-            var res = json.decode(utf8.decode(response.bodyBytes));
-            return res["message"];
+            throw Exception("");
           }
         } else {
           throw Exception("");
@@ -205,8 +197,7 @@ class ExpenseRepository {
           if (response.statusCode == 200) {
           } else {
             globals.currentExpense!.discount = 0;
-            var res = json.decode(utf8.decode(response.bodyBytes));
-            return res["message"];
+            throw Exception("");
           }
         } else {
           throw Exception("");

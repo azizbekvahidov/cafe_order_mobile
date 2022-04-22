@@ -152,9 +152,13 @@ class _OrderFooterState extends State<OrderFooter> {
                                                       heightIndex: 0.22);
                                                   await modal.customDialog();
                                                   if (modal.res) {
-                                                    context
-                                                        .read<ExpenseBloc>()
-                                                        .add(ExpenseTakeaway());
+                                                    setState(() {
+                                                      globals.currentExpense!
+                                                          .order_type = "take";
+                                                    });
+                                                    // context
+                                                    //     .read<ExpenseBloc>()
+                                                    //     .add(ExpenseTakeaway());
                                                     // }
                                                   }
                                                 } else {
@@ -192,9 +196,14 @@ class _OrderFooterState extends State<OrderFooter> {
                                                     heightIndex: 0.3);
                                                 await modal.customDialog();
                                                 if (modal.res) {
-                                                  context
-                                                      .read<ExpenseBloc>()
-                                                      .add(ExpenseDelivery());
+                                                  setState(() {
+                                                    globals.currentExpense!
+                                                            .order_type =
+                                                        "delivery";
+                                                  });
+                                                  // context
+                                                  //     .read<ExpenseBloc>()
+                                                  //     .add(ExpenseDelivery());
                                                   // }
                                                 }
                                               } else {
