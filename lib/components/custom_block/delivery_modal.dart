@@ -92,7 +92,7 @@ class _DeliveryModalState extends State<DeliveryModal> {
                         initialValue: (globals.currentExpense!.delivery != null)
                             ? (globals.currentExpense!.delivery!
                                         .delivery_time !=
-                                    null)
+                                    "null")
                                 ? DateTime.parse(globals
                                     .currentExpense!.delivery!.delivery_time!)
                                 : null
