@@ -1558,7 +1558,7 @@ $img
                 <span class=" ">Тип заказа: <b>$expType</b></span> <br>
                 ${data.table != null ? """<span class=" ">Cтол №: <b>${data.table!.name}</b></span> <br>""" : ""}
                 ${data.delivery != null ? """<span class=" ">Телефон: <b>${data.delivery!.phone}</b></span> <br>
-                <span class=" ">Время доставки: <b>${data.delivery!.delivery_time}</b></span> <br>
+                ${data.delivery!.delivery_time != "null" ? "<span class=" ">Время доставки: <b>${data.delivery!.delivery_time}</b></span> <br>" : ""}
                 <span class=" ">Адрес: <b>${data.delivery!.address}</b></span> <br>""" : ""}
                 <span class=" ">Открыт: <b>${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.parse(data.order_date))}</b></span> <br>
                 <span class=' '>Распечатано: <b>${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now())}</b></span><br>
@@ -1772,16 +1772,20 @@ $img
   }
 
   static String generateCheck(
-      {required PrintData data, required Department department}) {
+      {required PrintData data,
+      required Department department,
+      String orderType = ""}) {
     String txt = "";
     department.orders!.forEach((element) {
-      txt += """
+      if (element.amount != 0) {
+        txt += """
             <p class="full-width inline-block">
                 <b class="left">${element.product!.name}</b>
-                <b class="right">${element.amount}</b>
+                <b class="right">${NumberFormat("###.#", "en_US").format(element.amount)}</b>
             </p>
             ${element.comment != null ? """<p>${element.comment}</p>""" : ""}
             """;
+      }
     });
     return """
 <!DOCTYPE html>
@@ -1870,7 +1874,7 @@ $img
     <div class="receipt">
         <div class="container">
             <div class="text-center">
-                <p>Счет №: ${data.expense_num} <b>(${data.table})<b/></p>
+                <p>Счет №: ${data.expense_num} <b>(${orderType})<b/></p>
             </div>
             <!-- header part -->
             <div class="text-left">

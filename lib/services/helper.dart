@@ -30,8 +30,9 @@ buildBarcode(
   final svg = bc.toSvg(
     data,
     width: width ?? 200,
-    height: height ?? 80,
+    height: height ?? 40,
     fontHeight: fontHeight,
+    drawText: false,
   );
   return svg;
 

@@ -8,8 +8,8 @@ import 'package:cafe_mostbyte/models/settings.dart';
 import 'package:cafe_mostbyte/models/user.dart';
 import 'package:flutter/material.dart';
 
-String apiLink = "http://takes/api/v1/";
-// String apiLink = "https://api.kfcbeer.uz/api/v1/";
+// String apiLink = "http://takes/api/v1/";
+String apiLink = "https://api.kfcbeer.uz/api/v1/";
 
 String lang = "ru";
 var loc;
@@ -33,7 +33,10 @@ Color mainColor = Color(0xff0D335D);
 Color secondaryColor = Color(0xffC70039);
 Color thirdColor = Color(0xffC1A1D3);
 Color fourthColor = Color(0xffFFF3E6);
-Map<String, String> headers = {"content-type": "application/json"};
+Map<String, String> headers = {
+  "content-type": "application/json",
+  'accept': 'application/json'
+};
 bool isLogin = false;
 String authName = "Aziz";
 String code = "";

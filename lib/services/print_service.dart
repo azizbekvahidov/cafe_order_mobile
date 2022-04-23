@@ -19,11 +19,13 @@ class PrintService {
     _printers = printers;
   }
 
-  _connect(
-      {isCheck = true,
-      Expense? expense,
-      PrintData? printData,
-      Department? e}) async {
+  _connect({
+    isCheck = true,
+    Expense? expense,
+    PrintData? printData,
+    Department? e,
+    String orderType = "",
+  }) async {
     if (_printers == null) {
       await _scan();
     }
@@ -35,16 +37,17 @@ class PrintService {
     await manager.connect();
     _manager = null;
     if (isCheck) {
-      setCheckPrint(e!, printData!, manager);
+      setCheckPrint(e!, printData!, manager, orderType);
     } else {
       setRecieptPrint(expense!, manager);
     }
     _manager = manager;
   }
 
-  setCheckPrint(
-      Department e, PrintData printData, USBPrinterManager manager) async {
-    final content = Demo.generateCheck(data: printData, department: e);
+  setCheckPrint(Department e, PrintData printData, USBPrinterManager manager,
+      String orderType) async {
+    final content = Demo.generateCheck(
+        data: printData, department: e, orderType: orderType);
     var bytes = await WebcontentConverter.contentToImage(
       content: content,
       executablePath: WebViewHelper.executablePath(),
@@ -58,12 +61,23 @@ class PrintService {
     }
   }
 
-  checkPrint({PrintData? printData}) async {
+  checkPrint({PrintData? printData, order_type}) async {
     List<Department>? list = printData!.departments;
-
+    var orderType = "Зал";
+    switch (order_type) {
+      case "book_table":
+        orderType = "Зал";
+        break;
+      case "delivery":
+        orderType = "Доставка";
+        break;
+      case "take":
+        orderType = "С собой";
+        break;
+    }
     if (list != null) {
       list.forEach((e) async {
-        _connect(e: e, printData: printData);
+        _connect(e: e, printData: printData, orderType: orderType);
       });
     }
   }
