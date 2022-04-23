@@ -50,7 +50,7 @@ class _OrderRowState extends State<OrderRow> {
                   children: [
                     InkWell(
                       onTap: () {
-                        if (expenseCardPageState.mounted)
+                        if (expenseCardPageState.mounted) {
                           expenseCardPageState.setState(() {
                             globals.currentExpense!.order.removeWhere(
                                 (element) =>
@@ -58,6 +58,12 @@ class _OrderRowState extends State<OrderRow> {
                                         widget.orderRow!.product_id &&
                                     element.type == widget.orderRow!.type);
                           });
+                          helper.generateCheck(
+                            data: widget.orderRow!.product!,
+                            type: widget.orderRow!.type,
+                            amount: widget.orderRow!.amount * -1,
+                          );
+                        }
                         if (moderatorExpenseCardPageState.mounted)
                           moderatorExpenseCardPageState.setState(() {
                             globals.currentExpense!.order.removeWhere(
@@ -66,7 +72,8 @@ class _OrderRowState extends State<OrderRow> {
                                         widget.orderRow!.product_id &&
                                     element.type == widget.orderRow!.type);
                           });
-
+                        helper.calculateTotalSum();
+                        globals.currentExpenseChange = true;
                         helper.calculateTotalSum();
                       },
                       child: Center(

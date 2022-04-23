@@ -78,6 +78,7 @@ class _TabsState extends State<Tabs> {
                                       await orderBloc.fetchExpense(
                                           id: _expense["id"]);
                                       setState(() {
+                                        globals.currentExpenseChange = false;
                                         globals.currentExpenseId =
                                             _expense["id"];
                                       });
@@ -133,6 +134,9 @@ class _TabsState extends State<Tabs> {
                           builder: (context, state) {
                             return InkWell(
                               onTap: () {
+                                setState(() {
+                                  globals.currentExpenseChange = false;
+                                });
                                 context
                                     .read<ExpenseBloc>()
                                     .add(ExpenseCreate());

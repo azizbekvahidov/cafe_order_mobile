@@ -1772,7 +1772,9 @@ $img
   }
 
   static String generateCheck(
-      {required PrintData data, required Department department}) {
+      {required PrintData data,
+      required Department department,
+      String orderType = ""}) {
     String txt = "";
     department.orders!.forEach((element) {
       txt += """
@@ -1870,7 +1872,7 @@ $img
     <div class="receipt">
         <div class="container">
             <div class="text-center">
-                <p>Счет №: ${data.expense_num} <b>(${data.table})<b/></p>
+                <p>Счет №: ${data.expense_num} <b>(${orderType})<b/></p>
             </div>
             <!-- header part -->
             <div class="text-left">

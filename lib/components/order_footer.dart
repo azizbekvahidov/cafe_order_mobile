@@ -56,7 +56,9 @@ class _OrderFooterState extends State<OrderFooter> {
               orderBloc.fetchExpense(id: globals.currentExpenseId);
 
               if (globals.orderState != null) {
-                await print.checkPrint(printData: globals.orderState);
+                await print.checkPrint(
+                    printData: globals.orderState,
+                    order_type: globals.currentExpense!.order_type);
                 globals.orderState = null;
                 tabsState.setState(() {
                   globals.currentExpenseChange = false;
