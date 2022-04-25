@@ -5,12 +5,14 @@ class DeliveryBotItem {
   double amount;
   int type;
   Product product;
+  String? comment;
 
   DeliveryBotItem({
     required this.product_id,
     required this.amount,
     required this.type,
     required this.product,
+    this.comment,
   });
 
   factory DeliveryBotItem.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class DeliveryBotItem {
       amount: double.parse(json["amount"].toString()),
       type: json["type"],
       product: Product.fromJson(json["product"]),
+      comment: json["comment"],
     );
   }
 
@@ -26,5 +29,6 @@ class DeliveryBotItem {
         "product_id": product_id,
         "amount": amount,
         "type": type,
+        'comment': comment,
       };
 }

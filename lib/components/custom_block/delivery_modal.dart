@@ -33,7 +33,9 @@ class _DeliveryModalState extends State<DeliveryModal> {
     super.initState();
     if (globals.currentExpense!.delivery != null) {
       delivery = globals.currentExpense!.delivery;
-      inputController.text = globals.currentExpense!.delivery!.price.toString();
+      inputController.text = globals.currentExpense!.delivery!.price != null
+          ? globals.currentExpense!.delivery!.price.toString()
+          : "";
       address = globals.currentExpense!.delivery!.address!;
       comment = globals.currentExpense!.delivery!.comment != null
           ? globals.currentExpense!.delivery!.comment!
@@ -91,11 +93,14 @@ class _DeliveryModalState extends State<DeliveryModal> {
                         name: "time",
                         initialValue: (globals.currentExpense!.delivery != null)
                             ? (globals.currentExpense!.delivery!
-                                        .delivery_time !=
-                                    "null")
-                                ? DateTime.parse(globals
+                                            .delivery_time ==
+                                        "null" ||
+                                    globals.currentExpense!.delivery!
+                                            .delivery_time ==
+                                        null)
+                                ? null
+                                : DateTime.parse(globals
                                     .currentExpense!.delivery!.delivery_time!)
-                                : null
                             : null,
                         textInputAction: TextInputAction.next,
                         format: DateFormat('HH:mm'),

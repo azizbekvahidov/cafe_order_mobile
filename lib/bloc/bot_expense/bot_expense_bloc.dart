@@ -24,9 +24,11 @@ class BotExpenseBloc extends Bloc<BotExpenseEvent, BotExpenseState> {
         globals.currentExpense = await repo.addToExpense(data: state.data);
         globals.currentExpense!.order.forEach((element) {
           helper.generateCheck(
-              data: element.product!,
-              type: element.type,
-              amount: element.amount);
+            data: element.product!,
+            type: element.type,
+            amount: element.amount,
+            comment: element.comment,
+          );
         });
         yield state.copyWith(formStatus: SubmissionSuccess());
       } catch (e) {
