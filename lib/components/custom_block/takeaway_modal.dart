@@ -20,7 +20,6 @@ class _TakeawayModalState extends State<TakeawayModal> {
   TextEditingController? phoneController =
       MaskedTextController(mask: '00 000 00 00');
   int debtSum = 0;
-  Delivery? delivery;
   String address = "";
   String phone = "";
   String comment = "";
@@ -93,11 +92,22 @@ class _TakeawayModalState extends State<TakeawayModal> {
                   width: 150,
                   child: SecondaryButton(
                     action: () async {
-                      globals.currentExpense!.delivery = delivery;
-                      Navigator.pop(context, true);
+                      Navigator.pop(context, "book_table");
                     },
                     colour: Theme.of(context).colorScheme.primary,
-                    text: "Сохранить",
+                    text: "В зале",
+                    // textColor: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Padding(padding: const EdgeInsets.only(left: 20)),
+                Container(
+                  width: 150,
+                  child: SecondaryButton(
+                    action: () async {
+                      Navigator.pop(context, "take");
+                    },
+                    colour: Theme.of(context).colorScheme.surface,
+                    text: "На вынос",
                     // textColor: Theme.of(context).primaryColor,
                   ),
                 ),

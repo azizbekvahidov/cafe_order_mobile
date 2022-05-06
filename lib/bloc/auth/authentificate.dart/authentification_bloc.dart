@@ -40,11 +40,18 @@ class AuthenticationBloc
       await userRepository.persistToken(event.token);
       yield AuthenticationAuthenticated();
     }
-
+    if (event is CloseChange) {
+      await userRepository.closeChange();
+      yield ClosedChange();
+    }
+    if (event is GetChange) {
+      await userRepository.getChange();
+    }
     if (event is LoggedOut) {
       globals.isAuth = false;
       globals.userData = null;
       globals.token = "";
+
       yield AuthenticationLoading();
       await userRepository.deleteToken();
       yield AuthenticationUnauthenticated();

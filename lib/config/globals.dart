@@ -1,5 +1,7 @@
 library cafe_order.globals;
 
+import 'package:cafe_mostbyte/models/change.dart';
+import 'package:cafe_mostbyte/models/change_sum.dart';
 import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/department.dart';
 import 'package:cafe_mostbyte/models/expense.dart';
@@ -27,6 +29,8 @@ int? isBotOrder;
 Settings? settings;
 List<Department>? department;
 bool isKassa = true;
+Change? tempChange;
+ChangeSum? tempChangeSum;
 
 String font = "Raleway";
 Color mainColor = Color(0xff0D335D);

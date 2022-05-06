@@ -22,10 +22,18 @@ class _AuthState extends State<Auth> {
   AuthRepository authRepo = AuthRepository();
 
   Future<String?> _authUser(LoginData data) {
-    authRepo.login(login: data.name, pass: data.password);
+    var message = "";
+    authRepo.login(login: data.name, pass: data.password).then((value) {
+      if (value == "no-change") {
+        message = 'Предыдущая смена не закрыта';
+      } else if (globals.userData == null || value == "no-login") {
+        message = 'Неправильный логин или пароль';
+      }
+    });
+    // res.catchError((value) => print(value));
     return Future.delayed(loginTime).then((_) {
       if (globals.userData == null) {
-        return 'User not exists';
+        return message;
       }
       return null;
     });

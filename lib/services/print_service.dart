@@ -47,7 +47,12 @@ class PrintService {
   setCheckPrint(Department e, PrintData printData, USBPrinterManager manager,
       String orderType) async {
     final content = Demo.generateCheck(
-        data: printData, department: e, orderType: orderType);
+        data: printData,
+        department: e,
+        orderType: orderType,
+        time: globals.currentExpense!.delivery != null
+            ? globals.currentExpense!.delivery!.delivery_time
+            : globals.currentExpense!.ready_time);
     var bytes = await WebcontentConverter.contentToImage(
       content: content,
       executablePath: WebViewHelper.executablePath(),
@@ -99,5 +104,32 @@ class PrintService {
 
   recieptPrint({Expense? expense}) async {
     _connect(expense: expense, isCheck: false);
+  }
+
+  changePrint() async {
+    if (_printers == null) {
+      await _scan();
+    }
+    USBPrinter _printer = _printers!
+        .firstWhere((element) => element.address == globals.settings!.printer);
+    var paperSize = PaperSize.mm80;
+    var profile = await CapabilityProfile.load();
+    var manager = USBPrinterManager(_printer, paperSize, profile);
+    await manager.connect();
+    final content = Demo.getChangeReceiptContent();
+    var bytes = await WebcontentConverter.contentToImage(
+      content: content,
+      executablePath: WebViewHelper.executablePath(),
+    );
+    var service = ESCPrinterService(bytes);
+    var data = await service.getBytes();
+
+    if (manager != null) {
+      // print("isConnected ${_manager!.isConnected}");
+      manager.writeBytes(data, isDisconnect: false);
+    }
+    _manager = null;
+
+    _manager = manager;
   }
 }

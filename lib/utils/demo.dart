@@ -1607,6 +1607,147 @@ $img
   """;
   }
 
+  static String getChangeReceiptContent() {
+    return """
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RECEIPT</title>
+</head>
+
+<style>
+    body,
+    p {
+        margin: 0px;
+        padding: 0px;
+    }
+    
+    body {
+        background: #eee;
+        width: 576px;
+        font-size: 1.8em
+    }
+    
+    .receipt {
+        max-width: 576px;
+        margin: auto;
+        background: white;
+    }
+    
+    .container {
+        padding: 5px 15px;
+    }
+    
+    hr {
+        border-top: 2px dashed black;
+    }
+    
+    .text-center {
+        text-align: center;
+    }
+    
+    .text-left {
+        text-align: left;
+    }
+    
+    .text-right {
+        text-align: left;
+    }
+    
+    .text-justify {
+        text-align: justify;
+    }
+    
+    .right {
+        float: right;
+    }
+    
+    .left {
+        float: left;
+    }
+    
+    .total {
+        font-size: 1.5em;
+        margin: 5px;
+    }
+    
+    a {
+        color: #1976d2;
+    }
+    
+    span {
+        color: black;
+    }
+    
+    .full-width {
+        width: 100%;
+    }
+    
+    .inline-block {
+        display: inline-block;
+    }
+</style>
+
+<body>
+            <div class="full-width inline-block">
+               
+                <!-- header part -->
+                <div class="text-center">
+                    <h1 class="capitalize" style="padding-left:-15px;">Отчет смены</h1>
+
+                </div>
+            </div>
+
+    <div class="receipt">
+        <div class="container">
+            <hr>
+            <!-- end header part -->
+
+            <p>Филиал: <b>${globals.tempChange!.filial.name}</b></p>
+
+            <p>Начало: <b>${globals.tempChange!.start}</b></p>
+            
+            <p>Конец: <b>${globals.tempChange!.end}</b></p>
+
+            <p>Ответственный: <b>${globals.tempChange!.employee.name}</b></p>
+            
+            <hr>
+            <p class="total"> Сумма к сдаче</p>
+
+            <p>Терминал: <b>${globals.tempChangeSum != null ? globals.tempChangeSum!.closed_terminal : 0}</b></p>
+            
+            <p>Наличка: <b>${globals.tempChangeSum != null ? (globals.tempChangeSum!.closed_sum! - globals.tempChangeSum!.closed_terminal!) : 0}</b></p>
+
+            <p>Общая сумма: <b>${globals.tempChangeSum != null ? globals.tempChangeSum!.closed_sum : 0}</b></p>
+            
+            <hr>
+            <p class="total"> Сумма Остатка в кассе</p>
+
+            <p>Терминал: <b>${globals.tempChangeSum != null ? globals.tempChangeSum!.terminal : 0}</b></p>
+            
+            <p>Наличка: <b>${globals.tempChangeSum != null ? globals.tempChangeSum!.sum! - globals.tempChangeSum!.terminal! : 0}</b></p>
+
+            <p>Общая сумма: <b>${globals.tempChangeSum != null ? globals.tempChangeSum!.sum : 0}</b></p>
+            
+        </div>
+        <hr>
+        <!-- end footer part -->
+        <div class="container">
+            <p class="full-width inline-block">
+                <span class="left">${DateFormat('dd.MM.yyyy HH:mm:ss').format(DateTime.now())}</span>
+            </p>
+        </div>
+
+    </div>
+</body>
+
+</html>  
+  """;
+  }
+
   static String getShortReceiptContent() {
     return """
 <!DOCTYPE html>
@@ -1774,7 +1915,8 @@ $img
   static String generateCheck(
       {required PrintData data,
       required Department department,
-      String orderType = ""}) {
+      String orderType = "",
+      String? time}) {
     String txt = "";
     department.orders!.forEach((element) {
       if (element.amount != 0) {
@@ -1878,7 +2020,7 @@ $img
             </div>
             <!-- header part -->
             <div class="text-left">
-                <p>Сотрудник: ${data.employee}</p>
+                <p>Сотрудник: ${data.employee}     ${time != null ? "<br>время приготовления: ${DateFormat('HH:mm').format(DateTime.parse(time))}" : ""}</p>
             </div>
             <hr>
             <!-- end header part -->

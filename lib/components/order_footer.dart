@@ -153,10 +153,11 @@ class _OrderFooterState extends State<OrderFooter> {
                                                       child: TakeawayModal(),
                                                       heightIndex: 0.22);
                                                   await modal.customDialog();
-                                                  if (modal.res) {
+                                                  if (modal.res is String) {
                                                     setState(() {
                                                       globals.currentExpense!
-                                                          .order_type = "take";
+                                                              .order_type =
+                                                          modal.res;
                                                     });
                                                     // context
                                                     //     .read<ExpenseBloc>()
@@ -171,13 +172,12 @@ class _OrderFooterState extends State<OrderFooter> {
                                               child: Icon(
                                                 MaterialIcons.food_bank,
                                                 // "assets/img/take-away.svg",
-                                                color: (data.delivery != null)
-                                                    ? Colors.black
-                                                    : ((data.phone == null)
+                                                color:
+                                                    (data.order_type != 'take')
                                                         ? Colors.black
                                                         : Theme.of(context)
                                                             .colorScheme
-                                                            .primary),
+                                                            .primary,
                                                 size: 30,
                                               ),
                                             ),

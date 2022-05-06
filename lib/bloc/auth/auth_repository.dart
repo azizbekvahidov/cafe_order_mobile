@@ -17,20 +17,37 @@ class AuthRepository {
           await net.post('${globals.apiLink}users/signin', body: data);
       if (response.statusCode == 200) {
         var result = json.decode(response.body);
+        globals.id = result["data"]["id"];
+        UserProvider _userProvider = UserProvider();
+        User userData = await _userProvider.getUser();
+        if (globals.isKassa) {
+          final change = await net.post('${globals.apiLink}change/open',
+              body: {"user_id": result["data"]["id"]});
+          if (change.statusCode == 201 || change.statusCode == 200) {
+            if (await helper.saveData("id", result["data"]["id"],
+                type: "int")) {
+              globals.isAuth = true;
+              User userData = await _userProvider.getUser();
 
-        if (await helper.saveData("id", result["data"]["id"], type: "int")) {
-          UserProvider _userProvider = UserProvider();
-          globals.isAuth = true;
-          globals.id = result["data"]["id"];
-          User userData = await _userProvider.getUser();
-
-          globals.userData = userData;
+              globals.userData = userData;
+            } else {
+              return "no-login";
+            }
+          } else {
+            throw "no-change";
+          }
         } else {
-          return ("error fetching users");
+          if (await helper.saveData("id", result["data"]["id"], type: "int")) {
+            globals.isAuth = true;
+            User userData = await _userProvider.getUser();
+
+            globals.userData = userData;
+          } else {
+            return "no-login";
+          }
         }
       } else {
-        var res = json.decode(utf8.decode(response.bodyBytes));
-        return res["message"];
+        return "no-login";
       }
     } catch (e) {
       return e.toString();

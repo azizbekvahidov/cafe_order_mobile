@@ -7,6 +7,7 @@ import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_sta
 import 'package:cafe_mostbyte/bloc/bot_order.dart/bot_order_bloc.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/bot_order_screen.dart';
+import 'package:cafe_mostbyte/services/print_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -40,6 +41,7 @@ class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppbarState extends State<CustomAppbar> {
+  PrintService print = new PrintService();
   Timer? _timer;
   @override
   void initState() {
@@ -60,23 +62,61 @@ class _CustomAppbarState extends State<CustomAppbar> {
   @override
   Widget build(BuildContext context) {
     botOrderBloc.fetchBotOrders(id: globals.filial);
-    return AppBar(
-      elevation: 1,
-      iconTheme: IconThemeData(color: globals.mainColor),
-      backgroundColor: Colors.white,
-      title: BlocListener<AuthenticationBloc, AuthentifacionState>(
-        listener: (context, state) {
-          var appStatus = state.appStatus;
-          if (appStatus is AppLoggedOutStatus) {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext ctx) {
-              return Auth();
-            }), (route) => true);
-            globals.currentExpenseSum = 0;
-            globals.currentExpense = null;
-          }
-        },
-        child: SizedBox(
+    return BlocListener<AuthenticationBloc, AuthentifacionState>(
+      listener: (context, state) async {
+        var appStatus = state.appStatus;
+        if (appStatus is AppLoggedOutStatus) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (BuildContext ctx) {
+            return Auth();
+          }), (route) => true);
+          globals.currentExpenseSum = 0;
+          globals.currentExpense = null;
+        }
+        if (state.appStatus is ChangeClosed) {
+          Future.delayed(Duration(milliseconds: 2250)).then((_) async {
+            await print.changePrint();
+            globals.tempChange = null;
+            globals.tempChangeSum = null;
+            return null;
+          });
+        }
+      },
+      child: AppBar(
+        actions: [
+          BlocBuilder<AuthenticationBloc, AuthentifacionState>(
+              builder: (context, state) {
+            return PopupMenuButton<int>(
+                itemBuilder: (context) => [
+                      // PopupMenuItem<int>(
+                      //   onTap: () async {
+                      //     context.read<AuthenticationBloc>().add(GetChange());
+                      //     Future.delayed(Duration(milliseconds: 2250))
+                      //         .then((_) async {
+                      //       await print.changePrint();
+
+                      //       return null;
+                      //     });
+                      //   },
+                      //   value: 0,
+                      //   child: Text("Распечатать смену"),
+                      // ),
+                      PopupMenuItem<int>(
+                          onTap: () {
+                            context
+                                .read<AuthenticationBloc>()
+                                .add(CloseChange());
+                            context.read<AuthenticationBloc>().add(LoggedOut());
+                          },
+                          value: 0,
+                          child: Text("Закрыть смену"))
+                    ]);
+          })
+        ],
+        elevation: 1,
+        iconTheme: IconThemeData(color: globals.mainColor),
+        backgroundColor: Colors.white,
+        title: SizedBox(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

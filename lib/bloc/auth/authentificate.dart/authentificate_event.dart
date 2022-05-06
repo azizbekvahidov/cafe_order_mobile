@@ -31,3 +31,15 @@ class LoggedOut extends AuthenticationEvent {
   @override
   List<Object?> get props => throw UnimplementedError();
 }
+
+class CloseChange extends AuthenticationEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}
+
+class GetChange extends AuthenticationEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}
