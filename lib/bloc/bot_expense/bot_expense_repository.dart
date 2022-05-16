@@ -117,4 +117,39 @@ class BotExpenseRepository {
       throw Exception(e.toString());
     }
   }
+
+  Future<void> CancelBotOrder() async {
+    try {
+      Map body = {
+        'bot_order': globals.isBotOrder,
+        'address': globals.currentExpense!.delivery!.address,
+        'filial_id': globals.filial,
+        'phone': globals.currentExpense!.delivery!.phone,
+        'name': globals.currentExpense!.delivery!.comment,
+        'price': globals.currentExpense!.delivery!.price,
+        'time': globals.currentExpense!.delivery!.delivery_time,
+        'order_type': globals.currentExpense!.order_type,
+        'status': 0,
+        'products': globals.currentExpense!.order
+            .map((e) => {
+                  "product_id": e.product_id,
+                  "amount": e.amount,
+                  "type": e.type,
+                  "comment": e.comment,
+                })
+            .toList(),
+      };
+      final response =
+          await net.post('${globals.apiLink}delivery/store', body: body);
+      if (response.statusCode == 201) {
+        debugPrint("ok");
+      } else {
+        globals.currentExpense!.discount = 0;
+        var res = json.decode(utf8.decode(response.bodyBytes));
+        return res["data"];
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

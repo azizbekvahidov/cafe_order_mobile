@@ -11,7 +11,6 @@ import '../config/globals.dart' as globals;
 
 class PrintService {
   bool _isLoading = false;
-  USBPrinterManager? _manager;
   List<USBPrinter>? _printers;
 
   _scan() async {
@@ -35,13 +34,13 @@ class PrintService {
     var profile = await CapabilityProfile.load();
     var manager = USBPrinterManager(_printer, paperSize, profile);
     await manager.connect();
-    _manager = null;
+    globals.manager = null;
     if (isCheck) {
       setCheckPrint(e!, printData!, manager, orderType);
     } else {
       setRecieptPrint(expense!, manager);
     }
-    _manager = manager;
+    globals.manager = manager;
   }
 
   setCheckPrint(Department e, PrintData printData, USBPrinterManager manager,
@@ -128,8 +127,8 @@ class PrintService {
       // print("isConnected ${_manager!.isConnected}");
       manager.writeBytes(data, isDisconnect: false);
     }
-    _manager = null;
+    globals.manager = null;
 
-    _manager = manager;
+    globals.manager = manager;
   }
 }

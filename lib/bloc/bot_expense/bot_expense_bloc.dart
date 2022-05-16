@@ -50,6 +50,7 @@ class BotExpenseBloc extends Bloc<BotExpenseEvent, BotExpenseState> {
         yield state.copyWith(formStatus: SubmissionFailed(e));
       }
     } else if (event is CancelBotOrder) {
+      await repo.AddBotOrder();
       yield state.copyWith(formStatus: FormSubmitting());
       try {
         yield state.copyWith(formStatus: SubmissionSuccess());

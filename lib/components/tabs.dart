@@ -46,8 +46,8 @@ class _TabsState extends State<Tabs> {
               var formStatus = state.formStatus;
               if (formStatus is SubmissionSuccess) {
                 orderBloc.fetchExpenses(id: globals.filial);
-
                 orderBloc.fetchExpense(id: globals.currentExpenseId);
+                globals.orderState = null;
                 expenseCardPageState.setState(() {});
                 orderFooterPageState.setState(() {});
                 context.read<ExpenseBloc>().add(ExpenseInitialized());
