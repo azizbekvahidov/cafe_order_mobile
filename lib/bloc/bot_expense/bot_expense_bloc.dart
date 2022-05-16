@@ -24,9 +24,11 @@ class BotExpenseBloc extends Bloc<BotExpenseEvent, BotExpenseState> {
         globals.currentExpense = await repo.addToExpense(data: state.data);
         globals.currentExpense!.order.forEach((element) {
           helper.generateCheck(
-              data: element.product!,
-              type: element.type,
-              amount: element.amount);
+            data: element.product!,
+            type: element.type,
+            amount: element.amount,
+            comment: element.comment,
+          );
         });
         yield state.copyWith(formStatus: SubmissionSuccess());
       } catch (e) {
@@ -48,6 +50,7 @@ class BotExpenseBloc extends Bloc<BotExpenseEvent, BotExpenseState> {
         yield state.copyWith(formStatus: SubmissionFailed(e));
       }
     } else if (event is CancelBotOrder) {
+      await repo.AddBotOrder();
       yield state.copyWith(formStatus: FormSubmitting());
       try {
         yield state.copyWith(formStatus: SubmissionSuccess());

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cafe_mostbyte/bloc/app_status.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentificate_event.dart';
 import 'package:cafe_mostbyte/bloc/auth/authentificate.dart/authentification_bloc.dart';
@@ -10,8 +8,6 @@ import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_repository.dart';
 import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_state.dart';
 import 'package:cafe_mostbyte/bloc/bot_order.dart/bot_order_bloc.dart';
 import 'package:cafe_mostbyte/bloc/form_submission_status.dart';
-import 'package:cafe_mostbyte/components/custom_block/bot_item_modal.dart';
-import 'package:cafe_mostbyte/components/custom_block/modal.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/moderator_screen.dart';
@@ -21,7 +17,6 @@ import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../config/globals.dart' as globals;
 import '../services/helper.dart' as helper;
@@ -204,7 +199,9 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                 botOrderBloc.fetchApproveOrders(id: globals.filial);
                 if (globals.currentExpense != null) {
                   if (globals.orderState != null) {
-                    await print.checkPrint(printData: globals.orderState);
+                    await print.checkPrint(
+                        printData: globals.orderState,
+                        order_type: globals.currentExpense!.order_type);
                     globals.orderState = null;
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (BuildContext ctx) {

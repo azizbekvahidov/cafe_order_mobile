@@ -6,7 +6,7 @@ class DeliveryBot {
   String name;
   String phone;
   String? time;
-  String? price;
+  int? price;
   String? address;
   String order_type;
   Filial filial;

@@ -9,3 +9,5 @@ class InitialAppStatus extends AppStatus {
 class AppLoggedInStatus extends AppStatus {}
 
 class AppLoggedOutStatus extends AppStatus {}
+
+class ChangeClosed extends AppStatus {}

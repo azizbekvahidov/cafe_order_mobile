@@ -28,4 +28,8 @@ class AuthenticationUnauthenticated extends AuthentifacionState {
   AuthenticationUnauthenticated() : super(appStatus: AppLoggedOutStatus());
 }
 
+class ClosedChange extends AuthentifacionState {
+  ClosedChange() : super(appStatus: ChangeClosed());
+}
+
 class AuthenticationLoading extends AuthentifacionState {}
