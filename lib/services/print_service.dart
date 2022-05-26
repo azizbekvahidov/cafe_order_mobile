@@ -34,8 +34,8 @@ class PrintService {
         (isCheck
             ? e!.printer
             : (isClose
-                ? globals.settings!.printer
-                : globals.settings!.printerKassa)));
+                ? globals.settings!.printerKassa
+                : globals.settings!.printer)));
     var paperSize = PaperSize.mm80;
     var profile = await CapabilityProfile.load();
     var manager = USBPrinterManager(_printer, paperSize, profile);
