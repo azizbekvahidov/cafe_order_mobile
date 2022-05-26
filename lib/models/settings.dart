@@ -3,6 +3,7 @@ class Settings {
   String percent;
   String? logo_image;
   String printer;
+  String printerKassa;
   String text_footer;
   String discount;
 
@@ -11,6 +12,7 @@ class Settings {
     required this.percent,
     this.logo_image = null,
     required this.printer,
+    required this.printerKassa,
     required this.text_footer,
     required this.discount,
   });
@@ -21,6 +23,7 @@ class Settings {
       percent: json["percent"],
       logo_image: json["logo_image"],
       printer: json["printer"],
+      printerKassa: json["printerKassa"],
       text_footer: json["text_footer"],
       discount: json["discount"],
     );

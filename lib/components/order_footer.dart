@@ -499,6 +499,10 @@ class _OrderFooterState extends State<OrderFooter> {
                                                   textOK: Text("Да"),
                                                   title:
                                                       Text("Закрытие счета"))) {
+                                                await print.recieptPrint(
+                                                    expense:
+                                                        globals.currentExpense,
+                                                    isClose: true);
                                                 context.read<ExpenseBloc>().add(
                                                     ExpenseTerminalClose());
                                               }
@@ -528,6 +532,10 @@ class _OrderFooterState extends State<OrderFooter> {
                                                 textOK: Text("Да"),
                                                 title:
                                                     Text("Закрытие счета"))) {
+                                              await print.recieptPrint(
+                                                  expense:
+                                                      globals.currentExpense,
+                                                  isClose: true);
                                               context
                                                   .read<ExpenseBloc>()
                                                   .add(ExpenseClose());

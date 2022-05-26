@@ -7,9 +7,9 @@ class WebViewHelper {
     if (io.Platform.isWindows) {
       paths = [
         "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
-        // "C:\\ProgramFiles(x86)\\Google\\Chrome\\Application\\chrome.exe",
-        // "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
-        // io.Directory("chromium").absolute.path,
+        "C:\\ProgramFiles(x86)\\Google\\Chrome\\Application\\chrome.exe",
+        "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+        io.Directory("chromium").absolute.path,
       ];
     } else if (io.Platform.isMacOS) {
       paths = [
