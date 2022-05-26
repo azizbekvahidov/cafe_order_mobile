@@ -19,6 +19,7 @@ class PrintService {
   }
 
   _connect({
+    isClose = false,
     isCheck = true,
     Expense? expense,
     PrintData? printData,
@@ -29,7 +30,12 @@ class PrintService {
       await _scan();
     }
     USBPrinter _printer = _printers!.firstWhere((element) =>
-        element.address == (isCheck ? e!.printer : globals.settings!.printer));
+        element.address ==
+        (isCheck
+            ? e!.printer
+            : (isClose
+                ? globals.settings!.printerKassa
+                : globals.settings!.printer)));
     var paperSize = PaperSize.mm80;
     var profile = await CapabilityProfile.load();
     var manager = USBPrinterManager(_printer, paperSize, profile);
@@ -101,8 +107,8 @@ class PrintService {
     }
   }
 
-  recieptPrint({Expense? expense}) async {
-    _connect(expense: expense, isCheck: false);
+  recieptPrint({Expense? expense, isClose = false}) async {
+    _connect(expense: expense, isCheck: false, isClose: isClose);
   }
 
   changePrint() async {
