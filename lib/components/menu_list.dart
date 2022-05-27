@@ -1,6 +1,6 @@
 import 'package:cafe_mostbyte/bloc/order/order_bloc.dart';
 import 'package:cafe_mostbyte/components/product_card.dart';
-import 'package:cafe_mostbyte/models/menu_item.dart';
+import 'package:cafe_mostbyte/models/menu_item.dart' as menuItem;
 import 'package:flutter/material.dart';
 
 class MenuList extends StatefulWidget {
@@ -28,13 +28,14 @@ class _MenuListState extends State<MenuList> {
           controller: _menuController,
           child: StreamBuilder(
             stream: orderBloc.productList,
-            builder: (context, AsyncSnapshot<List<MenuItem>> snapshot) {
+            builder:
+                (context, AsyncSnapshot<List<menuItem.MenuItem>> snapshot) {
               if (snapshot.hasData) {
                 List _products = snapshot.data as List;
 
                 return Wrap(
                   children: [
-                    for (MenuItem _product in _products)
+                    for (menuItem.MenuItem _product in _products)
                       ProductCard(data: _product)
                   ],
                 );

@@ -1,6 +1,6 @@
 import 'package:cafe_mostbyte/bloc/search/search_bloc.dart';
 import 'package:cafe_mostbyte/components/product_card.dart';
-import 'package:cafe_mostbyte/models/menu_item.dart';
+import 'package:cafe_mostbyte/models/menu_item.dart' as menuItem;
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../config/globals.dart' as globals;
@@ -80,12 +80,13 @@ class _SearchState extends State<Search> {
                 itemBuilder: (context, suggestion) {
                   return StreamBuilder(
                     stream: searchBloc.productList,
-                    builder: (context, AsyncSnapshot<List<MenuItem>> snapshot) {
+                    builder: (context,
+                        AsyncSnapshot<List<menuItem.MenuItem>> snapshot) {
                       if (snapshot.hasData) {
                         List _products = snapshot.data as List;
                         return Wrap(
                           children: [
-                            for (MenuItem _product in _products)
+                            for (menuItem.MenuItem _product in _products)
                               ProductCard(data: _product)
                           ],
                         );

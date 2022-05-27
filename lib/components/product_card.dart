@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/components/tabs.dart';
-import 'package:cafe_mostbyte/models/menu_item.dart';
+import 'package:cafe_mostbyte/models/menu_item.dart' as menuItem;
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,7 +11,7 @@ import '../config/globals.dart' as globals;
 import '../services/helper.dart' as helper;
 
 class ProductCard extends StatelessWidget {
-  MenuItem data;
+  menuItem.MenuItem data;
   ProductCard({required this.data, Key? key}) : super(key: key);
 
   @override
