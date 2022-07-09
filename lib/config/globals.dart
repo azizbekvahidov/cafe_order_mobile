@@ -11,7 +11,7 @@ import 'package:cafe_mostbyte/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:pos_printer_manager/pos_printer_manager.dart';
 
-String apiLink = "http://takes/api/v1/";
+String apiLink = "https://cafe.mostbyte.uz/api/v1/";
 // String apiLink = "https://api.kfcbeer.uz/api/v1/";
 
 String lang = "ru";

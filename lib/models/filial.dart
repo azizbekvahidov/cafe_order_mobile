@@ -13,4 +13,11 @@ class Filial {
       name: json["name_uz"],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+    };
+  }
 }

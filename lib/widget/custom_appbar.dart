@@ -148,6 +148,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
                   children: [
                     InkWell(
                       onTap: () {
+                        globals.currentExpense = null;
+                        globals.orderState = null;
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (BuildContext ctx) {
                           return BotOrderScreen();

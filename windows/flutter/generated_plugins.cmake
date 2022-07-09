@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   network_info_plus_windows
   printing
-  system_theme
   url_launcher_windows
   window_manager
 )

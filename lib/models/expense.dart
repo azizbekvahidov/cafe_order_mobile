@@ -1,5 +1,6 @@
 import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/employee.dart';
+import 'package:cafe_mostbyte/models/filial.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/tables.dart';
 
@@ -19,6 +20,7 @@ class Expense {
   String? phone;
   Employee employee;
   Tables? table;
+  Filial? filial;
   List<Order> order;
   bool isChanged;
   Delivery? delivery;
@@ -40,6 +42,7 @@ class Expense {
     required this.phone,
     required this.employee,
     this.table = null,
+    this.filial = null,
     required this.order,
     this.isChanged = false,
     this.delivery,
@@ -63,6 +66,7 @@ class Expense {
       phone: json["phone"],
       employee: Employee.fromJson(json["employee"]),
       table: json["table"] != null ? Tables.fromJson(json["table"]) : null,
+      filial: json["filial"] != null ? Filial.fromJson(json["filial"]) : null,
       order: List<Order>.from(json["order"].map((x) => Order.fromJson(x))),
       delivery:
           json["delivery"] != null ? Delivery.fromJson(json["delivery"]) : null,
@@ -87,6 +91,7 @@ class Expense {
       'phone': phone,
       'employee': employee.toJson(),
       'table': table != null ? table!.toJson() : 0,
+      'filial': filial!.toJson(),
       "order": order.map((e) => e.toJson()).toList(),
       "delivery": delivery != null ? delivery!.toJson() : null,
       "order_type": order_type,

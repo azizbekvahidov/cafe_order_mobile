@@ -264,6 +264,13 @@ generateCheck(
       } else {
         order.amount += amount;
         order.comment = comment;
+        if (order.amount == 0.0) {
+          s.orders!.removeWhere((element) => element == order);
+          if (s.orders!.length == 0) {
+            globals.orderState!.departments!
+                .removeWhere((element) => element == s);
+          }
+        }
       }
     }
   }

@@ -51,6 +51,7 @@ class PrintService {
 
   setCheckPrint(Department e, PrintData printData, USBPrinterManager manager,
       String orderType) async {
+    printData = removeDuplicate(printData);
     final content = Demo.generateCheck(
         data: printData,
         department: e,
@@ -69,6 +70,17 @@ class PrintService {
       // print("isConnected ${e.printer} ${_manager!.isConnected}");
       manager.writeBytes(data, isDisconnect: false);
     }
+  }
+
+  PrintData removeDuplicate(PrintData data) {
+    data.departments!.forEach((e) {
+      if (e.orders != null) {
+        e.orders!.map((order) {
+          e.orders!.removeWhere((element) => element == order);
+        });
+      }
+    });
+    return data;
   }
 
   checkPrint({PrintData? printData, order_type}) async {

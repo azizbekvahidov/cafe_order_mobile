@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:system_theme/system_theme.dart';
+// import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import '/bloc/auth/authentificate.dart/authentification_bloc.dart';
 import '/bloc/auth/authentificate.dart/authentification_state.dart';
@@ -50,8 +50,8 @@ void main() async {
   if (defaultTargetPlatform == TargetPlatform.windows ||
       defaultTargetPlatform == TargetPlatform.android ||
       kIsWeb) {
-    darkMode = await SystemTheme.darkMode;
-    await SystemTheme.accentInstance.load();
+    // darkMode = await SystemTheme.darkMode;
+    // await SystemTheme.accentInstance.load();
   } else {
     darkMode = true;
   }
