@@ -1706,6 +1706,8 @@ $img
             <hr>
             <!-- end header part -->
 
+            <p>ID смены: <b>${globals.tempChange!.id}</b></p>
+            
             <p>Филиал: <b>${globals.tempChange!.filial.name}</b></p>
 
             <p>Начало: <b>${globals.tempChange!.start}</b></p>
