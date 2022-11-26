@@ -11,6 +11,7 @@ import 'package:cafe_mostbyte/components/input/custom_radio.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/models/delivery.dart';
 import 'package:cafe_mostbyte/models/filial.dart';
+import 'package:cafe_mostbyte/utils/enums/order_type.dart';
 import 'package:intl/intl.dart';
 import 'package:cafe_mostbyte/components/input/default_input.dart';
 import 'package:cafe_mostbyte/components/input/number_input.dart';
@@ -322,9 +323,18 @@ class _ModeratorFooterState extends State<ModeratorFooter> {
                                     },
                                     name: 'filial',
                                     options: [
-                                      {"key": "book_table", "value": "Зал"},
-                                      {"key": "take", "value": "С собой"},
-                                      {"key": "delivery", "value": "Доставка"},
+                                      {
+                                        "key": OrderType.book_table.name,
+                                        "value": "Зал"
+                                      },
+                                      {
+                                        "key": OrderType.take.name,
+                                        "value": "С собой"
+                                      },
+                                      {
+                                        "key": OrderType.delivery.name,
+                                        "value": "Доставка"
+                                      },
                                     ]
                                         .map((item) => FormBuilderFieldOption(
                                               value: item["key"].toString(),

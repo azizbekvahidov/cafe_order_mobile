@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cafe_mostbyte/utils/enums/roles.dart';
 import 'package:http/io_client.dart';
 import '../../../models/user.dart';
 import '../../network_service.dart';
@@ -18,7 +19,7 @@ class UserProvider {
 
       globals.filial = userJson.filial != null ? userJson.filial!.id : 0;
       globals.isKassa = false;
-      if (userJson.role.role == "cashier") {
+      if (userJson.role.role == Roles.cashier.name) {
         globals.isKassa = true;
       }
       return userJson;

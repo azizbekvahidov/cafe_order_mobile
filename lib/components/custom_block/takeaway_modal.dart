@@ -2,6 +2,7 @@ import 'package:cafe_mostbyte/components/button/secondary_button.dart';
 import 'package:cafe_mostbyte/components/input/default_input.dart';
 import 'package:cafe_mostbyte/components/input/phone_input.dart';
 import 'package:cafe_mostbyte/models/delivery.dart';
+import 'package:cafe_mostbyte/utils/enums/order_type.dart';
 import 'package:intl/intl.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +93,7 @@ class _TakeawayModalState extends State<TakeawayModal> {
                   width: 150,
                   child: SecondaryButton(
                     action: () async {
-                      Navigator.pop(context, "book_table");
+                      Navigator.pop(context, OrderType.book_table.name);
                     },
                     colour: Theme.of(context).colorScheme.primary,
                     text: "В зале",
@@ -104,7 +105,7 @@ class _TakeawayModalState extends State<TakeawayModal> {
                   width: 150,
                   child: SecondaryButton(
                     action: () async {
-                      Navigator.pop(context, "take");
+                      Navigator.pop(context, OrderType.take.name);
                     },
                     colour: Theme.of(context).colorScheme.surface,
                     text: "На вынос",

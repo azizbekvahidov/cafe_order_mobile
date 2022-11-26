@@ -4,6 +4,7 @@ import 'package:cafe_mostbyte/bloc/auth/auth_repository.dart';
 import 'package:cafe_mostbyte/generated/locale_base.dart';
 import 'package:cafe_mostbyte/screen/moderator_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
+import 'package:cafe_mostbyte/utils/enums/roles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,8 +27,10 @@ class _AuthState extends State<Auth> {
     authRepo.login(login: data.name, pass: data.password).then((value) {
       if (value == "no-change") {
         message = 'Предыдущая смена не закрыта';
-      } else if (globals.userData == null || value == "no-login") {
+      } else if (value == "no-login") {
         message = 'Неправильный логин или пароль';
+      } else if (value == "incorrect-role") {
+        message = 'Несоответсвует роль пользователя';
       }
     });
     // res.catchError((value) => print(value));
@@ -88,9 +91,10 @@ class _AuthState extends State<Auth> {
         onSignup: _signupUser,
         onSubmitAnimationCompleted: () {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => (globals.userData!.role.role == "moderator")
-                ? ModeratorScreen()
-                : OrderScreen(),
+            builder: (context) =>
+                (globals.userData!.role.role == Roles.moderator.name)
+                    ? ModeratorScreen()
+                    : OrderScreen(),
           ));
         },
         hideForgotPasswordButton: true,

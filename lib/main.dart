@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/moderator_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
+import 'package:cafe_mostbyte/utils/enums/roles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -172,7 +173,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return (globals.userData!.role.role == "moderator")
+    return (globals.userData!.role.role == Roles.moderator.name)
         ? ModeratorScreen()
         : OrderScreen();
   }

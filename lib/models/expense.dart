@@ -3,6 +3,9 @@ import 'package:cafe_mostbyte/models/employee.dart';
 import 'package:cafe_mostbyte/models/filial.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/tables.dart';
+import 'package:cafe_mostbyte/utils/enums/order_type.dart';
+
+import '../utils/enums/order_type.dart';
 
 class Expense {
   int id;

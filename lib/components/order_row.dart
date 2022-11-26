@@ -4,7 +4,9 @@ import 'package:cafe_mostbyte/components/custom_block/order_comment_modal.dart';
 import 'package:cafe_mostbyte/components/expense_card.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_expense_card.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
+import 'package:cafe_mostbyte/components/tabs.dart';
 import 'package:cafe_mostbyte/models/order.dart';
+import 'package:cafe_mostbyte/screen/table_screen.dart';
 import 'package:flutter/material.dart';
 import '../config/globals.dart' as globals;
 import 'package:auto_size_text/auto_size_text.dart';
@@ -74,7 +76,7 @@ class _OrderRowState extends State<OrderRow> {
                           });
                         helper.calculateTotalSum();
                         globals.currentExpenseChange = true;
-                        helper.calculateTotalSum();
+                        tabsState.setState(() {});
                       },
                       child: Center(
                         child: Icon(

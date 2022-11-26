@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:cafe_mostbyte/utils/enums/roles.dart';
+
 import '../../models/user.dart';
 
 import '../../services/api_provider/data_api_provider.dart';
@@ -17,13 +19,30 @@ class AuthRepository {
           await net.post('${globals.apiLink}users/signin', body: data);
       if (response.statusCode == 200) {
         var result = json.decode(response.body);
-        globals.id = result["data"]["id"];
-        UserProvider _userProvider = UserProvider();
-        User userData = await _userProvider.getUser();
-        if (globals.isKassa) {
-          final change = await net.post('${globals.apiLink}change/open',
-              body: {"user_id": result["data"]["id"]});
-          if (change.statusCode == 201 || change.statusCode == 200) {
+        User user = User.fromJson(result["data"]);
+        if (user.role.role == Roles.cashier.name ||
+            user.role.role == Roles.moderator.name ||
+            user.role.role == Roles.waiter.name) {
+          globals.id = result["data"]["id"];
+          UserProvider _userProvider = UserProvider();
+          User userData = await _userProvider.getUser();
+          if (globals.isKassa) {
+            final change = await net.post('${globals.apiLink}change/open',
+                body: {"user_id": result["data"]["id"]});
+            if (change.statusCode == 201 || change.statusCode == 200) {
+              if (await helper.saveData("id", result["data"]["id"],
+                  type: "int")) {
+                globals.isAuth = true;
+                User userData = await _userProvider.getUser();
+
+                globals.userData = userData;
+              } else {
+                return "no-login";
+              }
+            } else {
+              throw "no-change";
+            }
+          } else {
             if (await helper.saveData("id", result["data"]["id"],
                 type: "int")) {
               globals.isAuth = true;
@@ -33,18 +52,9 @@ class AuthRepository {
             } else {
               return "no-login";
             }
-          } else {
-            throw "no-change";
           }
         } else {
-          if (await helper.saveData("id", result["data"]["id"], type: "int")) {
-            globals.isAuth = true;
-            User userData = await _userProvider.getUser();
-
-            globals.userData = userData;
-          } else {
-            return "no-login";
-          }
+          return "incorrect-role";
         }
       } else {
         return "no-login";

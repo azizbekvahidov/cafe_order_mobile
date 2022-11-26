@@ -13,6 +13,7 @@ import 'package:cafe_mostbyte/screen/auth/auth.dart';
 import 'package:cafe_mostbyte/screen/moderator_screen.dart';
 import 'package:cafe_mostbyte/screen/order_screen.dart';
 import 'package:cafe_mostbyte/services/print_service.dart';
+import 'package:cafe_mostbyte/utils/enums/roles.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
   @override
   void initState() {
     super.initState();
-    if (globals.userData!.role.role == 'moderator') {
+    if (globals.userData!.role.role == Roles.moderator.name) {
       globals.filial = 0;
       globals.currentExpense = null;
       globals.currentExpenseSum = 0;
@@ -69,15 +70,6 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Container(
-                //   child: Text(
-                //     widget.title!,
-                //     style: TextStyle(
-                //         fontFamily: globals.font,
-                //         fontSize: 18,
-                //         color: globals.mainColor),
-                //   ),
-                // ),
                 Container(
                   child: Stack(
                     children: [
@@ -85,7 +77,8 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                         onTap: () {
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (BuildContext ctx) {
-                            return globals.userData!.role.role == 'moderator'
+                            return globals.userData!.role.role ==
+                                    Roles.moderator.name
                                 ? ModeratorScreen()
                                 : OrderScreen();
                           }), (route) => false);
@@ -167,19 +160,6 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                                 borderRadius: BorderRadius.circular(11),
                                 color: Colors.red),
                           ),
-
-                    // Container(
-                    //   margin: EdgeInsets.only(left: 10),
-                    //   width: 16,
-                    //   height: 16,
-                    //   decoration: BoxDecoration(
-                    //       border: Border.all(
-                    //         color: globals.thirdColor,
-                    //         width: 1,
-                    //       ),
-                    //       borderRadius: BorderRadius.circular(11),
-                    //       color: Color(0xff29FF3F)),
-                    // ),
                   ],
                 ),
               ],
@@ -208,7 +188,7 @@ class _BotOrderScreenState extends State<BotOrderScreen> {
                       return OrderScreen();
                     }), (route) => false);
                   } else {
-                    if (globals.userData!.role.role == 'moderator') {
+                    if (globals.userData!.role.role == Roles.moderator.name) {
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (BuildContext ctx) {
                         return ModeratorScreen();
