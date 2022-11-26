@@ -3,6 +3,7 @@ import 'package:cafe_mostbyte/components/input/default_input.dart';
 import 'package:cafe_mostbyte/components/input/number_input.dart';
 import 'package:cafe_mostbyte/components/input/phone_input.dart';
 import 'package:cafe_mostbyte/models/delivery_bot.dart';
+import 'package:cafe_mostbyte/utils/enums/order_type.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:cafe_mostbyte/components/input/text_input.dart';
@@ -48,7 +49,7 @@ class _BotItemModalState extends State<BotItemModal> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SvgPicture.asset(
-              "assets/img/${(widget.data.order_type == "book_table") ? "cafe-hall" : ((widget.data.order_type == 'take') ? "take-away" : "delivery")}.svg",
+              "assets/img/${(widget.data.order_type == OrderType.book_table.name) ? "cafe-hall" : ((widget.data.order_type == OrderType.take.name) ? "take-away" : "delivery")}.svg",
               width: 50,
             ),
             Row(

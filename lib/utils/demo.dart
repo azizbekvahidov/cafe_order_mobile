@@ -1521,6 +1521,9 @@ class Demo {
     .font1{
       font-size: 0.8em;
     }
+    .font1-1{
+      font-size: 1.1em;
+    }
     .font2{
       font-size: 1.2em;
     }
@@ -1554,7 +1557,7 @@ $img
                
             ${barcode}
             </div>
-            <p class="full-width inline-block font1">
+            <p class="full-width inline-block font1-1">
                 <span class=" ">Тип заказа: <b>$expType</b></span> <br>
                 ${data.table != null ? """<span class=" ">Cтол №: <b>${data.table!.name}</b></span> <br>""" : ""}
                 ${data.delivery != null ? """<span class=" ">Телефон: <b>${data.delivery!.phone}</b></span> <br>
@@ -1924,8 +1927,8 @@ $img
       if (element.amount != 0) {
         txt += """
             <p class="full-width inline-block">
-                <b class="left">${element.product!.name}</b>
-                <b class="right">${NumberFormat("###.#", "en_US").format(element.amount)}</b>
+                <b class="left">${element.product!.name}${element.amount < 0 ? "(<span style='font-size:1.5em;'>Отказ</span>)" : ""}</b>
+                <b class="right" ${element.amount < 0 ? "style='font-size:1.5em;'" : ""}>${NumberFormat("###.#", "en_US").format(element.amount)}</b>
             </p>
             ${element.comment != null ? """<p>${element.comment}</p>""" : ""}
             """;

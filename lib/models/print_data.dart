@@ -16,7 +16,7 @@ class PrintData {
   });
 
   Map<String, dynamic> toJson() => {
-        "expense_id": expense_id,
+        "id": expense_id,
         "expense_num": expense_num,
         "table": table,
         "employee": employee,

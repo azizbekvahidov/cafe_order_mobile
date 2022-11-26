@@ -1,4 +1,5 @@
 import 'package:cafe_mostbyte/bloc/bot_expense/bot_expense_repository.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../form_submission_status.dart';
@@ -21,13 +22,15 @@ class BotExpenseBloc extends Bloc<BotExpenseEvent, BotExpenseState> {
     } else if (event is AddToExpense) {
       yield state.copyWith(formStatus: FormSubmitting());
       try {
-        globals.currentExpense = await repo.addToExpense(data: state.data);
-        globals.currentExpense!.order.forEach((element) {
+        Expense expense = await repo.addToExpense(data: state.data);
+        globals.currentExpense = expense;
+        expense.order.forEach((element) {
           helper.generateCheck(
             data: element.product!,
             type: element.type,
             amount: element.amount,
             comment: element.comment,
+            expense: expense,
           );
         });
         yield state.copyWith(formStatus: SubmissionSuccess());

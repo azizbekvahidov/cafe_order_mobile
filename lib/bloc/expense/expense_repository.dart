@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:cafe_mostbyte/models/delivery.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/services/api_provider/data_api_provider.dart';
 import 'package:cafe_mostbyte/services/network_service.dart';
+import 'package:cafe_mostbyte/utils/enums/order_type.dart';
 import '../../../config/globals.dart' as globals;
 
 class ExpenseRepository {
@@ -12,7 +14,7 @@ class ExpenseRepository {
       var data = {
         "user_id": globals.userData!.id,
         "filial_id": globals.filial,
-        "order_type": "book_table"
+        "order_type": OrderType.book_table.name
       };
       final response =
           await net.post('${globals.apiLink}expense/create', body: data);

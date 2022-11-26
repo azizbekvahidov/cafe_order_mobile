@@ -2,14 +2,17 @@ library yoshlar_portali.helper;
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:barcode/barcode.dart';
 import 'package:cafe_mostbyte/components/moderator/moderator_footer.dart';
 import 'package:cafe_mostbyte/components/order_footer.dart';
 import 'package:cafe_mostbyte/models/department.dart';
+import 'package:cafe_mostbyte/models/expense.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/print_data.dart';
 import 'package:cafe_mostbyte/models/product.dart';
+import 'package:cafe_mostbyte/utils/enums/roles.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
@@ -61,7 +64,7 @@ void calculateTotalSum() {
       return true;
     });
     sum = sum +
-        (globals.userData!.role.role == 'waiter'
+        (globals.userData!.role.role == Roles.waiter.name
             ? ((sum / 100).toInt() * int.parse(globals.settings!.percent))
             : 0);
     globals.currentExpense!.expense_sum = sum;
@@ -197,17 +200,20 @@ Map<String, dynamic> parseSettings(List data) {
 }
 
 generateCheck(
-    {required Product data, required type, required amount, comment = null}) {
+    {required Product data,
+    required type,
+    required amount,
+    comment = null,
+    Expense? expense}) {
+  expense = expense ?? globals.currentExpense;
   if (globals.orderState == null) {
     PrintData orderState = new PrintData(
-        expense_id: globals.currentExpense!.id,
-        expense_num: globals.currentExpense!.num,
-        employee: globals.currentExpense!.employee.name,
-        table: globals.currentExpense!.order_type == "book_table"
-            ? "Зал ${globals.currentExpense!.table ?? ""}"
-            : (globals.currentExpense!.order_type == "delivery"
-                ? "Доставка"
-                : "С собой"),
+        expense_id: expense!.id,
+        expense_num: expense.num,
+        employee: expense.employee.name,
+        table: expense.order_type == "book_table"
+            ? "Зал ${expense.table ?? ""}"
+            : (expense.order_type == "delivery" ? "Доставка" : "С собой"),
         departments: [
           Department(
               department_id: data.department == null

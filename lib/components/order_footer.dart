@@ -68,7 +68,12 @@ class _OrderFooterState extends State<OrderFooter> {
               orderFooterPageState.setState(() {});
               context.read<ExpenseBloc>().add(ExpenseInitialized());
             } else if (formStatus is SubmissionFailed) {
-              helper.getToast("Что то пошло не так", context);
+              if (globals.currentExpense!.order.isEmpty) {
+                helper.getToast(
+                    "Счет пустой, счет не должен быть пустым", context);
+              } else {
+                helper.getToast("Что то пошло не так", context);
+              }
             }
             // TODO: implement listener
           },
@@ -357,35 +362,44 @@ class _OrderFooterState extends State<OrderFooter> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () async {
-                            await print.recieptPrint(
-                                expense: globals.currentExpense);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.black,
+                        BlocBuilder<ExpenseBloc, ExpenseState>(
+                          builder: (context, state) {
+                            return InkWell(
+                              onTap: () async {
+                                if (globals.currentExpenseChange) {
+                                  context
+                                      .read<ExpenseBloc>()
+                                      .add(ExpenseUpdate());
+                                }
+                                await print.recieptPrint(
+                                    expense: globals.currentExpense);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.black,
+                                  ),
+                                  color: globals.fourthColor,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      MaterialCommunityIcons.printer_pos,
+                                      size: 30,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer,
+                                    )
+                                    //SvgPicture.asset("assets/img/print.svg")
+                                  ],
+                                ),
                               ),
-                              color: globals.fourthColor,
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  MaterialCommunityIcons.printer_pos,
-                                  size: 30,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .secondaryContainer,
-                                )
-                                //SvgPicture.asset("assets/img/print.svg")
-                              ],
-                            ),
-                          ),
+                            );
+                          },
                         ),
                         (globals.isKassa)
                             ? Row(
@@ -400,23 +414,31 @@ class _OrderFooterState extends State<OrderFooter> {
                                           action: () async {
                                             if (globals.currentExpense !=
                                                 null) {
-                                              var modal = Modal(
-                                                  ctx: context,
-                                                  child: AvansModal(),
-                                                  heightIndex: 0.2);
-                                              await modal.customDialog();
-                                              if (modal.res) {
-                                                if (await confirm(context,
-                                                    content:
-                                                        Text("Вы уверены?"),
-                                                    textCancel: Text("Нет"),
-                                                    textOK: Text("Да"),
-                                                    title: Text(
-                                                        "Сохранить аванс"))) {
-                                                  context
-                                                      .read<ExpenseBloc>()
-                                                      .add(ExpenseAvansClose());
+                                              if (globals.currentExpense!.order
+                                                  .isNotEmpty) {
+                                                var modal = Modal(
+                                                    ctx: context,
+                                                    child: AvansModal(),
+                                                    heightIndex: 0.2);
+                                                await modal.customDialog();
+                                                if (modal.res) {
+                                                  if (await confirm(context,
+                                                      content:
+                                                          Text("Вы уверены?"),
+                                                      textCancel: Text("Нет"),
+                                                      textOK: Text("Да"),
+                                                      title: Text(
+                                                          "Сохранить аванс"))) {
+                                                    context
+                                                        .read<ExpenseBloc>()
+                                                        .add(
+                                                            ExpenseAvansClose());
+                                                  }
                                                 }
+                                              } else {
+                                                helper.getToast(
+                                                    "Счет пустой, счет не должен быть пустым",
+                                                    context);
                                               }
                                             } else {
                                               helper.getToast(
@@ -443,23 +465,31 @@ class _OrderFooterState extends State<OrderFooter> {
                                           action: () async {
                                             if (globals.currentExpense !=
                                                 null) {
-                                              var modal = Modal(
-                                                  ctx: context,
-                                                  child: DebtModal(),
-                                                  heightIndex: 0.2);
-                                              await modal.customDialog();
-                                              if (modal.res) {
-                                                if (await confirm(context,
-                                                    content:
-                                                        Text("Вы уверены?"),
-                                                    textCancel: Text("Нет"),
-                                                    textOK: Text("Да"),
-                                                    title: Text(
-                                                        "Закрытие счет в долг"))) {
-                                                  context
-                                                      .read<ExpenseBloc>()
-                                                      .add(ExpenseDebtClose());
+                                              if (globals.currentExpense!.order
+                                                  .isNotEmpty) {
+                                                var modal = Modal(
+                                                    ctx: context,
+                                                    child: DebtModal(),
+                                                    heightIndex: 0.2);
+                                                await modal.customDialog();
+                                                if (modal.res) {
+                                                  if (await confirm(context,
+                                                      content:
+                                                          Text("Вы уверены?"),
+                                                      textCancel: Text("Нет"),
+                                                      textOK: Text("Да"),
+                                                      title: Text(
+                                                          "Закрытие счет в долг"))) {
+                                                    context
+                                                        .read<ExpenseBloc>()
+                                                        .add(
+                                                            ExpenseDebtClose());
+                                                  }
                                                 }
+                                              } else {
+                                                helper.getToast(
+                                                    "Счет пустой, счет не должен быть пустым",
+                                                    context);
                                               }
                                             } else {
                                               helper.getToast(
@@ -484,28 +514,42 @@ class _OrderFooterState extends State<OrderFooter> {
                                       builder: (context, state) {
                                         return MainButton(
                                           action: () async {
-                                            int terminalSum = 0;
-                                            var modal = Modal(
-                                                ctx: context,
-                                                child: TerminalModal(
-                                                  terminalSum: terminalSum,
-                                                ),
-                                                heightIndex: 0.2);
-                                            await modal.customDialog();
-                                            if (modal.res) {
-                                              if (await confirm(context,
-                                                  content: Text("Вы уверены?"),
-                                                  textCancel: Text("Нет"),
-                                                  textOK: Text("Да"),
-                                                  title:
-                                                      Text("Закрытие счета"))) {
-                                                await print.recieptPrint(
-                                                    expense:
-                                                        globals.currentExpense,
-                                                    isClose: true);
-                                                context.read<ExpenseBloc>().add(
-                                                    ExpenseTerminalClose());
+                                            if (globals.currentExpense!.order
+                                                .isNotEmpty) {
+                                              int terminalSum = 0;
+                                              var modal = Modal(
+                                                  ctx: context,
+                                                  child: TerminalModal(
+                                                    terminalSum: terminalSum,
+                                                  ),
+                                                  heightIndex: 0.2);
+                                              await modal.customDialog();
+                                              if (modal.res) {
+                                                if (await confirm(context,
+                                                    content:
+                                                        Text("Вы уверены?"),
+                                                    textCancel: Text("Нет"),
+                                                    textOK: Text("Да"),
+                                                    title: Text(
+                                                        "Закрытие счета"))) {
+                                                  if (globals
+                                                      .currentExpenseChange) {
+                                                    context
+                                                        .read<ExpenseBloc>()
+                                                        .add(ExpenseUpdate());
+                                                  }
+                                                  await print.recieptPrint(
+                                                      expense: globals
+                                                          .currentExpense,
+                                                      isClose: true);
+                                                  context.read<ExpenseBloc>().add(
+                                                      ExpenseTerminalClose());
+                                                }
                                               }
+                                            } else {
+                                              helper.getToast(
+                                                  "Счет пустой, счет не должен быть пустым",
+                                                  context);
                                             }
                                           },
                                           colour: Theme.of(context)
@@ -526,19 +570,32 @@ class _OrderFooterState extends State<OrderFooter> {
                                       builder: (context, state) {
                                         return MainButton(
                                           action: () async {
-                                            if (await confirm(context,
-                                                content: Text("Вы уверены?"),
-                                                textCancel: Text("Нет"),
-                                                textOK: Text("Да"),
-                                                title:
-                                                    Text("Закрытие счета"))) {
-                                              await print.recieptPrint(
-                                                  expense:
-                                                      globals.currentExpense,
-                                                  isClose: true);
-                                              context
-                                                  .read<ExpenseBloc>()
-                                                  .add(ExpenseClose());
+                                            if (globals.currentExpense!.order
+                                                .isNotEmpty) {
+                                              if (await confirm(context,
+                                                  content: Text("Вы уверены?"),
+                                                  textCancel: Text("Нет"),
+                                                  textOK: Text("Да"),
+                                                  title:
+                                                      Text("Закрытие счета"))) {
+                                                if (globals
+                                                    .currentExpenseChange) {
+                                                  context
+                                                      .read<ExpenseBloc>()
+                                                      .add(ExpenseUpdate());
+                                                }
+                                                await print.recieptPrint(
+                                                    expense:
+                                                        globals.currentExpense,
+                                                    isClose: true);
+                                                context
+                                                    .read<ExpenseBloc>()
+                                                    .add(ExpenseClose());
+                                              }
+                                            } else {
+                                              helper.getToast(
+                                                  "Счет пустой, счет не должен быть пустым",
+                                                  context);
                                             }
                                           },
                                           colour: Theme.of(context)

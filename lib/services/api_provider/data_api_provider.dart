@@ -10,6 +10,7 @@ import 'package:cafe_mostbyte/models/filial.dart';
 import 'package:cafe_mostbyte/models/menu_item.dart';
 import 'package:cafe_mostbyte/models/order.dart';
 import 'package:cafe_mostbyte/models/settings.dart';
+import 'package:cafe_mostbyte/utils/enums/roles.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../network_service.dart';
@@ -58,6 +59,23 @@ class DataApiProvider {
     await file.writeAsString(json.encode(settings));
     globals.filial = settings["filial_id"];
     globals.isKassa = settings["isKassa"];
+  }
+
+  Future<void> setArchive({required expense, required String action}) async {
+    try {
+      var data = {
+        "expense": expense,
+        "action": action,
+      };
+      final response =
+          await net.post('${globals.apiLink}archiveorder/store', body: data);
+      if (response.statusCode == 200) {
+      } else {
+        throw Exception("");
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> getDepartment() async {
@@ -139,7 +157,7 @@ class DataApiProvider {
   Future<List<DeliveryBot>> getBotOrderApproveList({id}) async {
     try {
       final response = await net.get(
-          '${globals.apiLink}delivery/bot-list/$id?order_status=${globals.userData!.role.role == 'moderator' ? 2 : 1}');
+          '${globals.apiLink}delivery/bot-list/$id?order_status=${globals.userData!.role.role == Roles.moderator.name ? 2 : 1}');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
         return List<DeliveryBot>.from(
@@ -155,7 +173,7 @@ class DataApiProvider {
   Future<List<DeliveryBotOrder>> getBotOrderList({id}) async {
     try {
       final response = await net.get(
-          '${globals.apiLink}delivery/orders/$id?order_status=${globals.userData!.role.role == 'moderator' ? 2 : 1}');
+          '${globals.apiLink}delivery/orders/$id?order_status=${globals.userData!.role.role == Roles.moderator.name ? 2 : 1}');
       if (response.statusCode == 200) {
         var res = json.decode(utf8.decode(response.bodyBytes));
         return List<DeliveryBotOrder>.from(
